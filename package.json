@@ -1,0 +1,41 @@
+{
+  "name": "swagger-angular-generator",
+  "version": "1.0.0",
+  "description": "Generator of API layer in TypeScript for Angular 2+ apps",
+  "main": "index.js",
+  "scripts": {
+    "generate": "ts-node -O '{\"target\": \"es2017\", \"module\": \"commonjs\"}' src/generate.ts",
+    "lint": "tslint -p tsconfig.json",
+    "lint:fix": "tslint -p tsconfig.json --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jnwltr/swagger-angular-generator.git"
+  },
+  "keywords": [
+    "swagger",
+    "api",
+    "client",
+    "typescript",
+    "generate",
+    "generator",
+    "angular"
+  ],
+  "author": "Jan Walter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jnwltr/swagger-angular-generator/issues"
+  },
+  "homepage": "https://github.com/jnwltr/swagger-angular-generator#readme",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.77",
+    "@types/node": "^8.0.46",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.7.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "typescript": "^2.5.3"
+  }
+}
