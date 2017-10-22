@@ -4,7 +4,7 @@ import * as conf from './conf';
 import { NativeNames, Schema } from './types';
 import { indent, makeComment } from './utils';
 
-interface PropertyOutput {
+export interface PropertyOutput {
   property: string;
   enumDeclaration: string;
   native: boolean;

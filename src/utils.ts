@@ -1,14 +1,15 @@
 import * as fs from 'fs';
-import * as conf from './conf';
+import { basename } from 'path';
 
 import * as schemaData from '../in/api-docs.json';
+import * as conf from './conf';
 
 const schema = schemaData as any;
 const header = processHeader(schema);
 
 /**
  * Recursively deletes the path
- * @param path to be deleted
+ * @param path
  * @param removeSelf whether to remove the directory itself or just its content
  */
 export function emptyDir(path: string, removeSelf: boolean = false) {
@@ -18,13 +19,35 @@ export function emptyDir(path: string, removeSelf: boolean = false) {
   }
 
   fs.readdirSync(path).forEach(file => {
-    const current = path + '/' + file;
+    const current = `${path}/${file}`;
 
-    if (fs.lstatSync(current).isDirectory()) emptyDir(current);
+    if (fs.lstatSync(current).isDirectory()) emptyDir(current, removeSelf);
     else fs.unlinkSync(current);
   });
 
   if (removeSelf) fs.rmdirSync(path);
+}
+
+/**
+ * Recursively copies the src to dest
+ * @param src file or directory
+ * @param dst directory
+ */
+export function copyDir(src: string, dst: string) {
+  const target = `${dst}/${basename(src)}`;
+
+  if (!fs.lstatSync(src).isDirectory()) fs.copyFileSync(src, target);
+  else {
+    if (fs.existsSync(target) &&
+        fs.lstatSync(target).isDirectory()) {
+      emptyDir(target, true);
+    }
+
+    fs.mkdirSync(target);
+    fs.readdirSync(src).forEach(file => {
+      copyDir(`${src}/${file}`, target);
+    });
+  }
 }
 
 /**

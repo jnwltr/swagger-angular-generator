@@ -10,7 +10,7 @@ import * as conf from './conf';
 import { HttpResponse, Method, MethodName, Parameter } from './types';
 import { emptyDir, indent, makeComment, writeFile } from './utils';
 
-interface Paths {
+export interface Paths {
   [key: string]: {
     [key in MethodName]?: Method;
   };
@@ -91,10 +91,11 @@ function processController(methods: ControllerMethod[], name: string) {
   let content = '';
   content += 'import { Injectable } from \'@angular/core\';\n';
   content += 'import { Observable } from \'rxjs/Observable\';\n';
-  content += 'import { ApiService } from \'../../../app/common/services/rest/api.service\';\n';
+  content += '\n';
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n`;
   }
+  content += 'import { ApiService } from \'../services/api\';\n';
   content += '\n';
 
   const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');
@@ -105,7 +106,7 @@ function processController(methods: ControllerMethod[], name: string) {
 
   content += `@Injectable()\n`;
   content += `export class ${name}Service {\n`;
-  content += indent('constructor(private apiService: ApiService) { }');
+  content += indent('constructor(private apiService: ApiService) {}');
   content += '\n';
   content += indent(_.map(processedMethods, 'methodDef').join('\n\n'));
   content += '\n}\n';
@@ -180,7 +181,7 @@ function processMethod(method: ControllerMethod): MethodOutput {
         def = '{\n' + indent(list) + '\n};';
       }
 
-      return `let ${groupName}Params = ${def}`;
+      return `const ${groupName}Params = ${def}`;
     });
 
     const paramsType = _.upperFirst(`${method.simpleName}Params`);
@@ -193,7 +194,7 @@ function processMethod(method: ControllerMethod): MethodOutput {
     allowed.forEach((ap: string) => {
       // empty declaration
       if (!paramGroups[ap] && (ap !== 'path' || url !== method.url)) {
-        paramSeparation.push(`let ${ap}Params;`);
+        paramSeparation.push(`const ${ap}Params = undefined;`);
       }
       // path params are interpolated directly in url
       if (ap !== 'path') {
@@ -213,7 +214,7 @@ function processMethod(method: ControllerMethod): MethodOutput {
     }
     interfaceDef += method.responseDef.enumDeclaration + '\n';
   }
-  methodDef += `public ${method.simpleName}(${paramsSignature}): Observable<` +
+  methodDef += `${method.simpleName}(${paramsSignature}): Observable<` +
     `${method.responseDef.type}> {\n`;
 
   methodDef += indent(paramSeparation);

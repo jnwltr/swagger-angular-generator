@@ -3,6 +3,7 @@ import { MethodName, NativeNames } from './types';
 
 // relative to project root
 export const outDir = 'out';
+export const servicesDir = 'services';
 export const defsDir = 'defs';
 export const apiDir = 'api';
 export const modelFile = 'model';

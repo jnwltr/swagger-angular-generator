@@ -10,7 +10,7 @@ import * as conf from './conf';
 import { Schema } from './types';
 import { emptyDir, indent, writeFile } from './utils';
 
-interface Definition {
+export interface Definition {
   properties: {
     [key: string]: Schema;
   };

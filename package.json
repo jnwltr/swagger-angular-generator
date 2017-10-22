@@ -2,11 +2,12 @@
   "name": "swagger-angular-generator",
   "version": "1.0.0",
   "description": "Generator of API layer in TypeScript for Angular 2+ apps",
-  "main": "index.js",
+  "main": "dist/generate.js",
   "scripts": {
-    "generate": "ts-node -O '{\"target\": \"es2017\", \"module\": \"commonjs\"}' src/generate.ts",
+    "start": "ts-node src/generate.ts",
     "lint": "tslint -p tsconfig.json",
-    "lint:fix": "tslint -p tsconfig.json --fix"
+    "lint:fix": "tslint -p tsconfig.json --fix",
+    "build": "tsc --outDir dist"
   },
   "repository": {
     "type": "git",
@@ -31,11 +32,18 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@angular/common": "^4.4.6",
+    "@angular/core": "^4.4.6",
+    "@angular/http": "^4.4.6",
+    "@angular/platform-browser": "^4.4.6",
     "@types/lodash": "^4.14.77",
     "@types/node": "^8.0.46",
+    "angular-2-local-storage": "^1.0.1",
+    "rxjs": "^5.5.0",
     "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
     "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^2.5.3"
+    "typescript": "^2.5.3",
+    "zone.js": "^0.8.18"
   }
 }
