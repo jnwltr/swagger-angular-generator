@@ -138,12 +138,16 @@ function processMethod(method) {
         allowed.forEach((ap) => {
             // empty declaration
             if (!paramGroups[ap] && (ap !== 'path' || url !== method.url)) {
-                paramSeparation.push(`const ${ap}Params: object = undefined;`);
+                let paramType;
+                if (ap === 'formData')
+                    paramType = '{[key: string]: File}';
+                else
+                    paramType = 'undefined';
+                paramSeparation.push(`const ${ap}Params: object = ${paramType};`);
             }
             // path params are interpolated directly in url
-            if (ap !== 'path') {
+            if (ap !== 'path')
                 params += `, ${ap}Params`;
-            }
         });
     }
     methodDef += '\n';
