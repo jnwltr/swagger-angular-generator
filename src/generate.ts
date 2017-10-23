@@ -11,6 +11,11 @@ export interface Config {
   dest: string;
 }
 
+/**
+ * Generates API layer for the project based on src to dest
+ * @param src source swagger json schema
+ * @param dest destination directory
+ */
 export function generate(src: string = conf.apiFile, dest: string = conf.outDir) {
   let schema: any;
 

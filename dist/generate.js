@@ -6,6 +6,11 @@ const conf = require("./conf");
 const definitions_1 = require("./definitions");
 const requests_1 = require("./requests");
 const utils_1 = require("./utils");
+/**
+ * Generates API layer for the project based on src to dest
+ * @param src source swagger json schema
+ * @param dest destination directory
+ */
 function generate(src = conf.apiFile, dest = conf.outDir) {
     let schema;
     try {
