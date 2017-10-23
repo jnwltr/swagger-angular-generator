@@ -1,6 +1,8 @@
-# WIP: do not use, yet
+## Purpose
 
-(RC tbd in a couple of days)
+Generate minimalistic TypeScript API layer with full type reflection of backend model.
+- Source: [swagger scheme](https://swagger.io/specification/)
+- Destination: [Angular-cli](https://cli.angular.io/) based [Angular](https://angular.io/) app.
 
 ## Install
 
