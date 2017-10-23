@@ -3,6 +3,7 @@
   "version": "1.0.6",
   "description": "Generator of API layer in TypeScript for Angular 2+ apps",
   "main": "dist/generate.js",
+  "types": "dist/*.d.ts",
   "bin": "dist/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
