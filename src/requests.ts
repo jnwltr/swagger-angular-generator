@@ -7,6 +7,7 @@ import * as path from 'path';
 
 import { processProperty } from './common';
 import * as conf from './conf';
+import { Config } from './generate';
 import { HttpResponse, Method, MethodName, Parameter } from './types';
 import { emptyDir, indent, makeComment, writeFile } from './utils';
 
@@ -40,8 +41,8 @@ interface ControllerMethod {
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-export function processPaths(paths: Paths, swaggerPath: string, header: string) {
-  emptyDir(path.join(conf.outDir, conf.apiDir));
+export function processPaths(paths: Paths, swaggerPath: string, config: Config) {
+  emptyDir(path.join(config.dest, conf.apiDir));
 
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url) => (
     _.map(methods, (method, methodName: MethodName) => ({
@@ -62,7 +63,7 @@ export function processPaths(paths: Paths, swaggerPath: string, header: string) 
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, (methods, name) => processController(methods, name, header));
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config));
 }
 
 /**
@@ -70,8 +71,8 @@ export function processPaths(paths: Paths, swaggerPath: string, header: string) 
  * @param controllers list of methods of the controller
  * @param name
  */
-function processController(methods: ControllerMethod[], name: string, header: string) {
-  const filename = path.join(conf.outDir, conf.apiDir, `${name}.ts`);
+function processController(methods: ControllerMethod[], name: string, config: Config) {
+  const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
   let usesGlobalType = false;
 
   // make simpleNames unique and process responses
@@ -116,7 +117,7 @@ function processController(methods: ControllerMethod[], name: string, header: st
                               conf.adHocExceptions.api[name][1]);
   }
 
-  writeFile(filename, content, header);
+  writeFile(filename, content, config.header);
 }
 
 /**

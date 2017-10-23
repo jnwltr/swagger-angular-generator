@@ -7,6 +7,7 @@ import * as path from 'path';
 
 import { normalizeDef, processProperty } from './common';
 import * as conf from './conf';
+import { Config } from './generate';
 import { Schema } from './types';
 import { emptyDir, indent, writeFile } from './utils';
 
@@ -23,19 +24,16 @@ export interface Definition {
  * to individual files
  * @param defs definitions from the schema
  */
-export function processDefinitions(defs: { [key: string]: Definition }, header: string) {
-  emptyDir(path.join(conf.outDir, conf.defsDir));
+export function processDefinitions(defs: { [key: string]: Definition }, config: Config) {
+  emptyDir(path.join(config.dest, conf.defsDir));
 
   const files: { [key: string]: string[] } = {};
   _.forOwn(defs, (v, source) => {
-    const file = processDefinition(v, source, header);
+    const file = processDefinition(v, source, config);
     if (file) {
       const previous = files[file];
-      if (previous === undefined) {
-        files[file] = [source];
-      } else {
-        previous.push(source);
-      }
+      if (previous === undefined) files[file] = [source];
+      else previous.push(source);
     }
   });
 
@@ -44,8 +42,8 @@ export function processDefinitions(defs: { [key: string]: Definition }, header: 
     allExports += createExport(def) + createExportComments(def, sources) + '\n';
   });
 
-  const filename = path.join(conf.outDir, `${conf.modelFile}.ts`);
-  writeFile(filename, allExports, header);
+  const filename = path.join(config.dest, `${conf.modelFile}.ts`);
+  writeFile(filename, allExports, config.header);
 }
 
 /**
@@ -53,10 +51,9 @@ export function processDefinitions(defs: { [key: string]: Definition }, header: 
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def: Definition, name: string, header: string): string {
-  if (!isWritable(name)) {
-    return;
-  }
+function processDefinition(def: Definition, name: string, config: Config): string {
+  if (!isWritable(name)) return;
+
   name = normalizeDef(name);
 
   let output = '';
@@ -65,21 +62,18 @@ function processDefinition(def: Definition, name: string, header: string): strin
   if (properties.some(p => !p.native)) {
     output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
   }
-  if (def.description) {
-    output += `/** ${def.description} */\n`;
-  }
+  if (def.description) output += `/** ${def.description} */\n`;
+
   output += `export interface ${name} {\n`;
   output += indent(_.map(properties, 'property').join('\n'));
   output += `\n}\n`;
 
   // concat non-empty enum lines
   const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
-  if (enumLines) {
-    output += `\n${enumLines}\n`;
-  }
+  if (enumLines) output += `\n${enumLines}\n`;
 
-  const filename = path.join(conf.outDir, conf.defsDir, `${name}.ts`);
-  writeFile(filename, output, header);
+  const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
+  writeFile(filename, output, config.header);
 
   return name;
 }

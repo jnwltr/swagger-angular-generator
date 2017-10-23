@@ -6,6 +6,11 @@ import { processDefinitions } from './definitions';
 import { processPaths } from './requests';
 import { copyDir, out, processHeader } from './utils';
 
+export interface Config {
+  header: string;
+  dest: string;
+}
+
 export function generate(src: string = conf.apiFile, dest: string = conf.outDir) {
   let schema: any;
 
@@ -21,10 +26,12 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
   }
 
   const header = processHeader(schema);
+  const config: Config = {header, dest};
 
-  // TODO(janwalter) aplly and create dest
-  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, header);
-  processDefinitions(schema.definitions, header);
+  if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+
+  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
+  processDefinitions(schema.definitions, config);
 
   copyDir(conf.servicesDir, dest);
 }

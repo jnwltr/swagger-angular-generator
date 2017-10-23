@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import { basename } from 'path';
-
 import * as conf from './conf';
 
 /**

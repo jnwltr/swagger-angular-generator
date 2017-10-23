@@ -1,11 +1,12 @@
-import { environment } from '../../environments/environment';
-import { Injectable } from '@angular/core';
-import { Headers, Http, RequestMethod, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+
+import { Injectable } from '@angular/core';
+import { Headers, Http, RequestMethod, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth';
 
 @Injectable()
