@@ -49,5 +49,14 @@
     "tslint-eslint-rules": "^4.1.1",
     "typescript": "^2.5.3",
     "zone.js": "^0.8.18"
+  },
+  "peerDependencies": {
+    "@angular/common": "^4.4.6",
+    "@angular/core": "^4.4.6",
+    "@angular/http": "^4.4.6",
+    "@angular/platform-browser": "^4.4.6",
+    "angular-2-local-storage": "^1.0.1",
+    "zone.js": "^0.8.18",
+    "rxjs": "^5.5.0"
   }
 }

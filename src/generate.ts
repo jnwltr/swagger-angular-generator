@@ -6,7 +6,7 @@ import { processDefinitions } from './definitions';
 import { processPaths } from './requests';
 import { copyDir, out, processHeader } from './utils';
 
-export default function generate(src: string = conf.apiFile, dest: string = conf.outDir) {
+export function generate(src: string = conf.apiFile, dest: string = conf.outDir) {
   let schema: any;
 
   try {

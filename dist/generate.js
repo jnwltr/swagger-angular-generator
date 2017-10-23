@@ -26,5 +26,5 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
     definitions_1.processDefinitions(schema.definitions, header);
     utils_1.copyDir(conf.servicesDir, dest);
 }
-exports.default = generate;
+exports.generate = generate;
 //# sourceMappingURL=generate.js.map
