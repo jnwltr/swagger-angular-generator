@@ -1,7 +1,6 @@
-/** Configuration constants */
 import { MethodName, NativeNames } from './types';
 export declare const outDir = "src/api";
-export declare const servicesDir = "services";
+export declare const servicesDir: string;
 export declare const defsDir = "defs";
 export declare const apiDir = "controllers";
 export declare const apiFile = "conf/api/api-docs.json";

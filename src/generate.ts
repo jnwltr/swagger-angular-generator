@@ -22,6 +22,7 @@ export default function generate(src: string = conf.apiFile, dest: string = conf
 
   const header = processHeader(schema);
 
+  // TODO(janwalter) aplly and create dest
   processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, header);
   processDefinitions(schema.definitions, header);
 

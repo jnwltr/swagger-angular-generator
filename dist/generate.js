@@ -21,6 +21,7 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
         return;
     }
     const header = utils_1.processHeader(schema);
+    // TODO(janwalter) aplly and create dest
     requests_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, header);
     definitions_1.processDefinitions(schema.definitions, header);
     utils_1.copyDir(conf.servicesDir, dest);

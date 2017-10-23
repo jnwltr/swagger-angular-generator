@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Configuration constants */
+const path_1 = require("path");
 // relative to project root
 exports.outDir = 'src/api';
-exports.servicesDir = 'services';
+exports.servicesDir = path_1.join(__dirname, '..', 'services');
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.apiFile = 'conf/api/api-docs.json';
