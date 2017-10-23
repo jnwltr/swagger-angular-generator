@@ -196,8 +196,8 @@ function processMethod(method: ControllerMethod): MethodOutput {
       if (!paramGroups[ap] && (ap !== 'path' || url !== method.url)) {
         let paramType;
         if (ap === 'formData') paramType = '{[key: string]: File}';
-        else paramType = 'undefined';
-        paramSeparation.push(`const ${ap}Params: object = ${paramType};`);
+        else paramType = 'object';
+        paramSeparation.push(`const ${ap}Params: ${paramType} = undefined;`);
       }
       // path params are interpolated directly in url
       if (ap !== 'path') params += `, ${ap}Params`;
