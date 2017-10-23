@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // relative to project root
-exports.outDir = 'out';
+exports.outDir = 'src/api';
 exports.servicesDir = 'services';
 exports.defsDir = 'defs';
-exports.apiDir = 'api';
+exports.apiDir = 'controllers';
+exports.apiFile = 'conf/api/api-docs.json';
 exports.modelFile = 'model';
 exports.indentation = 2;
 // part of path in url

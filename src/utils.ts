@@ -1,11 +1,7 @@
 import * as fs from 'fs';
 import { basename } from 'path';
 
-import * as schemaData from '../in/api-docs.json';
 import * as conf from './conf';
-
-const schema = schemaData as any;
-const header = processHeader(schema);
 
 /**
  * Recursively deletes the path
@@ -70,7 +66,7 @@ export function indent(input: string | string[], level: number = 1): string {
  * @param file
  * @param content
  */
-export function writeFile(file: string, content: string): void {
+export function writeFile(file: string, content: string, header: string): void {
   content = `${header}\n${content}`;
   fs.writeFileSync(file, content);
   out(`${file} generated`, 'green');
@@ -98,7 +94,7 @@ export function makeComment(input: string | string[]): string {
  * Creates a unified header for all serialized files
  * @param schemaDef input schema header
  */
-function processHeader(schemaDef: any): string {
+export function processHeader(schemaDef: any): string {
   const relevant = {
     info: schemaDef.info,
     path: schemaDef.host + schemaDef.basePath,
@@ -113,10 +109,10 @@ function processHeader(schemaDef: any): string {
   return makeComment(res);
 }
 
-type Color = 'green' | 'red';
-type TermColors = {[key in Color]: string};
+export type Color = 'green' | 'red';
+export type TermColors = {[key in Color]: string};
 
-const termColors: TermColors = {
+export const termColors: TermColors = {
   green: '\x1b[32m',
   red: '\x1b[31m',
 };
@@ -126,7 +122,7 @@ const termColors: TermColors = {
  * @param text
  * @param color
  */
-function out(text: string | string[], color?: Color) {
+export function out(text: string | string[], color?: Color) {
   if (Array.isArray(text)) text = text.join('\n');
   if (color) text = `${termColors[color]}${text}`;
 

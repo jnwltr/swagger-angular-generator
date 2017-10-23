@@ -2,10 +2,11 @@
 import { MethodName, NativeNames } from './types';
 
 // relative to project root
-export const outDir = 'out';
+export const outDir = 'src/api';
 export const servicesDir = 'services';
 export const defsDir = 'defs';
-export const apiDir = 'api';
+export const apiDir = 'controllers';
+export const apiFile = 'conf/api/api-docs.json';
 export const modelFile = 'model';
 export const indentation = 2;
 // part of path in url

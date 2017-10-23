@@ -23,12 +23,12 @@ export interface Definition {
  * to individual files
  * @param defs definitions from the schema
  */
-export function processDefinitions(defs: { [key: string]: Definition }) {
+export function processDefinitions(defs: { [key: string]: Definition }, header: string) {
   emptyDir(path.join(conf.outDir, conf.defsDir));
 
   const files: { [key: string]: string[] } = {};
   _.forOwn(defs, (v, source) => {
-    const file = processDefinition(v, source);
+    const file = processDefinition(v, source, header);
     if (file) {
       const previous = files[file];
       if (previous === undefined) {
@@ -45,7 +45,7 @@ export function processDefinitions(defs: { [key: string]: Definition }) {
   });
 
   const filename = path.join(conf.outDir, `${conf.modelFile}.ts`);
-  writeFile(filename, allExports);
+  writeFile(filename, allExports, header);
 }
 
 /**
@@ -53,7 +53,7 @@ export function processDefinitions(defs: { [key: string]: Definition }) {
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def: Definition, name: string): string {
+function processDefinition(def: Definition, name: string, header: string): string {
   if (!isWritable(name)) {
     return;
   }
@@ -79,7 +79,7 @@ function processDefinition(def: Definition, name: string): string {
   }
 
   const filename = path.join(conf.outDir, conf.defsDir, `${name}.ts`);
-  writeFile(filename, output);
+  writeFile(filename, output, header);
 
   return name;
 }

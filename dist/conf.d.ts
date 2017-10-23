@@ -1,9 +1,10 @@
 /** Configuration constants */
 import { MethodName, NativeNames } from './types';
-export declare const outDir = "out";
+export declare const outDir = "src/api";
 export declare const servicesDir = "services";
 export declare const defsDir = "defs";
-export declare const apiDir = "api";
+export declare const apiDir = "controllers";
+export declare const apiFile = "conf/api/api-docs.json";
 export declare const modelFile = "model";
 export declare const indentation = 2;
 export declare const swaggerFile = "/swagger-ui.html#!/";

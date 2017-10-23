@@ -14,11 +14,11 @@ const utils_1 = require("./utils");
  * to individual files
  * @param defs definitions from the schema
  */
-function processDefinitions(defs) {
+function processDefinitions(defs, header) {
     utils_1.emptyDir(path.join(conf.outDir, conf.defsDir));
     const files = {};
     _.forOwn(defs, (v, source) => {
-        const file = processDefinition(v, source);
+        const file = processDefinition(v, source, header);
         if (file) {
             const previous = files[file];
             if (previous === undefined) {
@@ -34,7 +34,7 @@ function processDefinitions(defs) {
         allExports += createExport(def) + createExportComments(def, sources) + '\n';
     });
     const filename = path.join(conf.outDir, `${conf.modelFile}.ts`);
-    utils_1.writeFile(filename, allExports);
+    utils_1.writeFile(filename, allExports, header);
 }
 exports.processDefinitions = processDefinitions;
 /**
@@ -42,7 +42,7 @@ exports.processDefinitions = processDefinitions;
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def, name) {
+function processDefinition(def, name, header) {
     if (!isWritable(name)) {
         return;
     }
@@ -65,7 +65,7 @@ function processDefinition(def, name) {
         output += `\n${enumLines}\n`;
     }
     const filename = path.join(conf.outDir, conf.defsDir, `${name}.ts`);
-    utils_1.writeFile(filename, output);
+    utils_1.writeFile(filename, output, header);
     return name;
 }
 /**

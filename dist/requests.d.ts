@@ -10,4 +10,4 @@ export interface Paths {
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-export declare function processPaths(paths: Paths, swaggerPath: string): void;
+export declare function processPaths(paths: Paths, swaggerPath: string, header: string): void;

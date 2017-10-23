@@ -2,10 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const path_1 = require("path");
-const schemaData = require("../in/api-docs.json");
 const conf = require("./conf");
-const schema = schemaData;
-const header = processHeader(schema);
 /**
  * Recursively deletes the path
  * @param path
@@ -68,7 +65,7 @@ exports.indent = indent;
  * @param file
  * @param content
  */
-function writeFile(file, content) {
+function writeFile(file, content, header) {
     content = `${header}\n${content}`;
     fs.writeFileSync(file, content);
     out(`${file} generated`, 'green');
@@ -108,7 +105,8 @@ function processHeader(schemaDef) {
     res = res.split('\n').filter(l => l.match(/\w/)).join('\n');
     return makeComment(res);
 }
-const termColors = {
+exports.processHeader = processHeader;
+exports.termColors = {
     green: '\x1b[32m',
     red: '\x1b[31m',
 };
@@ -121,7 +119,8 @@ function out(text, color) {
     if (Array.isArray(text))
         text = text.join('\n');
     if (color)
-        text = `${termColors[color]}${text}`;
+        text = `${exports.termColors[color]}${text}`;
     process.stdout.write(`${text}\n`);
 }
+exports.out = out;
 //# sourceMappingURL=utils.js.map

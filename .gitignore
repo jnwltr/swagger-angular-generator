@@ -27,6 +27,6 @@ node_modules/
 # IDE project profiles
 .vscode/
 
-# in/out
-in/
-out/
+# testing input/outpur
+conf/
+src/api/

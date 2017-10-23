@@ -21,13 +21,14 @@ export class ApiService {
    * @param data to be sent
    * @param form form data used for files, has precedence over data
    */
-  post(url: string, data?: any, query?: object, form?: object): Observable<any> {
+  post(url: string, data?: any, query?: object, form?: {[key: string]: File}): Observable<any> {
+    let formData: FormData;
     if (form) {
-      const formData = new FormData();
-      Object.keys(form).forEach(key => data.append(key, formData[key]));
+      formData = new FormData();
+      Object.keys(form).forEach(key => formData.append(key, form[key]));
     }
 
-    return this.request(RequestMethod.Post, url, data, query);
+    return this.request(RequestMethod.Post, url, formData || data, query);
   }
 
   put(url: string, data?: any, query?: object): Observable<any> {

@@ -40,7 +40,7 @@ interface ControllerMethod {
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-export function processPaths(paths: Paths, swaggerPath: string) {
+export function processPaths(paths: Paths, swaggerPath: string, header: string) {
   emptyDir(path.join(conf.outDir, conf.apiDir));
 
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url) => (
@@ -62,7 +62,7 @@ export function processPaths(paths: Paths, swaggerPath: string) {
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, processController);
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, header));
 }
 
 /**
@@ -70,7 +70,7 @@ export function processPaths(paths: Paths, swaggerPath: string) {
  * @param controllers list of methods of the controller
  * @param name
  */
-function processController(methods: ControllerMethod[], name: string) {
+function processController(methods: ControllerMethod[], name: string, header: string) {
   const filename = path.join(conf.outDir, conf.apiDir, `${name}.ts`);
   let usesGlobalType = false;
 
@@ -116,7 +116,7 @@ function processController(methods: ControllerMethod[], name: string) {
                               conf.adHocExceptions.api[name][1]);
   }
 
-  writeFile(filename, content);
+  writeFile(filename, content, header);
 }
 
 /**
@@ -194,7 +194,7 @@ function processMethod(method: ControllerMethod): MethodOutput {
     allowed.forEach((ap: string) => {
       // empty declaration
       if (!paramGroups[ap] && (ap !== 'path' || url !== method.url)) {
-        paramSeparation.push(`const ${ap}Params = undefined;`);
+        paramSeparation.push(`const ${ap}Params: object = undefined;`);
       }
       // path params are interpolated directly in url
       if (ap !== 'path') {

@@ -13,4 +13,4 @@ export interface Definition {
  */
 export declare function processDefinitions(defs: {
     [key: string]: Definition;
-}): void;
+}, header: string): void;
