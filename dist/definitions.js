@@ -14,27 +14,25 @@ const utils_1 = require("./utils");
  * to individual files
  * @param defs definitions from the schema
  */
-function processDefinitions(defs, header) {
-    utils_1.emptyDir(path.join(conf.outDir, conf.defsDir));
+function processDefinitions(defs, config) {
+    utils_1.emptyDir(path.join(config.dest, conf.defsDir));
     const files = {};
     _.forOwn(defs, (v, source) => {
-        const file = processDefinition(v, source, header);
+        const file = processDefinition(v, source, config);
         if (file) {
             const previous = files[file];
-            if (previous === undefined) {
+            if (previous === undefined)
                 files[file] = [source];
-            }
-            else {
+            else
                 previous.push(source);
-            }
         }
     });
     let allExports = '';
     _.forOwn(files, (sources, def) => {
         allExports += createExport(def) + createExportComments(def, sources) + '\n';
     });
-    const filename = path.join(conf.outDir, `${conf.modelFile}.ts`);
-    utils_1.writeFile(filename, allExports, header);
+    const filename = path.join(config.dest, `${conf.modelFile}.ts`);
+    utils_1.writeFile(filename, allExports, config.header);
 }
 exports.processDefinitions = processDefinitions;
 /**
@@ -42,10 +40,9 @@ exports.processDefinitions = processDefinitions;
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def, name, header) {
-    if (!isWritable(name)) {
+function processDefinition(def, name, config) {
+    if (!isWritable(name))
         return;
-    }
     name = common_1.normalizeDef(name);
     let output = '';
     const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
@@ -53,19 +50,17 @@ function processDefinition(def, name, header) {
     if (properties.some(p => !p.native)) {
         output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
-    if (def.description) {
+    if (def.description)
         output += `/** ${def.description} */\n`;
-    }
     output += `export interface ${name} {\n`;
     output += utils_1.indent(_.map(properties, 'property').join('\n'));
     output += `\n}\n`;
     // concat non-empty enum lines
     const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
-    if (enumLines) {
+    if (enumLines)
         output += `\n${enumLines}\n`;
-    }
-    const filename = path.join(conf.outDir, conf.defsDir, `${name}.ts`);
-    utils_1.writeFile(filename, output, header);
+    const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
+    utils_1.writeFile(filename, output, config.header);
     return name;
 }
 /**

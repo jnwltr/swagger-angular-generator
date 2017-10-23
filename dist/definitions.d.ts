@@ -1,3 +1,4 @@
+import { Config } from './generate';
 import { Schema } from './types';
 export interface Definition {
     properties: {
@@ -13,4 +14,4 @@ export interface Definition {
  */
 export declare function processDefinitions(defs: {
     [key: string]: Definition;
-}, header: string): void;
+}, config: Config): void;

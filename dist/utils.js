@@ -66,7 +66,8 @@ exports.indent = indent;
  * @param content
  */
 function writeFile(file, content, header) {
-    content = `${header}\n${content}`;
+    const disable = '/* tslint:disable:max-line-lengtx */';
+    content = `${disable}\n${header}\n${content}`;
     fs.writeFileSync(file, content);
     out(`${file} generated`, 'green');
 }

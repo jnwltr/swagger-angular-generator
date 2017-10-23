@@ -15,8 +15,8 @@ const utils_1 = require("./utils");
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-function processPaths(paths, swaggerPath, header) {
-    utils_1.emptyDir(path.join(conf.outDir, conf.apiDir));
+function processPaths(paths, swaggerPath, config) {
+    utils_1.emptyDir(path.join(config.dest, conf.apiDir));
     const controllers = _.flatMap(paths, (methods, url) => (_.map(methods, (method, methodName) => ({
         url,
         name: _.upperFirst(_.camelCase(method.tags[0].replace(/(-rest)?-controller/, ''))),
@@ -32,7 +32,7 @@ function processPaths(paths, swaggerPath, header) {
     }))));
     const controllerFiles = _.groupBy(controllers, 'name');
     conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-    _.forEach(controllerFiles, (methods, name) => processController(methods, name, header));
+    _.forEach(controllerFiles, (methods, name) => processController(methods, name, config));
 }
 exports.processPaths = processPaths;
 /**
@@ -40,8 +40,8 @@ exports.processPaths = processPaths;
  * @param controllers list of methods of the controller
  * @param name
  */
-function processController(methods, name, header) {
-    const filename = path.join(conf.outDir, conf.apiDir, `${name}.ts`);
+function processController(methods, name, config) {
+    const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
     let usesGlobalType = false;
     // make simpleNames unique and process responses
     const simpleNames = _.map(methods, 'simpleName');
@@ -77,7 +77,7 @@ function processController(methods, name, header) {
     if (conf.adHocExceptions.api[name]) {
         content = content.replace(conf.adHocExceptions.api[name][0], conf.adHocExceptions.api[name][1]);
     }
-    utils_1.writeFile(filename, content, header);
+    utils_1.writeFile(filename, content, config.header);
 }
 /**
  * Process all responses of one method

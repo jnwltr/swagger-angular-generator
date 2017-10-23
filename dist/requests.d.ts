@@ -1,3 +1,4 @@
+import { Config } from './generate';
 import { Method, MethodName } from './types';
 export interface Paths {
     [key: string]: {
@@ -10,4 +11,4 @@ export interface Paths {
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-export declare function processPaths(paths: Paths, swaggerPath: string, header: string): void;
+export declare function processPaths(paths: Paths, swaggerPath: string, config: Config): void;
