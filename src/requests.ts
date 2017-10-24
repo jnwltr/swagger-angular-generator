@@ -8,7 +8,7 @@ import * as path from 'path';
 import { processProperty } from './common';
 import * as conf from './conf';
 import { Config } from './generate';
-import { HttpResponse, Method, MethodName, Parameter } from './types';
+import { HttpCode, HttpResponse, Method, MethodName, Parameter } from './types';
 import { emptyDir, indent, makeComment, writeFile } from './utils';
 
 export interface Paths {
@@ -122,11 +122,12 @@ function processController(methods: ControllerMethod[], name: string, config: Co
 
 /**
  * Process all responses of one method
- * @param input response object
+ * @param httpResponse response object
  * @param name of the context for type name uniqueness
  */
-function processResponses(input: HttpResponse, name: string) {
-  const responses = _.filter(input, 'schema');
+function processResponses(httpResponse: HttpResponse, name: string) {
+  const responses = _.filter(httpResponse, (r, status: HttpCode) => (
+    r.schema && Math.floor(Number(status) / 100) === 2));
   const properties = _.map(responses, response => (
     processProperty(response.schema, undefined, `${name}`)
   ));
