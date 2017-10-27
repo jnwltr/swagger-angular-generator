@@ -1,7 +1,7 @@
 /** Configuration constants */
-import { join } from 'path';
+import {join} from 'path';
 
-import { MethodName, NativeNames } from './types';
+import {MethodName, NativeNames} from './types';
 
 // relative to project root
 export const outDir = 'src/api';

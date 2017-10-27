@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 
 import * as conf from './conf';
-import { NativeNames, Schema } from './types';
-import { indent, makeComment } from './utils';
+import {NativeNames, Schema} from './types';
+import {indent, makeComment} from './utils';
 
 export interface PropertyOutput {
   property: string;
@@ -89,7 +89,7 @@ export function processProperty(prop: Schema, name: string = '', namespace: stri
     property = `${comment}${name}${optional}: ${type};`;
   } else property = `${type}`;
 
-  return { property, enumDeclaration, native };
+  return {property, enumDeclaration, native};
 }
 
 /**
@@ -156,7 +156,7 @@ function translateType(type: string): DefType {
     return resolveDefType(subtype[1]);
   }
 
-  return { type, native: true };
+  return {type, native: true};
 }
 
 /**

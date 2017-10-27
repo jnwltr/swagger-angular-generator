@@ -5,11 +5,11 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 
-import { processProperty } from './common';
+import {processProperty} from './common';
 import * as conf from './conf';
-import { Config } from './generate';
-import { HttpCode, HttpResponse, Method, MethodName, Parameter } from './types';
-import { emptyDir, indent, makeComment, writeFile } from './utils';
+import {Config} from './generate';
+import {HttpCode, HttpResponse, Method, MethodName, Parameter} from './types';
+import {emptyDir, indent, makeComment, writeFile} from './utils';
 
 export interface Paths {
   [key: string]: {
@@ -143,7 +143,7 @@ function processResponses(httpResponse: HttpResponse, name: string) {
     type = 'void';
   }
 
-  return { type, enumDeclaration, usesGlobalType };
+  return {type, enumDeclaration, usesGlobalType};
 }
 
 interface MethodOutput {
@@ -230,7 +230,7 @@ function processMethod(method: ControllerMethod): MethodOutput {
   methodDef += `\n`;
   methodDef += `}`;
 
-  return { methodDef, interfaceDef, usesGlobalType };
+  return {methodDef, interfaceDef, usesGlobalType};
 }
 
 /**
@@ -268,7 +268,7 @@ function processParams(def: Parameter[], paramsType: string) {
     paramDef += `\n`;
   }
 
-  return { paramDef, usesGlobalType };
+  return {paramDef, usesGlobalType};
 }
 
 /**

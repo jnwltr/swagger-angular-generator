@@ -4,7 +4,10 @@
   "description": "Generator of API layer in TypeScript for Angular 2+ apps",
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
-  "bin": "dist/index.js",
+  "bin": {
+    "swag2ng": "dist/index.js",
+    "swagger-angular-generator": "dist/index.js"
+  },
   "scripts": {
     "start": "ts-node src/index.ts",
     "lint": "tslint -p tsconfig.json",

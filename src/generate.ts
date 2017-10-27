@@ -2,9 +2,9 @@
 import * as fs from 'fs';
 
 import * as conf from './conf';
-import { processDefinitions } from './definitions';
-import { processPaths } from './requests';
-import { copyDir, out, processHeader } from './utils';
+import {processDefinitions} from './definitions';
+import {processPaths} from './requests';
+import {copyDir, out, processHeader} from './utils';
 
 export interface Config {
   header: string;

@@ -2,7 +2,7 @@
 import * as commander from 'commander';
 
 import * as conf from './conf';
-import { generate } from './generate';
+import {generate} from './generate';
 
 commander
   .option('-s, --src <source>', `Source directory, default: ${conf.apiFile}`)

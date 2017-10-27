@@ -5,11 +5,11 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 
-import { normalizeDef, processProperty } from './common';
+import {normalizeDef, processProperty} from './common';
 import * as conf from './conf';
-import { Config } from './generate';
-import { Schema } from './types';
-import { emptyDir, indent, writeFile } from './utils';
+import {Config} from './generate';
+import {Schema} from './types';
+import {emptyDir, indent, writeFile} from './utils';
 
 export interface Definition {
   properties: {
