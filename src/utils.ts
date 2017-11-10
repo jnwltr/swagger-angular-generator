@@ -7,7 +7,7 @@ import * as conf from './conf';
  * @param path
  * @param removeSelf whether to remove the directory itself or just its content
  */
-export function emptyDir(path: string, removeSelf: boolean = false) {
+export function emptyDir(path: string, removeSelf = false) {
   if (!fs.existsSync(path)) {
     if (!removeSelf) fs.mkdirSync(path);
     return;
@@ -50,7 +50,7 @@ export function copyDir(src: string, dst: string) {
  * @param input string (with new-line separation) or array of lines
  * @param level of indentation, takes into account `conf` indentation setting
  */
-export function indent(input: string | string[], level: number = 1): string {
+export function indent(input: string | string[], level = 1): string {
   if (Array.isArray(input)) input = input.join('\n');
 
   let res: string;

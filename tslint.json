@@ -12,6 +12,8 @@
     "member-access": [true, "no-public"],
     "no-duplicate-variable": true,
     "no-empty": false,
+    "no-inferrable-types": true,
+    "no-multi-spaces": true,
     "object-literal-sort-keys": false,
     "quotemark": [true, "single"],
     "variable-name": false

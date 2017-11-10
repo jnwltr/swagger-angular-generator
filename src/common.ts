@@ -16,7 +16,7 @@ export interface PropertyOutput {
  * @param name property name
  * @param namespace usage context for type name uniqueness
  */
-export function processProperty(prop: Schema, name: string = '', namespace: string = '',
+export function processProperty(prop: Schema, name = '', namespace = '',
                                 required: (string[] | boolean) = false,
                                 exportEnums = true): PropertyOutput {
   let type: string;
