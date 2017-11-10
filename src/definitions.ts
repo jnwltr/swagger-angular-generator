@@ -92,7 +92,7 @@ function createExport(def: string): string {
  * @param sources list of sources for the file
  */
 function createExportComments(file: string, sources: string[]): string {
-  if (sources.length > 1 || sources.indexOf(file) === -1) {
+  if (sources.length > 1 || !sources.includes(file)) {
     return ' // sources: ' + sources.join(', ');
   }
 

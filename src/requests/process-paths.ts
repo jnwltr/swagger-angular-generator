@@ -7,7 +7,7 @@ import * as path from 'path';
 
 import * as conf from '../conf';
 import {Config} from '../generate';
-import {MethodName} from '../types';
+import {Method, MethodName} from '../types';
 import {emptyDir} from '../utils';
 import {processController} from './process-controller';
 import {ControllerMethod, Paths} from './requests.models';
@@ -24,8 +24,7 @@ export function processPaths(paths: Paths, swaggerPath: string, config: Config) 
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url) => (
     _.map(methods, (method, methodName: MethodName) => ({
       url,
-      name: _.upperFirst(_.camelCase(
-        method.tags[0].replace(/(-rest)?-controller/, ''))),
+      name: getName(method),
       methodName,
       simpleName: getSimpleName(url),
       summary: method.summary,
@@ -51,6 +50,8 @@ export function processPaths(paths: Paths, swaggerPath: string, config: Config) 
 function getSimpleName(url: string) {
   // remove url params
   let method = url.replace(/\/{[^}]+}/g, '');
+  // remove trailing `/` if present
+  method = method.replace(/\/$/, '');
   // take trailing url folder
   method = method.replace(/(.*\/)*/, '');
   // subst spaces and underscores
@@ -58,4 +59,8 @@ function getSimpleName(url: string) {
   method = method.replace(/[^\w]/g, '');
 
   return method;
+}
+
+function getName(method: Method) {
+  return _.upperFirst(_.camelCase(method.tags[0].replace(/(-rest)?-controller/, '')));
 }

@@ -24,37 +24,30 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let paramsSignature = '';
   let params = '';
   let usesGlobalType = false;
+  let paramTypes: string[] = [];
 
   if (method.paramDef) {
-    const paramDef = method.paramDef.filter(df => allowed.indexOf(df.in) >= 0);
+    const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
     const paramGroups = _.groupBy(paramDef, 'in');
-
-    paramSeparation = getParamSeparation(paramGroups);
-
     const paramsType = _.upperFirst(`${method.simpleName}Params`);
-    paramsSignature = `params: ${paramsType}`;
-
     const processedParams = processParams(paramDef, paramsType);
+
+    paramTypes = Object.keys(paramGroups);
+    paramSeparation = getParamSeparation(paramGroups);
+    paramsSignature = `params: ${paramsType}`;
     usesGlobalType = processedParams.usesGlobalType;
     interfaceDef = processedParams.paramDef;
 
-    paramDef.forEach((pd: any) => {
-      if (method.methodName === 'get' && pd.in !== 'query') {
-        params += `, {params: queryParams}`;
-      // TODO - change for open api 3.0
-      } else if (method.methodName in ['post', 'put', 'patch'] && pd.in !== 'body') {
-        params += `, {params: params}`;
-      }
-    });
+    params += getRequestParams(paramTypes, method.methodName);
   }
-  methodDef += '\n';
 
+  methodDef += '\n';
   methodDef += makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
 
-  interfaceDef += getIntefaceObjectDeclaration(interfaceDef, method);
+  interfaceDef = getIntefaceObjectDeclaration(interfaceDef, method);
 
   // define method name
-  methodDef += `${method.simpleName}(${paramsSignature}): Observable<` + `${method.responseDef.type}> {\n`;
+  methodDef += `${method.simpleName}(${paramsSignature}): Observable<${method.responseDef.type}> {\n`;
 
   // apply the param definitions, e.g. bodyParams
   methodDef += indent(paramSeparation);
@@ -62,16 +55,13 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     methodDef += '\n';
   }
 
-  // assign params to the HttpParams object
-  const assignQueryParamsDef = assignQueryParamsObject();
-
-  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
-
-  if (params && method.methodName === 'get') {
-    methodDef += indent(assignQueryParamsDef);
+  if (paramTypes.includes('query')) {
+    methodDef += `\n`;
+    methodDef += indent(assignQueryParamsObject());
     methodDef += `\n`;
   }
 
+  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
@@ -79,30 +69,24 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   return {methodDef, interfaceDef, usesGlobalType};
 }
 
-// creates a definition of pathParams, bodyParams, queryParms or formDataParams
+/**
+ * Creates a definition of pathParams, bodyParams, queryParms or formDataParams
+ * @param paramGroups
+ */
 function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
+  return _.map(paramGroups, (group, groupName) => {
+    let def: string;
+    // only one direct body parameter is allowed
+    // 1st one taken if more of them present
+    if (groupName === 'body') {
+      def = `params.${group[0].name};`;
+    } else {
+      const list = _.map(group, p => `${p.name}: params.${p.name},`);
+      def = '{\n' + indent(list) + '\n};';
+    }
 
-  /* groupName is e.g. 'body'
-     group is e.g. [ { in: 'body',
-                       name: 'pointDto',
-                       description: 'pointDto',
-                       required: true,
-                       schema: { '$ref': '#/definitions/PointDto' } } ]
-  */
-  const paramSeaparation = _.map(paramGroups, (group, groupName) => {
-      let def: string;
-      // only one direct body parameter is allowed
-      // 1st one taken if more of them present
-      if (groupName === 'body') {
-        def = `params.${group[0].name};`;
-      } else {
-        const list = _.map(group, p => `${p.name}: params.${p.name},`);
-        def = '{\n' + indent(list) + '\n};';
-      }
-
-      return `const ${groupName}Params = ${def}`;
-    });
-  return paramSeaparation;
+    return `const ${groupName}Params = ${def}`;
+  });
 }
 
 // return the definition of intefrace objects
@@ -118,16 +102,29 @@ function getIntefaceObjectDeclaration(interfaceDef: string, method: ControllerMe
 
 function assignQueryParamsObject() {
   let assignQueryParamsDef = '';
+  assignQueryParamsDef += `const httpQueryParams = new HttpParams();\n`;
+  assignQueryParamsDef += `Object.keys(queryParams).forEach(key => httpQueryParams.append(key, queryParams[key]));\n`;
 
-  assignQueryParamsDef += `\n`;
-  assignQueryParamsDef += `let queryParams = new HttpParams();`;
-  assignQueryParamsDef += `\n`;
-  assignQueryParamsDef += `Object.keys(params).forEach(key => {`;
-  assignQueryParamsDef += `\n`;
-  assignQueryParamsDef += indent(`queryParams = queryParams.append(key, params[key]);`);
-  assignQueryParamsDef += `\n`;
-  assignQueryParamsDef += `});`;
-  assignQueryParamsDef += `\n`;
+  return assignQueryParamsDef;
+}
 
-  return assignQueryParamsDef ;
+// TODO! recheck with original code, allowed params logic lost???
+function getRequestParams(paramTypes: string[], methodName: string) {
+  let res = '';
+
+  if (['post', 'put', 'patch'].includes(methodName)) {
+    if (paramTypes.includes('body')) {
+      res += `, bodyParams`;
+    } else if (paramTypes.includes('formData')) {
+      res += `, formDataParams`;
+    } else {
+      res += `, {}`;
+    }
+  }
+
+  if (paramTypes.includes('query')) {
+    res += `, {params: httpQueryParams}`;
+  }
+
+  return res;
 }

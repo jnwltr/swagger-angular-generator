@@ -13,8 +13,8 @@ Generate minimalistic TypeScript API layer with full type reflection of backend 
 
 ### Run generator
 
-1. get the swagger scheme at http(s)://domain/[path]/v2/api/api-docs
-1. save it to json file in input directory and **format** it
+1. get the swagger scheme (typically at at http(s)://[server]/[app-path]/v2/api/api-docs)
+1. save it to json file in input directory and optionally **format** it for better diff
 1. run via
     1. **directly** `./node_modules/.bin/swagger-angular-generator`
     1. **as module** `swagger-angular-generator` package, `npm run generate`
@@ -39,7 +39,7 @@ The resulting API layer contains the following structure in the destination dire
 1. `model.ts` file reexports all of them together for a simple access
 1. `api` directory stores services devided by controllers containing all API methods
 
-When updating your code for new backend version, follow these steps:
+When updating your code for new backend version, we recommend you to follow these steps:
 
 1. `git diff` the changes
 1. run `tsc` for immediate problems
@@ -48,52 +48,38 @@ When updating your code for new backend version, follow these steps:
 
 ### Use
 
-In order to consume generated model, follow the steps **1-9** in the following example to use generated API model.
-
-#### Getting ready for injection in the module
-
-```typescript
-// 1. add providers to your module, e.g.
-import {ApiService} from '../api/services/api';
-import {AuthService} from '../api/services/auth';
-
-@NgModule({providers: [ApiService, AuthService, ...], ...})
-export class AppModule {}
-```
+In order to consume generated model, follow the steps **1-8** in the following example to use generated API model.
 
 #### Usage in the service or component
 ```typescript
-// 2. import used response types
+// 1. import used response types
 import {ItemDto, PageDto} from '[relative-path-to-destination-directory]/model';
-// 3. import used controller service and optionally param types
+// 2. import used controller service and optionally param types
 import {DataService, MethodParams} from '[relative-path-to-destination-directory]/api/DataService';
 
-@Component({
-  // 4. enable injection
-  providers: [DataService]
-})
+@Component({})
 export class MyComponent implements OnInit {
-  // 5. link response objects to generated API types
+  // 3. link response objects to generated API types
   public items: ItemDto[] = [];
   public page: PageDto;
 
-  // 6. link request params to generated API types (all params are passed together in one object)
+  // 4. link request params to generated API types (all params are passed together in one object)
   private params: MethodParams = {
     page: 0,
     size: 10,
     sort: ['name:asc']
   };
 
-  // 7. inject the service
+  // 5. inject the service
   constructor(private dataService: DataService) {}
 
   public ngOnInit() {
-    // 8. the returned observable is fully typed
+    // 6. the returned observable is fully typed
     this.dataService
       .get(this.params)
-      // 9. returned data are fully typed
+      // 7. returned data are fully typed
       .subscribe(data => {
-        // 10. assignments type-checked
+        // 8. assignments type-checked
         const {content, page} = data;
         this.items = content;
         this.page = page;
@@ -102,11 +88,12 @@ export class MyComponent implements OnInit {
 }
 ```
 
-## Known limitations / specifics
+## Assumptions / limitations
 
-1. ignoring params (on purpose)
-    1. `header` globally
-    1. `body` for `get` and `delete`
+1. swagger file is in [version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) format, it must be json
+1. each endpoint must have an `operationId` defined
+1. `in: header` definitions are ignored
+1. `get` and `delete` methods do not contain `body`
 
 ## Development
 
@@ -117,3 +104,5 @@ export class MyComponent implements OnInit {
 1. `docker exec -it swagger-angular-generator bash`
 1. `npm i`
 1. `npm test`
+
+### Pull requests are welcome!

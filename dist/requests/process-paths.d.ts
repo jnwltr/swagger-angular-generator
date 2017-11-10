@@ -1,10 +1,5 @@
-import { Config } from './generate';
-import { Method, MethodName } from './types';
-export interface Paths {
-    [key: string]: {
-        [key in MethodName]?: Method;
-    };
-}
+import { Config } from '../generate';
+import { Paths } from './requests.models';
 /**
  * Entry point, processes all possible api requests and exports them
  * to files devided ty controllers (same as swagger web app sections)

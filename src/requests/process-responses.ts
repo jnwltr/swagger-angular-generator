@@ -27,7 +27,7 @@ export function processResponses(httpResponse: HttpResponse, name: string) {
   if (property.length) {
     type = _.uniqWith(property, _.isEqual).join(' | ');
   } else {
-    type = 'object';
+    type = 'void';
   }
 
   return {type, enumDeclaration, usesGlobalType};

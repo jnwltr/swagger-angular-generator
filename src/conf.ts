@@ -24,7 +24,7 @@ export const nativeTypes: {[key in NativeNames]: string} = {
   integer: 'number',
   long: 'number',
   number: 'number',
-  object: 'Object',
+  object: 'object',
   password: 'string',
   string: 'string',
 };

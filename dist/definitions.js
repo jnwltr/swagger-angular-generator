@@ -76,7 +76,7 @@ function createExport(def) {
  * @param sources list of sources for the file
  */
 function createExportComments(file, sources) {
-    if (sources.length > 1 || sources.indexOf(file) === -1) {
+    if (sources.length > 1 || !sources.includes(file)) {
         return ' // sources: ' + sources.join(', ');
     }
     return '';

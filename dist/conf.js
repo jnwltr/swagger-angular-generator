@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/** Configuration constants */
-const path_1 = require("path");
 // relative to project root
 exports.outDir = 'src/api';
-exports.servicesDir = path_1.join(__dirname, '..', 'services');
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.apiFile = 'conf/api/api-docs.json';
@@ -25,7 +22,7 @@ exports.nativeTypes = {
     integer: 'number',
     long: 'number',
     number: 'number',
-    object: 'Object',
+    object: 'object',
     password: 'string',
     string: 'string',
 };

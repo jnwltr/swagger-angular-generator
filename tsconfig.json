@@ -10,7 +10,7 @@
     "noUnusedParameters": true,
     "lib": [
       "dom",
-      "es2015"
+      "es2017"
     ],
     "module": "commonjs",
     "sourceMap": true,

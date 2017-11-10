@@ -61,7 +61,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let optional = '';
     if (required === false)
         optional = '?';
-    else if (Array.isArray(required) && required.indexOf(name) < 0) {
+    else if (Array.isArray(required) && !required.includes(name)) {
         optional = '?';
     }
     const comments = [];

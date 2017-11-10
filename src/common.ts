@@ -71,7 +71,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
 
   let optional = '';
   if (required === false) optional = '?';
-  else if (Array.isArray(required) && required.indexOf(name) < 0) {
+  else if (Array.isArray(required) && !required.includes(name)) {
     optional = '?';
   }
 
