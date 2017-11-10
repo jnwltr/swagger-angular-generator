@@ -24,12 +24,15 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let paramsSignature: string = '';
   let params: string = '';
   let usesGlobalType: boolean = false;
+  let paramGroupNameArray: string[] = [];
 
   if (method.paramDef) {
     const paramDef = method.paramDef.filter(df => allowed.indexOf(df.in) >= 0);
     const paramGroups = _.groupBy(paramDef, 'in');
 
-    paramSeparation = getParamSeparation(paramGroups);
+    const paramSeparationResult = getParamSeparation(paramGroups);
+    paramSeparation = paramSeparationResult[0];
+    paramGroupNameArray = paramSeparationResult[1];
 
     const paramsType = _.upperFirst(`${method.simpleName}Params`);
     paramsSignature = `params: ${paramsType}`;
@@ -38,23 +41,16 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     usesGlobalType = processedParams.usesGlobalType;
     interfaceDef = processedParams.paramDef;
 
-    paramDef.forEach((pd: any) => {
-      if (method.methodName === 'get' && pd.in !== 'query') {
-        params += `, {params: queryParams}`;
-      // TODO - change for open api 3.0
-      } else if (method.methodName in ['post', 'put', 'patch'] && pd.in !== 'body') {
-        params += `, {params: params}`;
-      }
-    });
+    params += getRequestParams(paramGroupNameArray, method, params);
   }
   methodDef += '\n';
 
   methodDef += makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
 
-  interfaceDef += getIntefaceObjectDeclaration(interfaceDef, method);
+  interfaceDef = getIntefaceObjectDeclaration(interfaceDef, method);
 
   // define method name
-  methodDef += `${method.simpleName}(${paramsSignature}): Observable<` + `${method.responseDef.type}> {\n`;
+  methodDef += `${method.simpleName}(${paramsSignature}): Observable<` + `any> {\n`;
 
   // apply the param definitions, e.g. bodyParams
   methodDef += indent(paramSeparation);
@@ -62,16 +58,12 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     methodDef += '\n';
   }
 
-  // assign params to the HttpParams object
-  const assignQueryParamsDef = assignQueryParamsObject();
-
-  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
-
-  if (params && method.methodName === 'get') {
-    methodDef += indent(assignQueryParamsDef);
+  if (paramGroupNameArray.indexOf('query') !== -1) {
+    methodDef += indent(assignQueryParamsObject());
     methodDef += `\n`;
   }
 
+  const body = `return this.http.${method.methodName}(\`${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
@@ -80,7 +72,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
 }
 
 // creates a definition of pathParams, bodyParams, queryParms or formDataParams
-function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
+function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[][] {
 
   /* groupName is e.g. 'body'
      group is e.g. [ { in: 'body',
@@ -89,6 +81,7 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
                        required: true,
                        schema: { '$ref': '#/definitions/PointDto' } } ]
   */
+  const paramGroupNameArray: string[] = [];
   const paramSeaparation = _.map(paramGroups, (group, groupName) => {
       let def: string;
       // only one direct body parameter is allowed
@@ -100,9 +93,10 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
         def = '{\n' + indent(list) + '\n};';
       }
 
+      paramGroupNameArray.push(groupName);
       return `const ${groupName}Params = ${def}`;
     });
-  return paramSeaparation;
+  return [paramSeaparation, paramGroupNameArray];
 }
 
 // return the definition of intefrace objects
@@ -120,13 +114,29 @@ function assignQueryParamsObject() {
   let assignQueryParamsDef = '';
 
   assignQueryParamsDef  += `\n`;
-  assignQueryParamsDef  += `let queryParams = new HttpParams();`;
+  assignQueryParamsDef  += `const httpQueryParams = new HttpParams();`;
   assignQueryParamsDef  += `\n`;
-  assignQueryParamsDef  += `Object.keys(params).forEach(key => {`;
-  assignQueryParamsDef  += `\n`;
-  assignQueryParamsDef  += indent(`queryParams = queryParams.append(key, params[key]);`);
-  assignQueryParamsDef  += `\n`;
-  assignQueryParamsDef  += `});`;
+  assignQueryParamsDef  += `Object.keys(queryParams).forEach(key => httpQueryParams.append(key, queryParams[key]));`;
   assignQueryParamsDef  += `\n`;
   return assignQueryParamsDef ;
+}
+
+function getRequestParams(paramGroupNameArray: string[], method: ControllerMethod, params: string) {
+
+  if (['post', 'put', 'patch'].indexOf(method.methodName) !== -1) {
+
+    if (paramGroupNameArray.indexOf('body') !== -1) {
+      params += `, JSON.stringify(bodyParams)`;
+    } else if (paramGroupNameArray.indexOf('formData') !== -1) {
+      params += `, JSON.stringify(formDataParams)`;
+    } else {
+      params += `, JSON.stringify({})`;
+    }
+  }
+
+  if (paramGroupNameArray.indexOf('query') !== -1) {
+    params += `, {params: httpQueryParams}`;
+  }
+
+  return params;
 }

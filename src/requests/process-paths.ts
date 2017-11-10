@@ -7,10 +7,10 @@ import * as path from 'path';
 
 import * as conf from '../conf';
 import { Config } from '../generate';
-import { MethodName } from '../types';
+import { Method, MethodName } from '../types';
 import { emptyDir } from '../utils';
-import { Paths, ControllerMethod } from './requests.models';
 import { processController } from './process-controller';
+import { ControllerMethod, Paths } from './requests.models';
 
 /**
  * Entry point, processes all possible api requests and exports them
@@ -24,10 +24,9 @@ export function processPaths(paths: Paths, swaggerPath: string, config: Config) 
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url) => (
     _.map(methods, (method, methodName: MethodName) => ({
       url,
-      name: _.upperFirst(_.camelCase(
-        method.tags[0].replace(/(-rest)?-controller/, ''))),
+      name: getName(method),
       methodName,
-      simpleName: getSimpleName(url),
+      simpleName: getSimpleName(method),
       summary: method.summary,
       operationId: method.operationId,
       swaggerUrl: `${swaggerPath}${method.tags[0]}/${method.operationId}`,
@@ -43,16 +42,15 @@ export function processPaths(paths: Paths, swaggerPath: string, config: Config) 
   _.forEach(controllerFiles, (methods, name) => processController(methods, name, config));
 }
 
-/**
- * Returns simple name from last static URL segment
- * example: `/accounts/${accountId}/updateMothersName` => `updateMothersName`
- * @param url
- */
-function getSimpleName(url: string) {
-  // remove url params
-  let method = url.replace(/\/{[^}]+}/g, '');
-  // take trailing url folder
-  method = method.replace(/(.*\/)*/, '');
+function getName(method: Method) {
+    const name = _.upperFirst(_.camelCase(
+        method.tags[0].replace(/(-rest)?-controller/, '')));
+    return name;
+}
 
-  return method;
+function getSimpleName(method: Method) {
+    // e.g. api-token-refresh_create gets turned into ApiTokenRefreshCreate
+    const nameArray = method.operationId.split(new RegExp('[-_ ]', 'g'));
+    const nameArrayUpperFirst = nameArray.map(x => _.upperFirst(x));
+    return nameArrayUpperFirst.join('');
 }
