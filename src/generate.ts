@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as conf from './conf';
 import { processDefinitions } from './definitions';
 import { processPaths } from './requests';
-import { copyDir, out, processHeader } from './utils';
+import { out, processHeader } from './utils';
 
 export interface Config {
   header: string;
@@ -37,6 +37,4 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
 
   processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
   processDefinitions(schema.definitions, config);
-
-  copyDir(conf.servicesDir, dest);
 }

@@ -17,6 +17,10 @@ export interface Paths {
   };
 }
 
+interface Dictionary<T> {
+    [index: string]: T;
+}
+
 interface ControllerMethod {
   summary: string;
   operationId: string;
@@ -92,11 +96,11 @@ function processController(methods: ControllerMethod[], name: string, config: Co
   let content = '';
   content += 'import { Injectable } from \'@angular/core\';\n';
   content += 'import { Observable } from \'rxjs/Observable\';\n';
+  content += 'import { HttpClient } from \'@angular/common/http\';\n';
   content += '\n';
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n`;
   }
-  content += 'import { ApiService } from \'../services/api\';\n';
   content += '\n';
 
   const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');
@@ -106,8 +110,8 @@ function processController(methods: ControllerMethod[], name: string, config: Co
   }
 
   content += `@Injectable()\n`;
-  content += `export class ${name}Service {\n`;
-  content += indent('constructor(private apiService: ApiService) {}');
+  content += `export class ${name}HttpService {\n`;
+  content += indent('constructor(private http: HttpClient) {}');
   content += '\n';
   content += indent(_.map(processedMethods, 'methodDef').join('\n\n'));
   content += '\n}\n';
@@ -140,7 +144,7 @@ function processResponses(httpResponse: HttpResponse, name: string) {
   if (property.length) {
     type = _.uniqWith(property, _.isEqual).join(' | ');
   } else {
-    type = 'void';
+    type = 'object';
   }
 
   return { type, enumDeclaration, usesGlobalType };
@@ -172,19 +176,7 @@ function processMethod(method: ControllerMethod): MethodOutput {
     const paramDef = method.paramDef.filter(df => allowed.indexOf(df.in) >= 0);
     const paramGroups = _.groupBy(paramDef, 'in');
 
-    paramSeparation = _.map(paramGroups, (group, groupName) => {
-      let def: string;
-      // only one direct body parameter is allowed
-      // 1st one taken if more of them present
-      if (groupName === 'body') {
-        def = `params.${group[0].name};`;
-      } else {
-        const list = _.map(group, p => `${p.name}: params.${p.name},`);
-        def = '{\n' + indent(list) + '\n};';
-      }
-
-      return `const ${groupName}Params = ${def}`;
-    });
+    paramSeparation = getParamSeparation(paramGroups);
 
     const paramsType = _.upperFirst(`${method.simpleName}Params`);
     paramsSignature = `params: ${paramsType}`;
@@ -193,16 +185,13 @@ function processMethod(method: ControllerMethod): MethodOutput {
     usesGlobalType = processedParams.usesGlobalType;
     interfaceDef = processedParams.paramDef;
 
-    allowed.forEach((ap: string) => {
-      // empty declaration
-      if (!paramGroups[ap] && (ap !== 'path' || url !== method.url)) {
-        let paramType;
-        if (ap === 'formData') paramType = '{[key: string]: File}';
-        else paramType = 'object';
-        paramSeparation.push(`const ${ap}Params: ${paramType} = undefined;`);
+    paramDef.forEach((pd: any) => {
+      if (method.methodName === 'get' && pd.in !== 'query') {
+        params += `, {params}`;
+      // TODO - change for open api 3.0
+      } else if (method.methodName in ['post', 'put', 'patch'] && pd.in !== 'body') {
+        params += `, {params}`;
       }
-      // path params are interpolated directly in url
-      if (ap !== 'path') params += `, ${ap}Params`;
     });
   }
   methodDef += '\n';
@@ -225,12 +214,29 @@ function processMethod(method: ControllerMethod): MethodOutput {
     methodDef += '\n';
   }
 
-  const body = `return this.apiService.${method.methodName}(\`${url}\`${params});`;
+  const body = `return this.http.${method.methodName}(\`${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
 
   return { methodDef, interfaceDef, usesGlobalType };
+}
+
+function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
+  const paramSeaparation = _.map(paramGroups, (group, groupName) => {
+      let def: string;
+      // only one direct body parameter is allowed
+      // 1st one taken if more of them present
+      if (groupName === 'body') {
+        def = `params.${group[0].name};`;
+      } else {
+        const list = _.map(group, p => `${p.name}: params.${p.name},`);
+        def = '{\n' + indent(list) + '\n};';
+      }
+
+      return `const ${groupName}Params = ${def}`;
+    });
+  return paramSeaparation;
 }
 
 /**
