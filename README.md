@@ -107,3 +107,13 @@ export class MyComponent implements OnInit {
 1. ignoring params (on purpose)
     1. `header` globally
     1. `body` for `get` and `delete`
+
+## Development
+
+### Docker image
+
+1. `docker build . -t swagger-angular-generator`
+1. `docker-compose up -d`
+1. `docker exec -it swagger-angular-generator bash`
+1. `npm install`
+1. `npm run test`

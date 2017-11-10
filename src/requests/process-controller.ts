@@ -38,7 +38,7 @@ export function processController(methods: ControllerMethod[], name: string, con
   let content = '';
   content += 'import { Injectable } from \'@angular/core\';\n';
   content += 'import { Observable } from \'rxjs/Observable\';\n';
-  content += 'import { HttpClient } from \'@angular/common/http\';\n';
+  content += 'import { HttpClient, HttpParams } from \'@angular/common/http\';\n';
   content += '\n';
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n`;

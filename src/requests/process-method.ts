@@ -16,14 +16,14 @@ import { ControllerMethod, Dictionary, MethodOutput } from './requests.models';
  * @param controller
  */
 export function processMethod(method: ControllerMethod): MethodOutput {
-  let methodDef = '';
-  let interfaceDef = '';
-  const url = method.url.replace(/\/{([^}]+})/g, '/$${pathParams.$1');
-  const allowed: string[] = conf.allowedParams[method.methodName];
+  let methodDef: string     = '';
+  let interfaceDef: string  = '';
+  const url: string         = method.url.replace(/\/{([^}]+})/g, '/$${pathParams.$1');
+  const allowed: string[]   = conf.allowedParams[method.methodName];
   let paramSeparation: string[] = [];
-  let paramsSignature = '';
-  let params = '';
-  let usesGlobalType = false;
+  let paramsSignature: string = '';
+  let params: string = '';
+  let usesGlobalType: boolean = false;
 
   if (method.paramDef) {
     const paramDef = method.paramDef.filter(df => allowed.indexOf(df.in) >= 0);
@@ -40,34 +40,38 @@ export function processMethod(method: ControllerMethod): MethodOutput {
 
     paramDef.forEach((pd: any) => {
       if (method.methodName === 'get' && pd.in !== 'query') {
-        params += `, {params}`;
+        params += `, {params: queryParams}`;
       // TODO - change for open api 3.0
       } else if (method.methodName in ['post', 'put', 'patch'] && pd.in !== 'body') {
-        params += `, {params}`;
+        params += `, {params: params}`;
       }
     });
   }
   methodDef += '\n';
 
-  methodDef += makeComment([
-    method.summary, method.description, method.swaggerUrl,
-  ].filter(Boolean));
+  methodDef += makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
 
-  if (method.responseDef.enumDeclaration) {
-    if (interfaceDef) {
-      interfaceDef += '\n';
-    }
-    interfaceDef += method.responseDef.enumDeclaration + '\n';
-  }
-  methodDef += `${method.simpleName}(${paramsSignature}): Observable<` +
-    `${method.responseDef.type}> {\n`;
+  interfaceDef += getIntefaceObjectDeclaration(interfaceDef, method);
 
+  // define method name
+  methodDef += `${method.simpleName}(${paramsSignature}): Observable<` + `${method.responseDef.type}> {\n`;
+
+  // apply the param definitions, e.g. bodyParams
   methodDef += indent(paramSeparation);
   if (paramSeparation.length) {
     methodDef += '\n';
   }
 
-  const body = `return this.http.${method.methodName}(\`${url}\`${params});`;
+  // assign params to the HttpParams object
+  const assignQueryParamsDef = assignQueryParamsObject();
+
+  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
+
+  if (params && method.methodName === 'get') {
+    methodDef += indent(assignQueryParamsDef);
+    methodDef += `\n`;
+  }
+
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
@@ -75,7 +79,16 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   return { methodDef, interfaceDef, usesGlobalType };
 }
 
+// creates a definition of pathParams, bodyParams, queryParms or formDataParams
 function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
+
+  /* groupName is e.g. 'body'
+     group is e.g. [ { in: 'body',
+                       name: 'pointDto',
+                       description: 'pointDto',
+                       required: true,
+                       schema: { '$ref': '#/definitions/PointDto' } } ]
+  */
   const paramSeaparation = _.map(paramGroups, (group, groupName) => {
       let def: string;
       // only one direct body parameter is allowed
@@ -90,4 +103,30 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
       return `const ${groupName}Params = ${def}`;
     });
   return paramSeaparation;
+}
+
+// return the definition of intefrace objects
+function getIntefaceObjectDeclaration(interfaceDef: string, method: ControllerMethod) {
+  if (method.responseDef.enumDeclaration) {
+    if (interfaceDef) {
+      interfaceDef += '\n';
+    }
+    interfaceDef += method.responseDef.enumDeclaration + '\n';
+  }
+  return interfaceDef;
+}
+
+function assignQueryParamsObject() {
+  let assignQueryParamsDef = '';
+
+  assignQueryParamsDef  += `\n`;
+  assignQueryParamsDef  += `let queryParams = new HttpParams();`;
+  assignQueryParamsDef  += `\n`;
+  assignQueryParamsDef  += `Object.keys(params).forEach(key => {`;
+  assignQueryParamsDef  += `\n`;
+  assignQueryParamsDef  += indent(`queryParams = queryParams.append(key, params[key]);`);
+  assignQueryParamsDef  += `\n`;
+  assignQueryParamsDef  += `});`;
+  assignQueryParamsDef  += `\n`;
+  return assignQueryParamsDef ;
 }
