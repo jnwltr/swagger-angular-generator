@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 import * as conf from './conf';
 import { processDefinitions } from './definitions';
-import { processPaths } from './requests';
+import { processPaths } from './requests/process-paths';
 import { out, processHeader } from './utils';
 
 export interface Config {
