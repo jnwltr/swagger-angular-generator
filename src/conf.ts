@@ -1,11 +1,8 @@
 /** Configuration constants */
-import {join} from 'path';
-
 import {MethodName, NativeNames} from './types';
 
 // relative to project root
 export const outDir = 'src/api';
-export const servicesDir = join(__dirname, '..', 'services');
 export const defsDir = 'defs';
 export const apiDir = 'controllers';
 export const apiFile = 'conf/api/api-docs.json';

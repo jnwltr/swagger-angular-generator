@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+
+  swagger-angular-generator:
+    image: swagger-angular-generator
+    container_name: swagger-angular-generator
+    command: sh
+    tty: true
+    volumes:
+      - .:/code
