@@ -30,6 +30,7 @@ exports.nativeTypes = {
 // ordered as they are passed to api service methods
 exports.allowedParams = {
     get: ['path', 'query'],
+    patch: ['path', 'body', 'query', 'formData'],
     post: ['path', 'body', 'query', 'formData'],
     put: ['path', 'body', 'query'],
     delete: ['path'],

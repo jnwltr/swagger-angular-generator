@@ -4,8 +4,8 @@
  */
 import * as _ from 'lodash';
 import * as path from 'path';
-import * as conf from '../conf';
 
+import * as conf from '../conf';
 import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
 import {processMethod} from './process-method';

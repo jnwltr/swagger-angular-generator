@@ -1,6 +1,6 @@
 ## Purpose
 
-Generate minimalistic TypeScript API layer for Angular 4.3+ with full type reflection of backend model.
+Generate minimalistic TypeScript API layer for Angular with full type reflection of backend model.
 - Source: [swagger scheme](https://swagger.io/specification/)
 - Destination: [Angular-cli](https://cli.angular.io/) based [Angular](https://angular.io/) app.
 
@@ -100,9 +100,9 @@ export class MyComponent implements OnInit {
 ### Docker image
 
 1. `docker build . -t swagger-angular-generator`
-1. `docker-compose up -d`
-1. `docker exec -it swagger-angular-generator bash`
+1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
 1. `npm i`
-1. `npm test`
 
-### Pull requests are welcome!
+---
+
+### _Pull requests are welcome!_
