@@ -33,6 +33,7 @@ export const nativeTypes: {[key in NativeNames]: string} = {
 // ordered as they are passed to api service methods
 export const allowedParams: {[key in MethodName]: string[]} = {
   get: ['path', 'query'],
+  patch: ['path', 'body', 'query', 'formData'],
   post: ['path', 'body', 'query', 'formData'],
   put: ['path', 'body', 'query'],
   delete: ['path'],

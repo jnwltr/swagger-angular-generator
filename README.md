@@ -1,6 +1,6 @@
 ## Purpose
 
-Generate minimalistic TypeScript API layer with full type reflection of backend model.
+Generate minimalistic TypeScript API layer for Angular 4.3+ with full type reflection of backend model.
 - Source: [swagger scheme](https://swagger.io/specification/)
 - Destination: [Angular-cli](https://cli.angular.io/) based [Angular](https://angular.io/) app.
 
