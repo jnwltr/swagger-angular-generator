@@ -1,5 +1,5 @@
 /** Shared types */
-export type MethodName = 'get' | 'post' | 'put' | 'delete';
+export type MethodName = 'get' | 'patch' | 'post' | 'put' | 'delete';
 export type HttpCode = '200' | '201' | '204' |
   '400' | '401' | '403' | '404' | '409' | '417' |
   '500';

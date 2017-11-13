@@ -1,6 +1,6 @@
 ## Purpose
 
-Generate minimalistic TypeScript API layer with full type reflection of backend model.
+Generate minimalistic TypeScript API layer for Angular 4.3+ with full type reflection of backend model.
 - Source: [swagger scheme](https://swagger.io/specification/)
 - Destination: [Angular-cli](https://cli.angular.io/) based [Angular](https://angular.io/) app.
 
@@ -45,8 +45,6 @@ The resulting API layer contains the following structure in the destination dire
 1. each endpoint must have a `operationId` defined with its name
 1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
-1. each post, put and patch method must have `body` parameters filled in
-1. post, put and patch methods do not contain `query` definitions
 
 ## Development
 
