@@ -5,11 +5,11 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 import * as conf from '../conf';
-import { Config } from '../generate';
-import { indent, writeFile } from '../utils';
-import { processMethod } from './process-method';
-import { processResponses } from './process-responses';
-import { ControllerMethod } from './requests.models';
+import {Config} from '../generate';
+import {indent, writeFile} from '../utils';
+import {processMethod} from './process-method';
+import {processResponses} from './process-responses';
+import {ControllerMethod} from './requests.models';
 
 /**
  * Creates and serializes class for api communication for controller

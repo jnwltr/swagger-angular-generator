@@ -4,8 +4,8 @@
  */
 import * as _ from 'lodash';
 
-import { processProperty } from '../common';
-import { HttpCode, HttpResponse } from '../types';
+import {processProperty} from '../common';
+import {HttpCode, HttpResponse} from '../types';
 
 /**
  * Process all responses of one method

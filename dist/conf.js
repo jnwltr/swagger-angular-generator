@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/** Configuration constants */
-const path_1 = require("path");
 // relative to project root
 exports.outDir = 'src/api';
-exports.servicesDir = path_1.join(__dirname, '..', 'services');
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.apiFile = 'conf/api/api-docs.json';
@@ -33,6 +30,7 @@ exports.nativeTypes = {
 // ordered as they are passed to api service methods
 exports.allowedParams = {
     get: ['path', 'query'],
+    patch: ['path', 'body', 'query', 'formData'],
     post: ['path', 'body', 'query', 'formData'],
     put: ['path', 'body', 'query'],
     delete: ['path'],

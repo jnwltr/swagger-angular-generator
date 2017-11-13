@@ -1,4 +1,4 @@
-import { HttpResponse, Method, MethodName, Parameter } from '../types';
+import {HttpResponse, Method, MethodName, Parameter} from '../types';
 
 export interface Paths {
   [key: string]: {

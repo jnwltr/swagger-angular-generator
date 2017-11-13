@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const conf = require("./conf");
 const definitions_1 = require("./definitions");
-const requests_1 = require("./requests");
+const process_paths_1 = require("./requests/process-paths");
 const utils_1 = require("./utils");
 /**
  * Generates API layer for the project based on src to dest
@@ -29,9 +29,8 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
     const config = { header, dest };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
-    requests_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
+    process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
     definitions_1.processDefinitions(schema.definitions, config);
-    utils_1.copyDir(conf.servicesDir, dest);
 }
 exports.generate = generate;
 //# sourceMappingURL=generate.js.map

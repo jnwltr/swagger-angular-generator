@@ -53,7 +53,5 @@ The resulting API layer contains the following structure in the destination dire
 ### Docker image
 
 1. `docker build . -t swagger-angular-generator`
-1. `docker-compose up -d`
-1. `docker exec -it swagger-angular-generator bash`
+1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
 1. `npm install`
-1. `npm run test`

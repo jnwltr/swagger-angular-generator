@@ -6,11 +6,11 @@ import * as _ from 'lodash';
 import * as path from 'path';
 
 import * as conf from '../conf';
-import { Config } from '../generate';
-import { Method, MethodName } from '../types';
-import { emptyDir } from '../utils';
-import { processController } from './process-controller';
-import { ControllerMethod, Paths } from './requests.models';
+import {Config} from '../generate';
+import {Method, MethodName} from '../types';
+import {emptyDir} from '../utils';
+import {processController} from './process-controller';
+import {ControllerMethod, Paths} from './requests.models';
 
 /**
  * Entry point, processes all possible api requests and exports them

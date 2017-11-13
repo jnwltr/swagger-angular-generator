@@ -4,10 +4,10 @@
  */
 import * as _ from 'lodash';
 import * as conf from '../conf';
-import { Parameter } from '../types';
-import { indent, makeComment } from '../utils';
-import { processParams } from './process-params';
-import { ControllerMethod, Dictionary, MethodOutput } from './requests.models';
+import {Parameter} from '../types';
+import {indent, makeComment} from '../utils';
+import {processParams} from './process-params';
+import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
 
 /**
  * Transforms method definition to typescript method

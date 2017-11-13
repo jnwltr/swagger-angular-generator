@@ -4,9 +4,9 @@
  */
 import * as _ from 'lodash';
 
-import { processProperty } from '../common';
-import { Parameter } from '../types';
-import { indent } from '../utils';
+import {processProperty} from '../common';
+import {Parameter} from '../types';
+import {indent} from '../utils';
 
 /**
  * Transforms input parameters to interfaces definition
