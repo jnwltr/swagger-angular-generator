@@ -1,6 +1,6 @@
 // TODO(janwalter) use direct browser api for LS
-import { Injectable } from '@angular/core';
-import { LocalStorageService } from 'angular-2-local-storage';
+import {Injectable} from '@angular/core';
+import {LocalStorageService} from 'angular-2-local-storage';
 
 @Injectable()
 export class AuthService {

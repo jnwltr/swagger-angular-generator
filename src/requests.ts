@@ -90,13 +90,13 @@ function processController(methods: ControllerMethod[], name: string, config: Co
   usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
 
   let content = '';
-  content += 'import { Injectable } from \'@angular/core\';\n';
-  content += 'import { Observable } from \'rxjs/Observable\';\n';
+  content += 'import {Injectable} from \'@angular/core\';\n';
+  content += 'import {Observable} from \'rxjs/Observable\';\n';
   content += '\n';
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n`;
   }
-  content += 'import { ApiService } from \'../services/api\';\n';
+  content += 'import {ApiService} from \'../services/api\';\n';
   content += '\n';
 
   const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');
@@ -281,6 +281,9 @@ function getSimpleName(url: string) {
   let method = url.replace(/\/{[^}]+}/g, '');
   // take trailing url folder
   method = method.replace(/(.*\/)*/, '');
+  // subst spaces and underscores
+  method = _.camelCase(method);
+  method = method.replace(/[^\w]/g, '');
 
   return method;
 }

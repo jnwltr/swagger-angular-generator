@@ -2,12 +2,12 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { Injectable } from '@angular/core';
-import { Headers, Http, RequestMethod, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestMethod, RequestOptions, Response} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 
-import { environment } from '../../environments/environment';
-import { AuthService } from './auth';
+import {environment} from '../../environments/environment';
+import {AuthService} from './auth';
 
 @Injectable()
 export class ApiService {
@@ -81,7 +81,7 @@ export class ApiService {
       code = error.code ? error.code : 500;
     }
 
-    const httpError = { code, message };
+    const httpError = {code, message};
 
     return Observable.throw(httpError);
   }
@@ -92,6 +92,6 @@ export class ApiService {
       return new Headers();
     }
 
-    return new Headers({ Authorization: token });
+    return new Headers({Authorization: token});
   }
 }
