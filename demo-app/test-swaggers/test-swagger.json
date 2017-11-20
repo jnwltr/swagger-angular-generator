@@ -1,0 +1,279 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Test Swagger"
+  },
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/cars": {
+      "get": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Get all cars",
+        "operationId": "GetCars",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "producer",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/cars"
+            }
+          }
+        }
+      }
+    },
+    "/api/car-detail/{carId}": {
+      "get": {
+        "tags": [
+          "Car"
+        ],
+        "summary": "Get car detail",
+        "operationId": "GetCarDetail",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "description": "car id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/carDetail"
+            }
+          }
+        }
+      }
+    },
+
+    "/api/car-order": {
+      "post": {
+        "tags": [
+          "CarOrder"
+        ],
+        "summary": "create car order",
+        "operationId": "postCarOrder",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "producer",
+            "in": "body",
+            "description": "car producer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "description": "car model",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "customerName",
+            "in": "body",
+            "description": "customer name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "204": {
+            "description": "NoContent"
+          },
+          "415": {
+            "description": "Unsupported media type - multipart needed"
+          }
+        }
+      }
+    },
+    "/api/car-order/{orderId}": {
+      "patch": {
+        "tags": [
+          "PatchCarOrder"
+        ],
+        "summary": "Patches car order",
+        "operationId": "PatchCarOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "description": "car model",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+
+      "put": {
+        "tags": [
+          "PatchCarOrder"
+        ],
+        "summary": "Patches car order",
+        "operationId": "PatchCarOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "producer",
+            "in": "body",
+            "description": "car producer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "description": "car model",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "customerName",
+            "in": "body",
+            "description": "customer name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DeleteOrder"
+        ],
+        "summary": "Delete order",
+        "operationId": "DeleteOrder",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "cars": {
+      "type": "object",
+      "properties": {
+        "partnerId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "limit": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "offset": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

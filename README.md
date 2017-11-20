@@ -55,3 +55,8 @@ The resulting API layer contains the following structure in the destination dire
 1. `docker build . -t swagger-angular-generator`
 1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
 1. `npm install`
+
+### Testing
+
+- there is a demo app, which includes an exmaple swagger file
+- the structure is based on Angular CLI
