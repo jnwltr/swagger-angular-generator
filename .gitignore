@@ -26,11 +26,8 @@ node_modules/
 
 # IDE project profiles
 .vscode/
-.idea
+.idea/
 
-# testing input/outpur
+# testing input/output
 conf/
 src/api/
-
-# example project
-example-project

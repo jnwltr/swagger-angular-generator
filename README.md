@@ -13,7 +13,7 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 
 ### Run generator
 
-1. get the swagger scheme (typically at at http(s)://[server]/[app-path]/v2/api/api-docs)
+1. get the swagger scheme (typically at http(s)://[server]/[app-path]/v2/api/api-docs)
 1. save it to json file in input directory and optionally **format** it for better diff
 1. run via
     1. **directly** `./node_modules/.bin/swagger-angular-generator`

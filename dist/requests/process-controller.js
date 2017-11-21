@@ -44,7 +44,7 @@ function processController(methods, name, config) {
         content += '\n';
     }
     content += `@Injectable()\n`;
-    content += `export class ${name}HttpService {\n`;
+    content += `export class ${name}Service {\n`;
     content += utils_1.indent('constructor(private http: HttpClient) {}');
     content += '\n';
     content += utils_1.indent(_.map(processedMethods, 'methodDef').join('\n\n'));

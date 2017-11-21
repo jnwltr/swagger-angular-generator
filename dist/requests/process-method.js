@@ -38,23 +38,20 @@ function processMethod(method) {
     }
     methodDef += '\n';
     methodDef += utils_1.makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
-    interfaceDef = getIntefaceObjectDeclaration(interfaceDef, method);
-    // define method name
     methodDef += `${method.simpleName}(${paramsSignature}): Observable<${method.responseDef.type}> {\n`;
     // apply the param definitions, e.g. bodyParams
     methodDef += utils_1.indent(paramSeparation);
-    if (paramSeparation.length) {
+    if (paramSeparation.length)
         methodDef += '\n';
-    }
-    if (paramTypes.includes('query')) {
-        methodDef += `\n`;
-        methodDef += utils_1.indent(assignQueryParamsObject());
-        methodDef += `\n`;
-    }
     const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;
+    if (method.responseDef.enumDeclaration) {
+        if (interfaceDef)
+            interfaceDef += '\n';
+        interfaceDef += `${method.responseDef.enumDeclaration}\n`;
+    }
     return { methodDef, interfaceDef, usesGlobalType };
 }
 exports.processMethod = processMethod;
@@ -65,6 +62,11 @@ exports.processMethod = processMethod;
 function getParamSeparation(paramGroups) {
     return _.map(paramGroups, (group, groupName) => {
         let def;
+        if (groupName === 'query') {
+            def = 'const queryParams = new HttpParams();\n';
+            def += _.map(group, p => `queryParams.append('${p.name}', JSON.stringify(params.${p.name}));`).join('\n');
+            return def;
+        }
         // only one direct body parameter is allowed
         // 1st one taken if more of them present
         if (groupName === 'body') {
@@ -77,23 +79,11 @@ function getParamSeparation(paramGroups) {
         return `const ${groupName}Params = ${def}`;
     });
 }
-// return the definition of intefrace objects
-function getIntefaceObjectDeclaration(interfaceDef, method) {
-    if (method.responseDef.enumDeclaration) {
-        if (interfaceDef) {
-            interfaceDef += '\n';
-        }
-        interfaceDef += method.responseDef.enumDeclaration + '\n';
-    }
-    return interfaceDef;
-}
-function assignQueryParamsObject() {
-    let assignQueryParamsDef = '';
-    assignQueryParamsDef += `const httpQueryParams = new HttpParams();\n`;
-    assignQueryParamsDef += `Object.keys(queryParams).forEach(key => httpQueryParams.append(key, queryParams[key]));\n`;
-    return assignQueryParamsDef;
-}
-// TODO! recheck with original code, allowed params logic lost???
+/**
+ * Returns a list of additional params for http client call invocation
+ * @param paramTypes list of params types (should be from `path`, `body`, `query`, `formData`)
+ * @param methodName name of http method to invoke
+ */
 function getRequestParams(paramTypes, methodName) {
     let res = '';
     if (['post', 'put', 'patch'].includes(methodName)) {
@@ -104,11 +94,12 @@ function getRequestParams(paramTypes, methodName) {
             res += `, formDataParams`;
         }
         else {
-            res += `, {}`;
+            // TODO(jnwltr) check if {} is not needed
+            res += `, undefined`;
         }
     }
     if (paramTypes.includes('query')) {
-        res += `, {params: httpQueryParams}`;
+        res += `, {params: queryParams}`;
     }
     return res;
 }
