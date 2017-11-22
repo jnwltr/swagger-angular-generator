@@ -68,11 +68,26 @@ export function processMethod(method: ControllerMethod): MethodOutput {
  */
 function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
   return _.map(paramGroups, (group, groupName) => {
+    let baseDef: string;
     let def: string;
 
     if (groupName === 'query') {
-      def = 'const queryParams = new HttpParams();\n';
-      def += _.map(group, p => `queryParams.append('${p.name}', JSON.stringify(params.${p.name}));`).join('\n');
+      const list = _.map(group, p => `${p.name}: params.${p.name},`);
+      baseDef = '{\n' + indent(list) + '\n};';
+      def = `const queryParamBase = ${baseDef}\n\n`;
+
+      def += 'let queryParams = new HttpParams();\n';
+
+      def += `Object.entries(queryParamBase).forEach(([key, value]) => {\n`;
+      def += indent(`if (value !== undefined) {\n`);
+      def += indent(indent(`if (typeof value === 'string') {\n`));
+      def += indent(indent(indent(`queryParams = queryParams.set(key, value);\n`)));
+      def += indent(indent(`} else {\n`));
+      def += indent(indent(indent(`queryParams = queryParams.set(key, JSON.stringify(value));\n`)));
+      def += indent(indent(`}\n`));
+      def += indent(`}\n`);
+      def += `});\n`;
+
       return def;
     }
 
