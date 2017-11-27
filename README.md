@@ -37,7 +37,7 @@ The resulting API layer contains the following structure in the destination dire
 
 1. `def` directory stores all response interfaces and enums
 1. `model.ts` file reexports all of them together for a simple access
-1. `api` directory stores services devided by controllers containing all API methods
+1. `controllers` directory stores services containing all API methods
 
 When updating your code for new backend version, we recommend you to follow these steps:
 
@@ -91,11 +91,17 @@ export class MyComponent implements OnInit {
 ## Assumptions / limitations
 
 1. swagger file is in [version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) format, it must be json
-1. each endpoint must have an `operationId` defined
+1. each endpoint must have a `tags` attribute defined. In addition, there must be exactly one tag defined. 
+The http methods are grouped to services based on the tags, i.e. if two methods have tag "order", both will be
+generated inside Order.ts
 1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
+1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method 
+can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
 
 ## Development
+
+* at least node 8 is needed
 
 ### Docker image
 
@@ -103,6 +109,24 @@ export class MyComponent implements OnInit {
 1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
 1. `npm i`
 
+### Testing
+
+#### How the testing works
+
+* tests are written in the demo-app
+* the test swagger files can be found in demo-app/client/test-swaggers
+* upon these swagger files, interfaces and services are generated
+* the generated services are manually imported to the app.module.ts
+* unit tests can be found in demo-app/client/src/tests
+
+#### Running the tests
+
+1. `cd demo-app/client`
+1. `npm run generate-from-swagger`
+1. `npm run test`
+
+or instead of step 2 and 3 run: `npm run testci`
+
 ---
 
-### _Pull requests are welcome!_
+### _Pull requests are welcomed!_
