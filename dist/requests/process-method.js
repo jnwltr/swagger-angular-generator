@@ -23,6 +23,7 @@ function processMethod(method) {
     let paramsSignature = '';
     let params = '';
     let usesGlobalType = false;
+    let usesQueryParams;
     let paramTypes = [];
     if (method.paramDef) {
         const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
@@ -33,6 +34,7 @@ function processMethod(method) {
         paramSeparation = getParamSeparation(paramGroups);
         paramsSignature = `params: ${paramsType}`;
         usesGlobalType = processedParams.usesGlobalType;
+        usesQueryParams = 'query' in paramGroups;
         interfaceDef = processedParams.paramDef;
         params += getRequestParams(paramTypes, method.methodName);
     }
@@ -52,7 +54,7 @@ function processMethod(method) {
             interfaceDef += '\n';
         interfaceDef += `${method.responseDef.enumDeclaration}\n`;
     }
-    return { methodDef, interfaceDef, usesGlobalType };
+    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams };
 }
 exports.processMethod = processMethod;
 /**
@@ -61,10 +63,19 @@ exports.processMethod = processMethod;
  */
 function getParamSeparation(paramGroups) {
     return _.map(paramGroups, (group, groupName) => {
+        let baseDef;
         let def;
         if (groupName === 'query') {
-            def = 'const queryParams = new HttpParams();\n';
-            def += _.map(group, p => `queryParams.append('${p.name}', JSON.stringify(params.${p.name}));`).join('\n');
+            const list = _.map(group, p => `${p.name}: params.${p.name},`);
+            baseDef = '{\n' + utils_1.indent(list) + '\n};';
+            def = `const queryParamBase = ${baseDef}\n\n`;
+            def += 'let queryParams = new HttpParams();\n';
+            def += `Object.entries(queryParamBase).forEach(([key, value]) => {\n`;
+            def += `  if (value !== undefined) {\n`;
+            def += `    if (typeof value === 'string') queryParams = queryParams.set(key, value);\n`;
+            def += `    else queryParams = queryParams.set(key, JSON.stringify(value));\n`;
+            def += `  }\n`;
+            def += `});\n`;
             return def;
         }
         // only one direct body parameter is allowed

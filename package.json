@@ -1,19 +1,20 @@
 {
   "name": "swagger-angular-generator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Generator of API layer in TypeScript for Angular 2+ apps",
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
-  "bin": {
-    "swag2ng": "dist/index.js",
-    "swagger-angular-generator": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "scripts": {
+    "postinstall": "cd demo-app/client && npm i",
     "start": "ts-node src/index.ts",
+    "prebuild": "rm -rf dist",
+    "build": "tsc --outDir dist",
+    "postbuild": "npm run generate",
+    "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",
-    "build": "tsc --outDir dist",
-    "prebuild": "rm -rf dist"
+    "test": "cd demo-app/client && npm run test:ci"
   },
   "repository": {
     "type": "git",
@@ -39,10 +40,10 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@angular/common": "^4.4.6",
-    "@angular/core": "^4.4.6",
-    "@angular/http": "^4.4.6",
-    "@angular/platform-browser": "^4.4.6",
+    "@angular/common": "^5.0.3",
+    "@angular/core": "^5.0.3",
+    "@angular/http": "^5.0.3",
+    "@angular/platform-browser": "^5.0.3",
     "@types/commander": "^2.11.0",
     "@types/lodash": "^4.14.77",
     "@types/node": "^8.0.46",
@@ -54,10 +55,10 @@
     "zone.js": "^0.8.18"
   },
   "peerDependencies": {
-    "@angular/common": "^4.4.6",
-    "@angular/core": "^4.4.6",
-    "@angular/http": "^4.4.6",
-    "@angular/platform-browser": "^4.4.6",
+    "@angular/common": "^5.0.3",
+    "@angular/core": "^5.0.3",
+    "@angular/http": "^5.0.3",
+    "@angular/platform-browser": "^5.0.3",
     "zone.js": "^0.8.18",
     "rxjs": "^5.5.0"
   }

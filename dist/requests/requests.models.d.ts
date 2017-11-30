@@ -28,4 +28,5 @@ export interface MethodOutput {
     methodDef: string;
     interfaceDef: string;
     usesGlobalType: boolean;
+    usesQueryParams: boolean;
 }
