@@ -21,6 +21,9 @@ node_modules/
 # Optional eslint cache
 .eslintcache
 
+# macos
+.DS_Store
+
 # dotenv environment variables file
 .env
 

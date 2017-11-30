@@ -4,7 +4,8 @@
  * example.com/swagger
  */
 
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
+import {HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
@@ -33,11 +34,8 @@ export class OrderService {
     let queryParams = new HttpParams();
     Object.entries(queryParamBase).forEach(([key, value]) => {
       if (value !== undefined) {
-        if (typeof value === 'string') {
-          queryParams = queryParams.set(key, value);
-        } else {
-          queryParams = queryParams.set(key, JSON.stringify(value));
-        }
+        if (typeof value === 'string') queryParams = queryParams.set(key, value);
+        else queryParams = queryParams.set(key, JSON.stringify(value));
       }
     });
 

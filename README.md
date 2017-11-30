@@ -37,7 +37,7 @@ The resulting API layer contains the following structure in the destination dire
 
 1. `def` directory stores all response interfaces and enums
 1. `model.ts` file reexports all of them together for a simple access
-1. `controllers` directory stores services containing all API methods
+1. `controllers` directory stores services containing all API methods devided by controllers
 
 When updating your code for new backend version, we recommend you to follow these steps:
 
@@ -48,7 +48,7 @@ When updating your code for new backend version, we recommend you to follow thes
 
 ### Use
 
-In order to consume generated model, follow the steps **1-8** in the following example to use generated API model.
+In order to consume generated model, follow the steps **1-9** in the following example to use generated API model.
 
 #### Usage in the service or component
 ```typescript
@@ -57,29 +57,33 @@ import {ItemDto, PageDto} from '[relative-path-to-destination-directory]/model';
 // 2. import used controller service and optionally param types
 import {DataService, MethodParams} from '[relative-path-to-destination-directory]/api/DataService';
 
-@Component({})
+@Component({
+  ...
+  // 3. make the service injectable
+  providers: [DataService],
+})
 export class MyComponent implements OnInit {
-  // 3. link response objects to generated API types
+  // 4. link response objects to generated API types
   public items: ItemDto[] = [];
   public page: PageDto;
 
-  // 4. link request params to generated API types (all params are passed together in one object)
+  // 5. link request params to generated API types (all params are passed together in one object)
   private params: MethodParams = {
     page: 0,
     size: 10,
     sort: ['name:asc']
   };
 
-  // 5. inject the service
+  // 6. inject the service
   constructor(private dataService: DataService) {}
 
   public ngOnInit() {
-    // 6. the returned observable is fully typed
+    // 7. the returned observable is fully typed
     this.dataService
       .get(this.params)
-      // 7. returned data are fully typed
+      // 8. returned data are fully typed
       .subscribe(data => {
-        // 8. assignments type-checked
+        // 9. assignments type-checked
         const {content, page} = data;
         this.items = content;
         this.page = page;
@@ -91,12 +95,12 @@ export class MyComponent implements OnInit {
 ## Assumptions / limitations
 
 1. swagger file is in [version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) format, it must be json
-1. each endpoint must have a `tags` attribute defined. In addition, there must be exactly one tag defined. 
+1. each endpoint must have a `tags` attribute defined. In addition, there must be exactly one tag defined.
 The http methods are grouped to services based on the tags, i.e. if two methods have tag "order", both will be
 generated inside Order.ts
 1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
-1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method 
+1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method
 can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
 
 ## Development
@@ -122,11 +126,15 @@ can contain a link to the swagger UI method reference, e.g. `http://example.com/
 #### Running the tests
 
 1. `cd demo-app/client`
-1. `npm run generate-from-swagger`
+1. `npm run generate`
 1. `npm run test`
 
 or instead of step 2 and 3 run: `npm run testci`
 
+### TODO
+
+  1. test `formData` functionality
+
 ---
 
-### _Pull requests are welcomed!_
+### _Pull requests are welcome!_

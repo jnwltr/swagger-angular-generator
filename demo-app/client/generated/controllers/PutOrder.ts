@@ -4,10 +4,9 @@
  * example.com/swagger
  */
 
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-
 
 export interface OrderParams {
   /**

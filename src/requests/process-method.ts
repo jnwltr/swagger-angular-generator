@@ -24,6 +24,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let paramsSignature = '';
   let params = '';
   let usesGlobalType = false;
+  let usesQueryParams: boolean;
   let paramTypes: string[] = [];
 
   if (method.paramDef) {
@@ -36,6 +37,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     paramSeparation = getParamSeparation(paramGroups);
     paramsSignature = `params: ${paramsType}`;
     usesGlobalType = processedParams.usesGlobalType;
+    usesQueryParams = 'query' in paramGroups;
     interfaceDef = processedParams.paramDef;
 
     params += getRequestParams(paramTypes, method.methodName);
@@ -59,7 +61,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     interfaceDef += `${method.responseDef.enumDeclaration}\n`;
   }
 
-  return {methodDef, interfaceDef, usesGlobalType};
+  return {methodDef, interfaceDef, usesGlobalType, usesQueryParams};
 }
 
 /**
@@ -74,18 +76,14 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
     if (groupName === 'query') {
       const list = _.map(group, p => `${p.name}: params.${p.name},`);
       baseDef = '{\n' + indent(list) + '\n};';
+
       def = `const queryParamBase = ${baseDef}\n\n`;
-
       def += 'let queryParams = new HttpParams();\n';
-
       def += `Object.entries(queryParamBase).forEach(([key, value]) => {\n`;
-      def += indent(`if (value !== undefined) {\n`);
-      def += indent(indent(`if (typeof value === 'string') {\n`));
-      def += indent(indent(indent(`queryParams = queryParams.set(key, value);\n`)));
-      def += indent(indent(`} else {\n`));
-      def += indent(indent(indent(`queryParams = queryParams.set(key, JSON.stringify(value));\n`)));
-      def += indent(indent(`}\n`));
-      def += indent(`}\n`);
+      def += `  if (value !== undefined) {\n`;
+      def += `    if (typeof value === 'string') queryParams = queryParams.set(key, value);\n`;
+      def += `    else queryParams = queryParams.set(key, JSON.stringify(value));\n`;
+      def += `  }\n`;
       def += `});\n`;
 
       return def;

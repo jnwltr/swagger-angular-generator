@@ -36,14 +36,15 @@ export function processController(methods: ControllerMethod[], name: string, con
   usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
 
   let content = '';
-  content += 'import {HttpClient, HttpParams} from \'@angular/common/http\';\n';
-  content += 'import {Injectable} from \'@angular/core\';\n';
-  content += 'import {Observable} from \'rxjs/Observable\';\n';
-  content += '\n';
-  if (usesGlobalType) {
-    content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n`;
+  content += 'import {HttpClient} from \'@angular/common/http\';\n';
+  if (processedMethods.some(c => c.usesQueryParams)) {
+    content += 'import {HttpParams} from \'@angular/common/http\';\n';
   }
-  content += '\n';
+  content += 'import {Injectable} from \'@angular/core\';\n';
+  content += 'import {Observable} from \'rxjs/Observable\';\n\n';
+  if (usesGlobalType) {
+    content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+  }
 
   const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');
   if (interfaceDef) {

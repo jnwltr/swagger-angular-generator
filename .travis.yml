@@ -9,4 +9,4 @@ before_install:
   - docker build -t swagger-angular-generator .
 
 script:
-  - docker run -it swagger-angular-generator bash -c "npm install; cd demo-app/client; npm install; npm run testci;"
+  - docker run -it swagger-angular-generator bash -c "npm i; npm test"
