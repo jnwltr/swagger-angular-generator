@@ -21,7 +21,7 @@ import {ControllerMethod, Paths} from './requests.models';
 export function processPaths(paths: Paths, swaggerPath: string, config: Config) {
   emptyDir(path.join(config.dest, conf.apiDir));
 
-  const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url) => (
+  const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url: string) => (
     _.map(methods, (method, methodName: MethodName) => ({
       url,
       name: getName(method),
