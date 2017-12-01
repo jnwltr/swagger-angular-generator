@@ -36,12 +36,16 @@ export function processController(methods: ControllerMethod[], name: string, con
   usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
 
   let content = '';
-  content += 'import {HttpClient} from \'@angular/common/http\';\n';
+
+  const angularCommonHttp = ['HttpClient'];
   if (processedMethods.some(c => c.usesQueryParams)) {
-    content += 'import {HttpParams} from \'@angular/common/http\';\n';
+    angularCommonHttp.push('HttpParams');
   }
+  content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
+
   content += 'import {Injectable} from \'@angular/core\';\n';
   content += 'import {Observable} from \'rxjs/Observable\';\n\n';
+
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
   }

@@ -8,10 +8,10 @@ RUN apt-get update &&  \
     dpkg --unpack google-chrome-stable_current_amd64.deb && \
     apt-get install -f -y && \
     apt-get clean && \
-    rm google-chrome-stable_current_amd64.deb && \
+    rm google-chrome-stable_current_amd64.deb
 
-    # Font libraries
-    apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
+# Font libraries
+RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
 
 RUN mkdir /code
 WORKDIR /code
