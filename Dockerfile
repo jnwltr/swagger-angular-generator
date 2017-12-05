@@ -15,5 +15,7 @@ RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-
 
 RUN mkdir /code
 WORKDIR /code
-
 COPY . /code
+
+RUN chown -R node:node /code
+USER node

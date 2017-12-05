@@ -89,10 +89,26 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
       return def;
     }
 
-    // only one direct body parameter is allowed
-    // 1st one taken if more of them present
     if (groupName === 'body') {
-      def = `params.${group[0].name};`;
+      // when the schema: { '$ref': '#/definitions/exampleDto' } construct is used
+      if ('schema' in group[0]) {
+        def = `params.${group[0].name};`;
+      } else {
+        const list = _.map(group, p => `${p.name}: params.${p.name},`);
+        def = '{\n' + indent(list) + '\n};';
+      }
+
+      // when the patch method is used, it will discard bodyParams keys with value === undefined
+      let returnString = '';
+      returnString += `const ${groupName}Params = ${def}\n`;
+
+      returnString += `const bodyParamsWithoutUndefined: any = {};\n`;
+      returnString += `Object.entries(bodyParams).forEach(\n`;
+      returnString += indent(
+          `([key, value]) => { if (value !== undefined) bodyParamsWithoutUndefined[key] = value; },\n`);
+      returnString += `);`;
+      return returnString;
+
     } else {
       const list = _.map(group, p => `${p.name}: params.${p.name},`);
       def = '{\n' + indent(list) + '\n};';
@@ -112,7 +128,7 @@ function getRequestParams(paramTypes: string[], methodName: string) {
 
   if (['post', 'put', 'patch'].includes(methodName)) {
     if (paramTypes.includes('body')) {
-      res += `, bodyParams`;
+      res += `, bodyParamsWithoutUndefined`;
     } else if (paramTypes.includes('formData')) {
       res += `, formDataParams`;
     } else {

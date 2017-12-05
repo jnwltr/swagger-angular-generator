@@ -62,5 +62,5 @@ function getSimpleName(url: string) {
 }
 
 function getName(method: Method) {
-  return _.upperFirst(_.camelCase(method.tags[0].replace(/(-rest)?-controller/, '')));
+    return _.upperFirst(_.camelCase(method.tags[0].replace(/(-rest)?-controller/, '')));
 }

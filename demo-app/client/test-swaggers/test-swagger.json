@@ -214,7 +214,6 @@
           }
         }
       },
-
       "put": {
         "tags": [
           "PutOrder"
@@ -296,6 +295,90 @@
           }
         }
       }
+    },
+    "/api/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "create registration credentials",
+        "operationId": "Registration",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "loginDto",
+            "description": "login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/registration/{registrationType}": {
+      "post": {
+        "tags": [
+          "Registration"
+        ],
+        "summary": "create registration credentials",
+        "operationId": "Registration",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "registrationType",
+            "in": "path",
+            "description": "Registration type",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "E-mail",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "password1",
+            "in": "formData",
+            "description": "Password 1",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password2",
+            "in": "formData",
+            "description": "Password 2",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
     }
   },
 
@@ -352,6 +435,23 @@
           "type": "integer"
         },
         "name": {
+          "type": "string"
+        }
+      }
+    },
+
+    "loginDto": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "password": {
           "type": "string"
         }
       }

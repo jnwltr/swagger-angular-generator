@@ -10,7 +10,7 @@
     "start": "ts-node src/index.ts",
     "prebuild": "rm -rf dist",
     "build": "tsc --outDir dist",
-    "postbuild": "npm run generate",
+    "prepublishOnly": "cd demo-app/client && npm i && npm run generate",
     "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",
