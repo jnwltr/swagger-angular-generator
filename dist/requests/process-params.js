@@ -22,6 +22,7 @@ function processParams(def, paramsType) {
         description: p.description,
         format: p.format,
     }, p.schema), p.name, paramsType, p.required));
+    const isInterfaceEmpty = !params.length;
     const usesGlobalType = params.some(p => !p.native);
     paramDef += utils_1.indent(_.map(params, 'property'));
     paramDef += `\n`;
@@ -32,7 +33,7 @@ function processParams(def, paramsType) {
         paramDef += enums.join('\n\n');
         paramDef += `\n`;
     }
-    return { paramDef, usesGlobalType };
+    return { paramDef, usesGlobalType, isInterfaceEmpty };
 }
 exports.processParams = processParams;
 //# sourceMappingURL=process-params.js.map
