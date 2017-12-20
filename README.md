@@ -131,10 +131,6 @@ can contain a link to the swagger UI method reference, e.g. `http://example.com/
 
 or instead of step 2 and 3 run: `npm run testci`
 
-### TODO
-
-  1. test `formData` functionality
-
 ---
 
 ### _Pull requests are welcome!_
