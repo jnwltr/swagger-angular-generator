@@ -8,12 +8,18 @@ import {processProperty} from '../common';
 import {Parameter} from '../types';
 import {indent} from '../utils';
 
+export interface ProcessParamsOutput {
+  paramDef: string;
+  usesGlobalType: boolean;
+  isInterfaceEmpty: boolean;
+}
+
 /**
  * Transforms input parameters to interfaces definition
  * @param def definition
  * @param paramsType name of the type
  */
-export function processParams(def: Parameter[], paramsType: string) {
+export function processParams(def: Parameter[], paramsType: string): ProcessParamsOutput {
   let paramDef = '';
   paramDef += `export interface ${paramsType} {\n`;
 
@@ -31,6 +37,8 @@ export function processParams(def: Parameter[], paramsType: string) {
     }, p.name, paramsType, p.required),
   );
 
+  const isInterfaceEmpty = !(params.length);
+
   const usesGlobalType = params.some(p => !p.native);
 
   paramDef += indent(_.map(params, 'property') as string[]);
@@ -44,5 +52,5 @@ export function processParams(def: Parameter[], paramsType: string) {
     paramDef += `\n`;
   }
 
-  return {paramDef, usesGlobalType};
+  return {paramDef, usesGlobalType, isInterfaceEmpty};
 }

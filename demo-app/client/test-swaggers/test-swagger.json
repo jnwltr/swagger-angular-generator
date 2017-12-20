@@ -379,6 +379,68 @@
           }
         }
       }
+    },
+    "/api/logout": {
+      "post": {
+        "tags": [
+          "Logout"
+        ],
+        "summary": "Logout - empty post body",
+        "operationId": "Logout",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/career/v{version}/positions/{positionId}": {
+      "get": {
+        "tags": [
+          "Career"
+        ],
+        "summary": "get career",
+        "operationId": "Career",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "positionId",
+            "in": "path",
+            "description": "Position Id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "API version",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
     }
   },
 
