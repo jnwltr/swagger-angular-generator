@@ -1,9 +1,9 @@
 import {HttpClientModule, HttpRequest} from '@angular/common/http';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {async, inject, TestBed} from '@angular/core/testing';
-import {PatchOrderService} from '../../../generated/controllers/PatchOrder';
+import {CareerService} from '../../../generated/controllers/Career';
 
-describe(`PatchOrderService`, () => {
+describe(`CareerDetailService`, () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -11,7 +11,7 @@ describe(`PatchOrderService`, () => {
         HttpClientModule,
         HttpClientTestingModule,
       ],
-      providers: [PatchOrderService],
+      providers: [CareerService],
     });
   });
 
@@ -22,20 +22,14 @@ describe(`PatchOrderService`, () => {
   it(`should check request parameters are correct`,
     async(
 
-      inject([PatchOrderService, HttpTestingController],
-        (service: PatchOrderService, backend: HttpTestingController) => {
+      inject([CareerService, HttpTestingController],
+        (service: CareerService, backend: HttpTestingController) => {
 
-        service.order({
-          orderId: '100',
-          model: 'test-model',
-          },
-        ).subscribe();
+        service.positions({version: '2', positionId: 220}).subscribe();
 
         backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'PATCH'
-            && req.url === '/api/order/100'
-            && req.body.model === 'test-model'
-            && JSON.stringify(Object.keys(req.body)) === JSON.stringify(['model']);
+          return req.method === 'GET'
+            && req.url === '/api/career/v2/positions/220';
         });
       }),
     ),

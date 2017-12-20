@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import * as conf from '../conf';
 import {Parameter} from '../types';
 import {indent, makeComment} from '../utils';
-import {processParams} from './process-params';
+import {processParams, ProcessParamsOutput} from './process-params';
 import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
 
 /**
@@ -18,7 +18,7 @@ import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
 export function processMethod(method: ControllerMethod): MethodOutput {
   let methodDef = '';
   let interfaceDef = '';
-  const url = method.url.replace(/\/{([^}]+})/g, '/$${pathParams.$1');
+  const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
   const allowed: string[] = conf.allowedParams[method.methodName];
   let paramSeparation: string[] = [];
   let paramsSignature = '';
@@ -35,10 +35,10 @@ export function processMethod(method: ControllerMethod): MethodOutput {
 
     paramTypes = Object.keys(paramGroups);
     paramSeparation = getParamSeparation(paramGroups);
-    paramsSignature = `params: ${paramsType}`;
+    paramsSignature = getParamsSignature(processedParams, paramsType);
     usesGlobalType = processedParams.usesGlobalType;
     usesQueryParams = 'query' in paramGroups;
-    interfaceDef = processedParams.paramDef;
+    interfaceDef = getInterfaceDef(processedParams);
 
     params += getRequestParams(paramTypes, method.methodName);
   }
@@ -62,6 +62,23 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   }
 
   return {methodDef, interfaceDef, usesGlobalType, usesQueryParams};
+}
+
+/**
+ * Creates a definition of paramsSignature, which serves as input to http methods
+ * @param processedParams
+ * @param paramsType
+ */
+function getParamsSignature(processedParams: ProcessParamsOutput, paramsType: string) {
+    return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
+}
+
+/**
+ * Creates a definition of interfaceDef, which defines interface for the http method input
+ * @param processedParams
+ */
+function getInterfaceDef(processedParams: ProcessParamsOutput) {
+    return !processedParams.isInterfaceEmpty ? processedParams.paramDef : '';
 }
 
 /**
@@ -89,10 +106,26 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
       return def;
     }
 
-    // only one direct body parameter is allowed
-    // 1st one taken if more of them present
     if (groupName === 'body') {
-      def = `params.${group[0].name};`;
+      // when the schema: { '$ref': '#/definitions/exampleDto' } construct is used
+      if ('schema' in group[0]) {
+        def = `params.${group[0].name};`;
+      } else {
+        const list = _.map(group, p => `${p.name}: params.${p.name},`);
+        def = '{\n' + indent(list) + '\n};';
+      }
+
+      // bodyParams keys with value === undefined are removed
+      let returnString = '';
+      returnString += `const ${groupName}Params = ${def}\n`;
+
+      returnString += `const bodyParamsWithoutUndefined: any = {};\n`;
+      returnString += `Object.entries(bodyParams).forEach(\n`;
+      returnString += indent(
+          `([key, value]) => { if (value !== undefined) bodyParamsWithoutUndefined[key] = value; },\n`);
+      returnString += `);`;
+      return returnString;
+
     } else {
       const list = _.map(group, p => `${p.name}: params.${p.name},`);
       def = '{\n' + indent(list) + '\n};';
@@ -112,12 +145,11 @@ function getRequestParams(paramTypes: string[], methodName: string) {
 
   if (['post', 'put', 'patch'].includes(methodName)) {
     if (paramTypes.includes('body')) {
-      res += `, bodyParams`;
+      res += `, bodyParamsWithoutUndefined`;
     } else if (paramTypes.includes('formData')) {
       res += `, formDataParams`;
     } else {
-      // TODO(jnwltr) check if {} is not needed
-      res += `, undefined`;
+      res += `, {}`;
     }
   }
 

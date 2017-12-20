@@ -26,6 +26,10 @@ export class OrderService {
    */
   order(params: OrderParams): Observable<object> {
     const bodyParams = params.orderDto;
+    const bodyParamsWithoutUndefined: any = {};
+    Object.entries(bodyParams).forEach(
+      ([key, value]) => { if (value !== undefined) bodyParamsWithoutUndefined[key] = value; },
+    );
     const queryParamBase = {
       producer: params.producer,
     };
@@ -38,6 +42,6 @@ export class OrderService {
       }
     });
 
-    return this.http.post<object>(`/api/order`, bodyParams, {params: queryParams});
+    return this.http.post<object>(`/api/order`, bodyParamsWithoutUndefined, {params: queryParams});
   }
 }
