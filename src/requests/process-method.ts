@@ -119,7 +119,8 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
       let res = `const ${groupName}Params = ${def}\n`;
       res += 'const bodyParamsWithoutUndefined: any = {};\n';
       res += 'Object.entries(bodyParams).forEach(([key, value]) => {\n';
-      res += indent('if (value !== undefined) bodyParamsWithoutUndefined[key] = value});');
+      res += '  if (value !== undefined) bodyParamsWithoutUndefined[key] = value;\n';
+      res += '});';
 
       return res;
     } else {
