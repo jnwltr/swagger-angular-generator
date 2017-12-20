@@ -17,7 +17,7 @@ const process_params_1 = require("./process-params");
 function processMethod(method) {
     let methodDef = '';
     let interfaceDef = '';
-    const url = method.url.replace(/\/{([^}]+})/g, '/$${pathParams.$1');
+    const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
     const allowed = conf.allowedParams[method.methodName];
     let paramSeparation = [];
     let paramsSignature = '';
@@ -32,10 +32,10 @@ function processMethod(method) {
         const processedParams = process_params_1.processParams(paramDef, paramsType);
         paramTypes = Object.keys(paramGroups);
         paramSeparation = getParamSeparation(paramGroups);
-        paramsSignature = `params: ${paramsType}`;
+        paramsSignature = getParamsSignature(processedParams, paramsType);
         usesGlobalType = processedParams.usesGlobalType;
         usesQueryParams = 'query' in paramGroups;
-        interfaceDef = processedParams.paramDef;
+        interfaceDef = getInterfaceDef(processedParams);
         params += getRequestParams(paramTypes, method.methodName);
     }
     methodDef += '\n';
@@ -58,6 +58,21 @@ function processMethod(method) {
 }
 exports.processMethod = processMethod;
 /**
+ * Creates a definition of paramsSignature, which serves as input to http methods
+ * @param processedParams
+ * @param paramsType
+ */
+function getParamsSignature(processedParams, paramsType) {
+    return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
+}
+/**
+ * Creates a definition of interfaceDef, which defines interface for the http method input
+ * @param processedParams
+ */
+function getInterfaceDef(processedParams) {
+    return !processedParams.isInterfaceEmpty ? processedParams.paramDef : '';
+}
+/**
  * Creates a definition of pathParams, bodyParams, queryParms or formDataParams
  * @param paramGroups
  */
@@ -70,18 +85,29 @@ function getParamSeparation(paramGroups) {
             baseDef = '{\n' + utils_1.indent(list) + '\n};';
             def = `const queryParamBase = ${baseDef}\n\n`;
             def += 'let queryParams = new HttpParams();\n';
-            def += `Object.entries(queryParamBase).forEach(([key, value]) => {\n`;
-            def += `  if (value !== undefined) {\n`;
-            def += `    if (typeof value === 'string') queryParams = queryParams.set(key, value);\n`;
-            def += `    else queryParams = queryParams.set(key, JSON.stringify(value));\n`;
-            def += `  }\n`;
-            def += `});\n`;
+            def += 'Object.entries(queryParamBase).forEach(([key, value]) => {\n';
+            def += '  if (value !== undefined) {\n';
+            def += '    if (typeof value === \'string\') queryParams = queryParams.set(key, value);\n';
+            def += '    else queryParams = queryParams.set(key, JSON.stringify(value));\n';
+            def += '  }\n';
+            def += '});\n';
             return def;
         }
-        // only one direct body parameter is allowed
-        // 1st one taken if more of them present
         if (groupName === 'body') {
-            def = `params.${group[0].name};`;
+            // when the schema: { '$ref': '#/definitions/exampleDto' } construct is used
+            if ('schema' in group[0]) {
+                def = `params.${group[0].name};`;
+            }
+            else {
+                const list = _.map(group, p => `${p.name}: params.${p.name},`);
+                def = '{\n' + utils_1.indent(list) + '\n};';
+            }
+            // bodyParams keys with value === undefined are removed
+            let res = `const ${groupName}Params = ${def}\n`;
+            res += 'const bodyParamsWithoutUndefined: any = {};\n';
+            res += 'Object.entries(bodyParams).forEach(([key, value]) => {\n';
+            res += utils_1.indent('if (value !== undefined) bodyParamsWithoutUndefined[key] = value});');
+            return res;
         }
         else {
             const list = _.map(group, p => `${p.name}: params.${p.name},`);
@@ -99,14 +125,13 @@ function getRequestParams(paramTypes, methodName) {
     let res = '';
     if (['post', 'put', 'patch'].includes(methodName)) {
         if (paramTypes.includes('body')) {
-            res += `, bodyParams`;
+            res += `, bodyParamsWithoutUndefined`;
         }
         else if (paramTypes.includes('formData')) {
             res += `, formDataParams`;
         }
         else {
-            // TODO(jnwltr) check if {} is not needed
-            res += `, undefined`;
+            res += `, {}`;
         }
     }
     if (paramTypes.includes('query')) {

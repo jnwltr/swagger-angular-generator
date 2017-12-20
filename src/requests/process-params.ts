@@ -37,7 +37,7 @@ export function processParams(def: Parameter[], paramsType: string): ProcessPara
     }, p.name, paramsType, p.required),
   );
 
-  const isInterfaceEmpty = !(params.length);
+  const isInterfaceEmpty = !params.length;
 
   const usesGlobalType = params.some(p => !p.native);
 
