@@ -19,6 +19,7 @@ export type HttpResponse = {
   [key in HttpCode]?: Response;
 };
 
+// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject
 export interface Parameter {
   description: string;
   in: string;
@@ -29,6 +30,14 @@ export interface Parameter {
   schema?: Schema;
   type?: string;
   format?: string;
+  allowEmptyValue?: boolean;
+  default?: any;
+  maximum?: number;
+  minimum?: number;
+  maxLength?: number;
+  minLength?: number;
+  pattern?: string;
+  uniqueItems?: boolean;
 }
 
 export interface Schema {
@@ -40,6 +49,14 @@ export interface Schema {
   description?: string;
   example?: any;
   format?: string;
+  allowEmptyValue?: boolean;
+  default?: any;
+  maximum?: number;
+  minimum?: number;
+  maxLength?: number;
+  minLength?: number;
+  pattern?: string;
+  uniqueItems?: boolean;
 }
 
 export interface Response {
@@ -51,3 +68,5 @@ export type NativeNames =
   'binary' | 'boolean' | 'byte' | 'date' | 'dateTime' | 'double' |
   'file' | 'float' | 'integer' | 'long' | 'number' | 'object' |
   'password' | 'string';
+
+export type FileType = 'ts' | 'html' | 'scss';

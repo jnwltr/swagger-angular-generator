@@ -26,10 +26,11 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let usesGlobalType = false;
   let usesQueryParams: boolean;
   let paramTypes: string[] = [];
+  let paramGroups: Dictionary<Parameter[]>;
 
   if (method.paramDef) {
     const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
-    const paramGroups = _.groupBy(paramDef, 'in');
+    paramGroups = _.groupBy(paramDef, 'in');
     const paramsType = _.upperFirst(`${method.simpleName}Params`);
     const processedParams = processParams(paramDef, paramsType);
 
@@ -60,8 +61,8 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     if (interfaceDef) interfaceDef += '\n';
     interfaceDef += `${method.responseDef.enumDeclaration}\n`;
   }
-
-  return {methodDef, interfaceDef, usesGlobalType, usesQueryParams};
+  const responseDef = method.responseDef;
+  return {methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef};
 }
 
 /**

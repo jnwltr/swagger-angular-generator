@@ -10,14 +10,17 @@ import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
 import {processMethod} from './process-method';
 import {processResponses} from './process-responses';
-import {ControllerMethod} from './requests.models';
+import {ControllerMethod, MethodOutput} from './requests.models';
+import {createForms} from '../forms/generate-form-modules';
+import {ProcessDefinition} from '../definitions';
 
 /**
  * Creates and serializes class for api communication for controller
  * @param controllers list of methods of the controller
  * @param name
  */
-export function processController(methods: ControllerMethod[], name: string, config: Config) {
+export function processController(methods: ControllerMethod[], name: string, config: Config,
+                                  schemaObjectDefinitions: ProcessDefinition[]) {
   const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
   let usesGlobalType = false;
 
@@ -33,7 +36,7 @@ export function processController(methods: ControllerMethod[], name: string, con
     usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
   });
 
-  const processedMethods = methods.map(processMethod);
+  const processedMethods: MethodOutput[] = methods.map(processMethod);
   usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
 
   let content = '';
@@ -68,6 +71,9 @@ export function processController(methods: ControllerMethod[], name: string, con
     content = content.replace(conf.adHocExceptions.api[name][0],
                               conf.adHocExceptions.api[name][1]);
   }
-
+  /* controllers */
   writeFile(filename, content, config.header);
+
+  /* forms */
+  createForms(config, name, processedMethods, schemaObjectDefinitions, methods);
 }

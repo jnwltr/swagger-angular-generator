@@ -18,6 +18,12 @@ export interface Dictionary<T> {
   [index: string]: T;
 }
 
+export interface ResponseDef {
+  type: string;
+  enumDeclaration: string;
+  usesGlobalType: boolean;
+}
+
 export interface ControllerMethod {
   summary: string;
   operationId: string;
@@ -28,11 +34,7 @@ export interface ControllerMethod {
   url: string;
   swaggerUrl: string;
   responses: HttpResponse;
-  responseDef: {
-    type: string;
-    enumDeclaration: string;
-    usesGlobalType: boolean;
-  };
+  responseDef: ResponseDef;
   paramDef: Parameter[];
 }
 
@@ -41,4 +43,6 @@ export interface MethodOutput {
   interfaceDef: string;
   usesGlobalType: boolean;
   usesQueryParams: boolean;
+  paramGroups: Dictionary<Parameter[]>;
+  responseDef: ResponseDef;
 }
