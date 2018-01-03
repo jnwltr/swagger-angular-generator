@@ -59,7 +59,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
               prop.additionalProperties.$ref);
             additionalType = defType.type;
           }
-          type = `{ [key: string]: ${additionalType} }`;
+          type = `{[key: string]: ${additionalType}}`;
         } else {
           defType = translateType(prop.type);
           type = defType.type;
@@ -75,10 +75,14 @@ export function processProperty(prop: Schema, name = '', namespace = '',
     optional = '?';
   }
 
+  let readOnly = '';
+  if (prop.readOnly) readOnly = 'readonly ';
+
   const comments = [];
   if (prop.description) comments.push(prop.description);
   if (prop.example) comments.push(`example: ${prop.example}`);
   if (prop.format) comments.push(`format: ${prop.format}`);
+  if (prop.default) comments.push(`default: ${prop.default}`);
 
   const comment = makeComment(comments);
   let property;
@@ -86,7 +90,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
   // pure type is returned if no name is specified
   if (name) {
     if (name.match(/-/)) name = `'${name}'`;
-    property = `${comment}${name}${optional}: ${type};`;
+    property = `${comment}${readOnly}${name}${optional}: ${type};`;
   } else property = `${type}`;
 
   return {property, enumDeclaration, native};
@@ -132,7 +136,7 @@ interface DefType {
  * Translates schema type into native/defined type for typescript
  * @param type definition
  */
-function translateType(type: string): DefType {
+export function translateType(type: string): DefType {
   if (type in conf.nativeTypes) {
     const typeType = type as NativeNames;
     return {

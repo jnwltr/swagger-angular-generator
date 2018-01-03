@@ -18,5 +18,9 @@
       "dom",
       "es2017"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "generated/**/*.ts"
+  ]
 }

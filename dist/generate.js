@@ -19,10 +19,10 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
     }
     catch (e) {
         if (e instanceof SyntaxError) {
-            utils_1.out(`${src} is either not a valid JSON scheme or contains non-printable characters`, 'red');
+            utils_1.out(`${src} is either not a valid JSON scheme or contains non-printable characters`, utils_1.TermColors.red);
         }
         else
-            utils_1.out(`JSON scheme file '${src}' does not exist`, 'red');
+            utils_1.out(`JSON scheme file '${src}' does not exist`, utils_1.TermColors.red);
         utils_1.out(`${e}`);
         return;
     }
@@ -30,8 +30,8 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
     const config = { header, dest };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
-    process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
-    definitions_1.processDefinitions(schema.definitions, config);
+    const definitions = definitions_1.processDefinitions(schema.definitions, config);
+    process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config, definitions);
 }
 exports.generate = generate;
 //# sourceMappingURL=generate.js.map
