@@ -4,7 +4,7 @@ import * as conf from './conf';
 
 import {processDefinitions} from './definitions';
 import {processPaths} from './requests/process-paths';
-import {out, processHeader} from './utils';
+import {out, processHeader, TermColors} from './utils';
 
 export interface Config {
   header: string;
@@ -24,8 +24,8 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
     schema = JSON.parse(content.toString());
   } catch (e) {
     if (e instanceof SyntaxError) {
-      out(`${src} is either not a valid JSON scheme or contains non-printable characters`, 'red');
-    } else out(`JSON scheme file '${src}' does not exist`, 'red');
+      out(`${src} is either not a valid JSON scheme or contains non-printable characters`, TermColors.red);
+    } else out(`JSON scheme file '${src}' does not exist`, TermColors.red);
 
     out(`${e}`);
     return;
@@ -36,6 +36,7 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
 
-  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
-  processDefinitions(schema.definitions, config);
+  const definitions = processDefinitions(schema.definitions, config);
+  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`,
+               config, definitions);
 }

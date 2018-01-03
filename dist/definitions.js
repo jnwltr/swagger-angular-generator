@@ -16,15 +16,17 @@ const utils_1 = require("./utils");
  */
 function processDefinitions(defs, config) {
     utils_1.emptyDir(path.join(config.dest, conf.defsDir));
+    const definitions = [];
     const files = {};
     _.forOwn(defs, (v, source) => {
         const file = processDefinition(v, source, config);
-        if (file) {
-            const previous = files[file];
+        if (file.name) {
+            const previous = files[file.name];
             if (previous === undefined)
-                files[file] = [source];
+                files[file.name] = [source];
             else
                 previous.push(source);
+            definitions.push(file);
         }
     });
     let allExports = '';
@@ -33,6 +35,7 @@ function processDefinitions(defs, config) {
     });
     const filename = path.join(config.dest, `${conf.modelFile}.ts`);
     utils_1.writeFile(filename, allExports, config.header);
+    return definitions;
 }
 exports.processDefinitions = processDefinitions;
 /**
@@ -61,7 +64,7 @@ function processDefinition(def, name, config) {
         output += `\n${enumLines}\n`;
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
-    return name;
+    return { name, def };
 }
 /**
  * Creates single export line for `def` name

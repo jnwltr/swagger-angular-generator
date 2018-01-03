@@ -15,13 +15,7 @@ const utils_1 = require("../utils");
 function processParams(def, paramsType) {
     let paramDef = '';
     paramDef += `export interface ${paramsType} {\n`;
-    const params = _.map(def, p => common_1.processProperty(Object.assign({
-        enum: p.enum,
-        items: p.items,
-        type: p.type,
-        description: p.description,
-        format: p.format,
-    }, p.schema), p.name, paramsType, p.required));
+    const params = _.map(def, p => common_1.processProperty(parameterToSchema(p), p.name, paramsType, p.required));
     const isInterfaceEmpty = !params.length;
     const usesGlobalType = params.some(p => !p.native);
     paramDef += utils_1.indent(_.map(params, 'property'));
@@ -36,4 +30,25 @@ function processParams(def, paramsType) {
     return { paramDef, usesGlobalType, isInterfaceEmpty };
 }
 exports.processParams = processParams;
+// TODO! use required array to set the variable
+// TODO might be unnecessary for v3.0+ of OpenAPI spec
+// https://swagger.io/specification/#parameterObject
+function parameterToSchema(param) {
+    return Object.assign({
+        allowEmptyValue: param.allowEmptyValue,
+        default: param.default,
+        description: param.description,
+        enum: param.enum,
+        format: param.format,
+        items: param.items,
+        maximum: param.maximum,
+        maxLength: param.maxLength,
+        minimum: param.minimum,
+        minLength: param.minLength,
+        pattern: param.pattern,
+        type: param.type,
+        uniqueItems: param.uniqueItems,
+    }, param.schema);
+}
+exports.parameterToSchema = parameterToSchema;
 //# sourceMappingURL=process-params.js.map
