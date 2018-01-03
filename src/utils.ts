@@ -1,6 +1,33 @@
 import * as fs from 'fs';
 import {basename} from 'path';
 import * as conf from './conf';
+import {FileType} from './types';
+
+/**
+ * Checks if directory exists
+ * @param path
+ */
+function doesDirExists(path: string) {
+  try {
+    return fs.statSync(path).isDirectory();
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      return false;
+    } else {
+      throw e;
+    }
+  }
+}
+
+/**
+ * Creates directory based on provided path
+ * @param path
+ */
+export function createDir(path: string) {
+  if (!doesDirExists(path)) {
+    fs.mkdirSync(path);
+  }
+}
 
 /**
  * Recursively deletes the path
@@ -65,9 +92,11 @@ export function indent(input: string | string[], level = 1): string {
  * @param file
  * @param content
  */
-export function writeFile(file: string, content: string, header: string): void {
-  const disable = '/* tslint:disable:max-line-length */';
-  content = `${disable}\n${header}\n${content}`;
+export function writeFile(file: string, content: string, header: string, fileType: FileType = 'ts'): void {
+  if (fileType === 'ts') {
+    const disable = '/* tslint:disable:max-line-length */';
+    content = `${disable}\n${header}\n${content}`;
+  }
   fs.writeFileSync(file, content);
   out(`${file} generated`, 'green');
 }

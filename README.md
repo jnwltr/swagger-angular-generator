@@ -103,6 +103,9 @@ generated inside Order.ts
 1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method
 can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
 
+### ngrx
+NavigatedTo inspired by - https://nrwl.io/nx/guide-data-persistence
+
 ## Development
 
 * at least node 8 is needed
