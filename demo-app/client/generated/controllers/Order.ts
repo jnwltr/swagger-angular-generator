@@ -12,7 +12,7 @@ import * as model from '../model';
 
 export interface OrderParams {
   /** order */
-  orderDto: model.OrderDto;
+  orderDto?: model.OrderDto;
   producer?: string;
 }
 
@@ -27,7 +27,7 @@ export class OrderService {
   order(params: OrderParams): Observable<object> {
     const bodyParams = params.orderDto;
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     const queryParamBase = {

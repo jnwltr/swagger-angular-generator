@@ -146,7 +146,7 @@
             "in": "body",
             "name": "orderDto",
             "description": "order",
-            "required": true,
+            "required": false,
             "schema": {
               "$ref": "#/definitions/orderDto"
             }
