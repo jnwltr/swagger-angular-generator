@@ -12,7 +12,7 @@ import * as model from '../model';
 
 export interface OrderParams {
   /** order */
-  orderDto: model.OrderDto;
+  orderDto?: model.OrderDto;
   producer?: string;
 }
 
