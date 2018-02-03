@@ -75,5 +75,5 @@ export function processController(methods: ControllerMethod[], name: string, con
   writeFile(filename, content, config.header);
 
   /* forms */
-  createForms(config, name, processedMethods, schemaObjectDefinitions, methods);
+  createForms(config, name, processedMethods, schemaObjectDefinitions);
 }

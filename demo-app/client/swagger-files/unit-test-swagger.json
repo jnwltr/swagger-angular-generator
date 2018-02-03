@@ -1,0 +1,670 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Test Swagger",
+    "version": "v1"
+  },
+  "host": "example.com",
+  "basePath": "/swagger",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get all products",
+        "operationId": "Products",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "stringField",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "BooleanField",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "int32Field",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "longField",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "floatField",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "float"
+          },
+          {
+            "name": "doubleField",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "double"
+          },
+          {
+            "name": "byteField",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "binaryField",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "binary"
+          },
+          {
+            "name": "dateField",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "dateTimeField",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/products"
+            }
+          }
+        }
+      }
+    },
+    "/api/product-detail/{productId}": {
+      "get": {
+        "tags": [
+          "ProductDetail"
+        ],
+        "summary": "Get product detail",
+        "operationId": "ProductDetail",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "product id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/productDetail"
+            }
+          }
+        }
+      }
+    },
+    "/api/order": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "create order",
+        "operationId": "Order",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "orderDto",
+            "description": "order",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/orderDto"
+            }
+          },
+          {
+            "name": "producer",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/order/{orderId}": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Patches order",
+        "operationId": "PatchOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "producer",
+            "in": "body",
+            "description": "producer",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "description": "model",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Put for order",
+        "operationId": "Put-Order",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "producer",
+            "in": "body",
+            "description": "car producer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "description": "car model",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "customerName",
+            "in": "body",
+            "description": "customer name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Delete order",
+        "operationId": "deleteORDER",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "create registration credentials",
+        "operationId": "Registration",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "loginDto",
+            "description": "login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/registration/{registrationType}": {
+      "post": {
+        "tags": [
+          "Registration"
+        ],
+        "summary": "create registration credentials",
+        "operationId": "Registration",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "E-mail",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "password1",
+            "in": "formData",
+            "description": "Password 1",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password2",
+            "in": "formData",
+            "description": "Password 2",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "registrationType",
+          "in": "path",
+          "description": "Registration type",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/api/logout": {
+      "post": {
+        "tags": [
+          "Logout"
+        ],
+        "summary": "Logout - empty post body",
+        "operationId": "Logout",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/career/v{version}/positions/{positionId}": {
+      "get": {
+        "tags": [
+          "Career"
+        ],
+        "summary": "get career",
+        "operationId": "Career",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "positionId",
+            "in": "path",
+            "description": "Position Id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "API version",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+
+    "/rest-auth/logout/": {
+      "get": {
+        "operationId": "rest-auth_logout_list",
+        "description": "Calls Django logout method and delete the Token object\nassigned to the current User object.\n\nAccepts/Returns nothing.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      },
+      "post": {
+        "operationId": "rest-auth_logout_create",
+        "description": "Calls Django logout method and delete the Token object\nassigned to the current User object.\n\nAccepts/Returns nothing.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      }
+    },
+
+    "/rest-auth/user/": {
+      "get": {
+        "operationId": "rest-auth_user_read",
+        "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      },
+      "put": {
+        "operationId": "rest-auth_user_update",
+        "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      },
+      "patch": {
+        "operationId": "rest-auth_user_partial_update",
+        "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "products": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "partnerId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "format": "string",
+          "type": "integer"
+        },
+        "offset": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "productDetail": {
+      "type": "object",
+      "properties": {
+        "partnerId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "format": "string",
+          "type": "integer"
+        },
+        "offset": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "orderDto": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "loginDto": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+
+    "UserDetails": {
+      "required": [
+        "username"
+      ],
+      "type": "object",
+      "properties": {
+        "pk": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "username": {
+          "title": "Username",
+          "description": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+          "type": "string",
+          "pattern": "^[\\w.@+-]+$",
+          "maxLength": 150
+        },
+        "email": {
+          "title": "Email address",
+          "type": "string",
+          "format": "email",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 30
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 150
+        }
+      }
+    }
+  }
+}

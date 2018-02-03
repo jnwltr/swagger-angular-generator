@@ -1,6 +1,5 @@
 import {Config} from '../generate';
 import * as path from 'path';
-import * as conf from '../conf';
 import {indent, writeFile} from '../utils';
 import {Parameter, Schema} from '../types';
 import {ProcessDefinition} from '../definitions';
@@ -10,43 +9,43 @@ export interface FieldDefinitionObj {
   paramsArray: string[];
 }
 
-export function createComponentTs(config: Config, dashedName: string, name: string, paramGroups: Parameter[],
-                                  schemaObjectDefinitions: ProcessDefinition[], simpleName: string) {
+export function createComponentTs(config: Config, name: string, paramGroups: Parameter[],
+                                  schemaObjectDefinitions: ProcessDefinition[], simpleName: string,
+                                  formSubDirName: string, className: string) {
 
   const schemaObjectDefinitionsKeys: string[] = schemaObjectDefinitions.map(s => s.name.toLowerCase());
 
   let content = '';
   content = getImports(content, name);
-  content = getComponent(dashedName, content);
+  content = getComponent(simpleName, content);
 
-  content += `export class ${name}Component implements OnInit {\n`;
+  content += `export class ${className}Component implements OnInit {\n`;
   content += indent(`${name}Form: FormGroup;\n`);
-  content += '\n';
   const fieldDefinition: FieldDefinitionObj = getFieldDefinition(paramGroups, schemaObjectDefinitionsKeys,
                                                                  schemaObjectDefinitions, content);
   content = fieldDefinition.content + '\n';
 
   content = getConstructor(content, name);
   content = getNgOnInit(content, fieldDefinition, name);
-  content = getFormSubmitFunction(content, name, simpleName);
+  content = getFormSubmitFunction(content, name, simpleName, paramGroups);
   content += '}\n';
 
-  const componentTsFileName = path.join(config.dest, conf.formDir + `/${dashedName}`, `${dashedName}.component.ts`);
-  writeFile(componentTsFileName, content, config.header);
+  const componentHTMLFileName = path.join(formSubDirName, `${simpleName}.component.ts`);
+  writeFile(componentHTMLFileName, content, config.header);
 }
 
 export function getImports(content: string, name: string) {
   content += 'import {Component, OnInit} from \'@angular/core\';\n';
   content += 'import {FormBuilder, FormControl, FormGroup, Validators} from \'@angular/forms\';\n';
-  content += `import {${name}Service} from '../../controllers/${name}';\n`;
+  content += `import {${name}Service} from '../../../controllers/${name}';\n`;
   content += '\n';
   return content;
 }
 
-export function getComponent(dashedName: string, content: string) {
+export function getComponent(simpleName: string, content: string) {
   content += '@Component({\n';
-  content += indent(`selector: '${dashedName}',\n`);
-  content += indent(`templateUrl: './${dashedName}.component.html',\n`);
+  content += indent(`selector: '${simpleName}',\n`);
+  content += indent(`templateUrl: './${simpleName}.component.html',\n`);
   content += '})\n';
   content += '\n';
   return content;
@@ -63,7 +62,6 @@ export function getFieldDefinition(paramGroups: Parameter[], schemaObjectDefinit
 
       const objDef: ProcessDefinition = schemaObjectDefinitions.find(
           obj => obj.name.toLowerCase() === param.name.toLowerCase());
-
       const properties = objDef.def.properties;
 
       Object.entries(properties).forEach(([key, value]) => {
@@ -117,10 +115,18 @@ export function getNgOnInit(content: string, fieldDefinition: FieldDefinitionObj
   return content;
 }
 
-export function getFormSubmitFunction(content: string, name: string, simpleName: string) {
+export function getFormSubmitFunction(content: string, name: string, simpleName: string, paramGroups: Parameter[]) {
   content += indent(`${name.toLowerCase()}() {\n`);
-  content += indent(indent(`this.${name.toLowerCase()}Service.${simpleName}(this.${name}Form.value);\n`));
+  content += indent(indent(`this.${name.toLowerCase()}Service.${simpleName}(${getSubmitFnParameters(name, paramGroups)});\n`));
   content += indent('}\n');
   content += '\n';
   return content;
+}
+
+export function getSubmitFnParameters(name: string, paramGroups: Parameter[]) {
+  if (paramGroups.length) {
+    return `this.${name}Form.value`;
+  } else {
+    return '';
+  }
 }

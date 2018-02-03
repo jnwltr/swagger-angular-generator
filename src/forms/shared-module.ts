@@ -7,6 +7,7 @@ export function createSharedModule(config: Config) {
   let content = '';
   content += `import {NgModule} from '@angular/core';\n`;
   content += `import {CommonModule} from '@angular/common';\n`;
+  content += `import {FlexLayoutModule} from '@angular/flex-layout';\n`;
   content += `import {ReactiveFormsModule} from '@angular/forms';\n`;
   content += 'import {\n';
   content += indent('MatButtonModule,\n');
@@ -31,6 +32,7 @@ export function createSharedModule(config: Config) {
   content += indent('imports: [\n');
   content += indent(indent('CommonModule,\n'));
   content += indent(indent('ReactiveFormsModule,\n'));
+  content += indent(indent('FlexLayoutModule,\n'));
 
   content += indent(indent('MatButtonModule,\n'));
   content += indent(indent('MatButtonToggleModule,\n'));
@@ -50,6 +52,30 @@ export function createSharedModule(config: Config) {
   content += indent(indent('MatSelectModule,\n'));
 
   content += indent('],\n');
+
+  content += indent('exports: [\n');
+  content += indent(indent('CommonModule,\n'));
+  content += indent(indent('ReactiveFormsModule,\n'));
+  content += indent(indent('FlexLayoutModule,\n'));
+
+  content += indent(indent('MatButtonModule,\n'));
+  content += indent(indent('MatButtonToggleModule,\n'));
+  content += indent(indent('MatCardModule,\n'));
+  content += indent(indent('MatCheckboxModule,\n'));
+  content += indent(indent('MatChipsModule,\n'));
+  content += indent(indent('MatDatepickerModule,\n'));
+  content += indent(indent('MatGridListModule,\n'));
+  content += indent(indent('MatIconModule,\n'));
+  content += indent(indent('MatInputModule,\n'));
+  content += indent(indent('MatListModule,\n'));
+  content += indent(indent('MatMenuModule,\n'));
+  content += indent(indent('MatNativeDateModule,\n'));
+  content += indent(indent('MatProgressBarModule,\n'));
+  content += indent(indent('MatProgressSpinnerModule,\n'));
+  content += indent(indent('MatRadioModule,\n'));
+  content += indent(indent('MatSelectModule,\n'));
+  content += indent('],\n');
+
   content += '})\n';
   content += `export class FormsSharedModule {}\n`;
 
