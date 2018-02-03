@@ -1,6 +1,5 @@
 import {Config} from '../generate';
 import * as path from 'path';
-import * as conf from '../conf';
 import {indent, writeFile} from '../utils';
 import {Parameter, Schema} from '../types';
 import {ProcessDefinition} from '../definitions';
@@ -11,8 +10,9 @@ export interface Validator {
   errorDescription: string;
 }
 
-export function createComponentHTML(config: Config, dashedName: string, name: string,
-                                    paramGroups: Parameter[], schemaObjectDefinitions: ProcessDefinition[]) {
+export function createComponentHTML(config: Config, name: string,
+                                    paramGroups: Parameter[], schemaObjectDefinitions: ProcessDefinition[],
+                                    formSubDirName: string, simpleName: string) {
   const schemaObjectDefinitionsKeys: string[] = schemaObjectDefinitions.map(s => s.name.toLowerCase());
   const formName = `${name}Form`;
   const submitFunctionName = `${name.toLowerCase()}`;
@@ -26,13 +26,14 @@ export function createComponentHTML(config: Config, dashedName: string, name: st
 
   content = getEndOfFile(content);
 
-  saveFile(config, dashedName, content);
+  const componentTsFileName = path.join(formSubDirName, `${simpleName}.component.html`);
+  writeFile(componentTsFileName, content, config.header, 'html');
 }
 
 export function getBeginingOfFile(content: string, formName: string, submitFunctionName: string, name: string) {
   content += '<mat-card>\n';
-  content += indent('<div fxFlex="20", fxFlex.lt-md="5">\n');
-  content += indent('<div fxFlex="60", fxFlex.lt-md="90">\n');
+  content += indent('<div fxFlex="20"></div>\n');
+  content += indent('<div fxFlex="60">\n');
   content += indent(`<mat-card-title fxLayoutAlign="center center">${name}</mat-card-title>\n`);
   content += '\n';
   content += indent(
@@ -44,7 +45,7 @@ export function getBeginingOfFile(content: string, formName: string, submitFunct
 export function getEndOfFile(content: string) {
   content += indent('</form>\n');
   content += indent('</div>\n');
-  content += indent('</div>\n');
+  content += indent('<div fxFlex></div>\n');
   content += '</mat-card>';
   return content;
 }
@@ -85,7 +86,7 @@ export function getFieldDefinition(paramGroups: Parameter[], schemaObjectDefinit
 }
 
 export function createFieldDefinition(content: string, key: string, validators: Validator[]) {
-  content += indent(indent(`<div fxLayout='row', fxLayoutWrap >\n`));
+  content += indent(indent(`<div fxLayout='row' fxLayoutWrap >\n`));
   content += indent(indent(indent(`<mat-form-field class='account-form-full-width'>\n`)));
   content += indent(indent(indent(indent(
       `<input matInput type='text' name='${key}' [formControl]='${key}' placeholder="${key}" />\n`))));
@@ -109,9 +110,4 @@ export function getValidators(param: Parameter | Schema): Validator[] {
   if (param.pattern) validators.push({type: 'pattern', errorDescription: 'Value does not comply with rules'});
 
   return validators;
-}
-
-export function saveFile(config: Config, dashedName: string, content: string) {
-  const componentHTMLFileName = path.join(config.dest, conf.formDir + `/${dashedName}`, `${dashedName}.component.html`);
-  writeFile(componentHTMLFileName, content, config.header, 'html');
 }

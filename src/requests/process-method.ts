@@ -27,6 +27,8 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let usesQueryParams: boolean;
   let paramTypes: string[] = [];
   let paramGroups: Dictionary<Parameter[]>;
+  const simpleName = method.simpleName;
+  const methodName = method.methodName;
 
   if (method.paramDef) {
     const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
@@ -62,7 +64,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     interfaceDef += `${method.responseDef.enumDeclaration}\n`;
   }
   const responseDef = method.responseDef;
-  return {methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef};
+  return {methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName};
 }
 
 /**

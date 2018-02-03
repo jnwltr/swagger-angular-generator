@@ -37,4 +37,6 @@ export interface MethodOutput {
   usesQueryParams: boolean;
   paramGroups: Dictionary<Parameter[]>;
   responseDef: ResponseDef;
+  simpleName: string;
+  methodName: string;
 }

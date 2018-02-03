@@ -1,28 +1,25 @@
-import * as conf from '../../conf';
 import * as path from 'path';
 import {indent, writeFile} from '../../utils';
 import {Config} from '../../generate';
-import {ControllerMethod, ResponseDef} from '../../requests/requests.models';
-import {ProcessDefinition} from '../../definitions';
 
-export function GenerateHttpReducers(config: Config, name: string, dashedName: string, simpleName: string,
-                                     responseDef: ResponseDef, methods: ControllerMethod[],
-                                     schemaObjectDefinitions: ProcessDefinition[],
-                                     actionClassNameBase: string, actionTypeNameBase: string) {
+export function GenerateHttpReducers(config: Config, actionClassNameBase: string, actionTypeNameBase: string,
+                                     formSubDirName: string) {
 
-  console.log(name, dashedName, simpleName, responseDef, methods, methods[0].responses, schemaObjectDefinitions);
+  // TODO - implement initial state logic
 
   let content = '';
   content = getReducerImports(content);
   content = getStateInteface(content, actionClassNameBase);
   content = getInitialState(content, actionClassNameBase);
+  content = getFeatureSelector(content, actionClassNameBase);
   content = getReducerDefinition(content, actionTypeNameBase, actionClassNameBase);
 
-  const reducersFileName = path.join(config.dest, conf.formDir + `/${dashedName}/states`, `reducers.ts`);
+  const reducersFileName = path.join(formSubDirName, `states`, `reducers.ts`);
   writeFile(reducersFileName, content, config.header);
 }
 
 export function getReducerImports(content: string) {
+  content += `import {createFeatureSelector} from '@ngrx/store';\n`;
   content += `import * as actions from './actions';\n`;
   content += `\n`;
   return content;
@@ -44,6 +41,12 @@ export function getInitialState(content: string, actionClassNameBase: string) {
   content += indent(`loading: false,\n`);
   content += indent(`error: '',\n`);
   content += `};\n`;
+  content += `\n`;
+  return content;
+}
+
+export function getFeatureSelector(content: string, actionClassNameBase: string) {
+  content += `export const get${actionClassNameBase}StateSelector = createFeatureSelector<${actionClassNameBase}State>('${actionClassNameBase}');\n`;
   content += `\n`;
   return content;
 }

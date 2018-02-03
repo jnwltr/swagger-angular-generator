@@ -1,30 +1,34 @@
-import * as conf from '../../conf';
 import * as path from 'path';
 import {indent, writeFile} from '../../utils';
 import {Config} from '../../generate';
 import {ResponseDef} from '../../requests/requests.models';
 import * as _ from 'lodash';
+import {Parameter} from '../../types';
 
-export function GenerateHttpActions(config: Config, name: string, dashedName: string, responseDef: ResponseDef,
-                                    actionClassNameBase: string, actionTypeNameBase: string) {
+export function GenerateHttpActions(config: Config, name: string, responseDef: ResponseDef,
+                                    actionClassNameBase: string, actionTypeNameBase: string, simpleName: string,
+                                    formSubDirName: string, paramGroups: Parameter[]) {
 
   let content = '';
-  content = getActionImports(content, name);
+  content = getActionImports(content, name, simpleName, paramGroups);
   content = getActionTypes(content, name, actionTypeNameBase);
 
-  content = getActionStartDefinition(content, name, actionClassNameBase, actionTypeNameBase);
+  content = getActionStartDefinition(content, simpleName, actionClassNameBase, actionTypeNameBase);
   content = getActionSuccessDefinition(content, actionClassNameBase, actionTypeNameBase, responseDef);
   content = getActionErrorDefinition(content, actionClassNameBase, actionTypeNameBase);
 
   content = getActionOverviewType(content, actionClassNameBase);
 
-  const actionsFileName = path.join(config.dest, conf.formDir + `/${dashedName}/states`, `actions.ts`);
+  const actionsFileName = path.join(formSubDirName, `states`, `actions.ts`);
   writeFile(actionsFileName, content, config.header);
 }
 
-export function getActionImports(content: string, name: string) {
+export function getActionImports(content: string, name: string, simpleName: string, paramGroups: Parameter[]) {
   content += `import {Action} from '@ngrx/store';\n`;
-  content += `import {${name}Params} from '../../../controllers/${name}';\n`;
+  if (paramGroups.length) {
+    content += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
+  }
+  content += `import * as model from '../../../../model';\n`;
   content += `\n`;
   return content;
 }
@@ -37,11 +41,11 @@ export function getActionTypes(content: string, name: string, actionTypeNameBase
   return content;
 }
 
-export function getActionStartDefinition(content: string, name: string, actionClassNameBase: string,
+export function getActionStartDefinition(content: string, simpleName: string, actionClassNameBase: string,
                                          actionTypeNameBase: string) {
   content += `export class ${actionClassNameBase}Start implements Action {\n`;
   content += indent(`readonly type = ${actionTypeNameBase}_START;\n`);
-  content += indent(`constructor(public payload: ${name}Params) {\n`);
+  content += indent(`constructor(public payload: ${_.upperFirst(simpleName)}Params) {\n`);
   content += indent(`}\n`);
   content += `}\n`;
   content += `\n`;
@@ -83,4 +87,8 @@ export function getActionTypeNameBase(name: string, simpleName: string, operatio
 
 export function getActionClassNameBase(name: string, simpleName: string, operationPrefix: string) {
   return `${operationPrefix}${name}${_.upperFirst(simpleName)}`;
+}
+
+export function getClassName(name: string, simpleName: string) {
+  return `${name}${_.upperFirst(simpleName)}`;
 }

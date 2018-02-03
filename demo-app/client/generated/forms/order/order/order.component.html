@@ -1,0 +1,24 @@
+<mat-card>
+  <div fxFlex="20"></div>
+  <div fxFlex="60">
+  <mat-card-title fxLayoutAlign="center center">Order</mat-card-title>
+
+  <form [formGroup]='OrderForm' (ngSubmit)='order()' class='full-width'>
+
+    <div fxLayout='row' fxLayoutWrap >
+      <mat-form-field class='account-form-full-width'>
+        <input matInput type='text' name='id' [formControl]='id' placeholder="id" />
+        <mat-error *ngIf="id.hasError('required')">This field is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout='row' fxLayoutWrap >
+      <mat-form-field class='account-form-full-width'>
+        <input matInput type='text' name='name' [formControl]='name' placeholder="name" />
+      </mat-form-field>
+    </div>
+
+  </form>
+  </div>
+  <div fxFlex></div>
+</mat-card>
