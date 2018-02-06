@@ -10,6 +10,27 @@ export interface PropertyOutput {
   native: boolean;
 }
 
+const getEnumable = (prop: Schema): {enumObj: any} | false => {
+  if (!prop.description) {
+    return false;
+  }
+
+  try {
+    const withoutPrefix = prop.description.split('[')[1];
+    const arrayLike = withoutPrefix.split(']')[0];
+    const words = arrayLike.match(/\w+/g);
+    const vals = words.filter((_, idx) => idx % 2 === 0);
+    const keys = words.filter((_, idx) => idx % 2 === 1);
+    const enumObj = keys.reduce((acc: any, cur: string, idx: number) => {
+      acc[cur] = vals[idx];
+      return acc;
+    }, {});
+    return {enumObj};
+  } catch (error) {
+    return false;
+  }
+};
+
 /**
  * Processes one property of the type
  * @param prop property definition
@@ -31,7 +52,14 @@ export function processProperty(prop: Schema, name = '', namespace = '',
 
     const list = prop.enum || prop.items.enum;
     const exp = exportEnums ? 'export ' : '';
-    enumDeclaration = `${exp}type ${type} =\n` + indent('\'' + list.join('\' |\n\'')) + '\';';
+
+    const enumable = getEnumable(prop);
+    if (!enumable) {
+      enumDeclaration = `${exp}type ${type} =\n` + indent('\'' + list.join('\' |\n\'')) + '\';';
+    } else {
+      const lines = Object.entries(enumable.enumObj).map(([key, val]) => `${key} = '${val}',`);
+      enumDeclaration = `${exp}enum ${type} {\n` + indent(lines) + '\n}';
+    }
 
     if (prop.type === 'array') type += '[]';
   } else {
