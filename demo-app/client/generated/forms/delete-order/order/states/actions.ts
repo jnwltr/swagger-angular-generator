@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -14,20 +14,17 @@ export const LOAD_DELETEORDER_ORDER_ERROR = '[DeleteOrder] Load DeleteOrder Erro
 
 export class LoadDeleteOrderOrderStart implements Action {
   readonly type = LOAD_DELETEORDER_ORDER_START;
-  constructor(public payload: OrderParams) {
-  }
+  constructor(public payload: OrderParams) {}
 }
 
 export class LoadDeleteOrderOrderSuccess implements Action {
   readonly type = LOAD_DELETEORDER_ORDER_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class LoadDeleteOrderOrderError implements Action {
   readonly type = LOAD_DELETEORDER_ORDER_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllLoadDeleteOrderOrderActions

@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_ERROR = '[RestAuth] Load 
 
 export class UpdateRestAuthRestAuthUserPartialUpdateStart implements Action {
   readonly type = UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_START;
-  constructor(public payload: RestAuthUserPartialUpdateParams) {
-  }
+  constructor(public payload: RestAuthUserPartialUpdateParams) {}
 }
 
 export class UpdateRestAuthRestAuthUserPartialUpdateSuccess implements Action {
   readonly type = UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_SUCCESS;
-  constructor(public payload: model.UserDetails) {
-  }
+  constructor(public payload: model.UserDetails) {}
 }
 
 export class UpdateRestAuthRestAuthUserPartialUpdateError implements Action {
   readonly type = UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllUpdateRestAuthRestAuthUserPartialUpdateActions

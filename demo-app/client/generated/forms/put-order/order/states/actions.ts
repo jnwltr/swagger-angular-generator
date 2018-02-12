@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const UPDATE_PUTORDER_ORDER_ERROR = '[PutOrder] Load PutOrder Error';
 
 export class UpdatePutOrderOrderStart implements Action {
   readonly type = UPDATE_PUTORDER_ORDER_START;
-  constructor(public payload: OrderParams) {
-  }
+  constructor(public payload: OrderParams) {}
 }
 
 export class UpdatePutOrderOrderSuccess implements Action {
   readonly type = UPDATE_PUTORDER_ORDER_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class UpdatePutOrderOrderError implements Action {
   readonly type = UPDATE_PUTORDER_ORDER_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllUpdatePutOrderOrderActions

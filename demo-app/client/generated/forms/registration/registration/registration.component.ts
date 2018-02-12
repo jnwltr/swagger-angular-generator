@@ -36,5 +36,4 @@ export class RegistrationRegistrationComponent implements OnInit {
   registration() {
     this.registrationService.registration(this.RegistrationForm.value);
   }
-
 }

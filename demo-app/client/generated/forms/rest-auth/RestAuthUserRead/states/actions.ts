@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -14,20 +14,17 @@ export const LOAD_RESTAUTH_RESTAUTHUSERREAD_ERROR = '[RestAuth] Load RestAuth Er
 
 export class LoadRestAuthRestAuthUserReadStart implements Action {
   readonly type = LOAD_RESTAUTH_RESTAUTHUSERREAD_START;
-  constructor(public payload: RestAuthUserReadParams) {
-  }
+  constructor(public payload: RestAuthUserReadParams) {}
 }
 
 export class LoadRestAuthRestAuthUserReadSuccess implements Action {
   readonly type = LOAD_RESTAUTH_RESTAUTHUSERREAD_SUCCESS;
-  constructor(public payload: model.UserDetails) {
-  }
+  constructor(public payload: model.UserDetails) {}
 }
 
 export class LoadRestAuthRestAuthUserReadError implements Action {
   readonly type = LOAD_RESTAUTH_RESTAUTHUSERREAD_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllLoadRestAuthRestAuthUserReadActions

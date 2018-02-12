@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const CREATE_ORDER_ORDER_ERROR = '[Order] Load Order Error';
 
 export class CreateOrderOrderStart implements Action {
   readonly type = CREATE_ORDER_ORDER_START;
-  constructor(public payload: OrderParams) {
-  }
+  constructor(public payload: OrderParams) {}
 }
 
 export class CreateOrderOrderSuccess implements Action {
   readonly type = CREATE_ORDER_ORDER_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class CreateOrderOrderError implements Action {
   readonly type = CREATE_ORDER_ORDER_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllCreateOrderOrderActions

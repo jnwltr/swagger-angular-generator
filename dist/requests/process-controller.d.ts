@@ -1,3 +1,4 @@
+import { ProcessDefinition } from '../definitions';
 import { Config } from '../generate';
 import { ControllerMethod } from './requests.models';
 /**
@@ -5,4 +6,4 @@ import { ControllerMethod } from './requests.models';
  * @param controllers list of methods of the controller
  * @param name
  */
-export declare function processController(methods: ControllerMethod[], name: string, config: Config): void;
+export declare function processController(methods: ControllerMethod[], name: string, config: Config, schemaObjectDefinitions: ProcessDefinition[]): void;

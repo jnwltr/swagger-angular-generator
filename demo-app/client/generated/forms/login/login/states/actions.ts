@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const CREATE_LOGIN_LOGIN_ERROR = '[Login] Load Login Error';
 
 export class CreateLoginLoginStart implements Action {
   readonly type = CREATE_LOGIN_LOGIN_START;
-  constructor(public payload: LoginParams) {
-  }
+  constructor(public payload: LoginParams) {}
 }
 
 export class CreateLoginLoginSuccess implements Action {
   readonly type = CREATE_LOGIN_LOGIN_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class CreateLoginLoginError implements Action {
   readonly type = CREATE_LOGIN_LOGIN_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllCreateLoginLoginActions

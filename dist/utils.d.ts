@@ -1,3 +1,9 @@
+import { FileType } from './types';
+/**
+ * Creates directory based on provided path
+ * @param path
+ */
+export declare function createDir(path: string): void;
 /**
  * Recursively deletes the path
  * @param path
@@ -21,7 +27,7 @@ export declare function indent(input: string | string[], level?: number): string
  * @param file
  * @param content
  */
-export declare function writeFile(file: string, content: string, header: string): void;
+export declare function writeFile(file: string, content: string, header: string, fileType?: FileType, disableFlags?: string[]): void;
 /**
  * Makes the string commented, supports single/multi-line and empty output
  * @param input string (with new-line separation) or array of lines

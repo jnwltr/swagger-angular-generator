@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_ERROR = '[RestAuth] Load RestAut
 
 export class UpdateRestAuthRestAuthUserUpdateStart implements Action {
   readonly type = UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_START;
-  constructor(public payload: RestAuthUserUpdateParams) {
-  }
+  constructor(public payload: RestAuthUserUpdateParams) {}
 }
 
 export class UpdateRestAuthRestAuthUserUpdateSuccess implements Action {
   readonly type = UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_SUCCESS;
-  constructor(public payload: model.UserDetails) {
-  }
+  constructor(public payload: model.UserDetails) {}
 }
 
 export class UpdateRestAuthRestAuthUserUpdateError implements Action {
   readonly type = UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllUpdateRestAuthRestAuthUserUpdateActions

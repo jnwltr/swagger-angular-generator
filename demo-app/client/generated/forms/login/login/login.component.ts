@@ -34,5 +34,4 @@ export class LoginLoginComponent implements OnInit {
   login() {
     this.loginService.login(this.LoginForm.value);
   }
-
 }

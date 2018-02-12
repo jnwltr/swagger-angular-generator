@@ -1,3 +1,4 @@
+import { ProcessDefinition } from '../definitions';
 import { Config } from '../generate';
 import { PathsWithParameters } from './requests.models';
 /**
@@ -6,4 +7,4 @@ import { PathsWithParameters } from './requests.models';
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-export declare function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config): void;
+export declare function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config, schemaObjectDefinitions: ProcessDefinition[]): void;

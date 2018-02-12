@@ -1,5 +1,5 @@
-import {Config} from '../generate';
 import * as path from 'path';
+import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
 
 export function createRoute(config: Config, formSubDirName: string, simpleName: string, className: string) {

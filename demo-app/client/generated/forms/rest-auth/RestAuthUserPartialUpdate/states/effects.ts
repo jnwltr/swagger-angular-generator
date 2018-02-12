@@ -14,16 +14,15 @@ import {UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_START, UpdateRestAuthRestAuthU
 
 @Injectable()
 export class UpdateRestAuthRestAuthUserPartialUpdateEffects {
-
-  constructor(
-    private actions: Actions,
-    private restauthService: RestAuthService,
-  ) {}
-
   @Effect()
   UpdateRestAuthRestAuthUserPartialUpdate = this.actions.ofType<UpdateRestAuthRestAuthUserPartialUpdateStart>(UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_START).pipe(
     switchMap((action: UpdateRestAuthRestAuthUserPartialUpdateStart) => this.restauthService.RestAuthUserPartialUpdate(action.payload).pipe(
       map(UpdateRestAuthRestAuthUserPartialUpdate => new UpdateRestAuthRestAuthUserPartialUpdateSuccess(UpdateRestAuthRestAuthUserPartialUpdate)),
       catchError((error: Error) => of(new UpdateRestAuthRestAuthUserPartialUpdateError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private restauthService: RestAuthService,
+  ) {}
 }

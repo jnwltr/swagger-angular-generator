@@ -1,6 +1,6 @@
-import {Config} from '../generate';
 import * as path from 'path';
 import * as conf from '../conf';
+import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
 
 export function createSharedModule(config: Config) {
@@ -30,50 +30,50 @@ export function createSharedModule(config: Config) {
   content += '\n';
   content += '@NgModule({\n';
   content += indent('imports: [\n');
-  content += indent(indent('CommonModule,\n'));
-  content += indent(indent('ReactiveFormsModule,\n'));
-  content += indent(indent('FlexLayoutModule,\n'));
+  content += indent('CommonModule,\n', 2);
+  content += indent('ReactiveFormsModule,\n', 2);
+  content += indent('FlexLayoutModule,\n', 2);
 
-  content += indent(indent('MatButtonModule,\n'));
-  content += indent(indent('MatButtonToggleModule,\n'));
-  content += indent(indent('MatCardModule,\n'));
-  content += indent(indent('MatCheckboxModule,\n'));
-  content += indent(indent('MatChipsModule,\n'));
-  content += indent(indent('MatDatepickerModule,\n'));
-  content += indent(indent('MatGridListModule,\n'));
-  content += indent(indent('MatIconModule,\n'));
-  content += indent(indent('MatInputModule,\n'));
-  content += indent(indent('MatListModule,\n'));
-  content += indent(indent('MatMenuModule,\n'));
-  content += indent(indent('MatNativeDateModule,\n'));
-  content += indent(indent('MatProgressBarModule,\n'));
-  content += indent(indent('MatProgressSpinnerModule,\n'));
-  content += indent(indent('MatRadioModule,\n'));
-  content += indent(indent('MatSelectModule,\n'));
+  content += indent('MatButtonModule,\n', 2);
+  content += indent('MatButtonToggleModule,\n', 2);
+  content += indent('MatCardModule,\n', 2);
+  content += indent('MatCheckboxModule,\n', 2);
+  content += indent('MatChipsModule,\n', 2);
+  content += indent('MatDatepickerModule,\n', 2);
+  content += indent('MatGridListModule,\n', 2);
+  content += indent('MatIconModule,\n', 2);
+  content += indent('MatInputModule,\n', 2);
+  content += indent('MatListModule,\n', 2);
+  content += indent('MatMenuModule,\n', 2);
+  content += indent('MatNativeDateModule,\n', 2);
+  content += indent('MatProgressBarModule,\n', 2);
+  content += indent('MatProgressSpinnerModule,\n', 2);
+  content += indent('MatRadioModule,\n', 2);
+  content += indent('MatSelectModule,\n', 2);
 
   content += indent('],\n');
 
   content += indent('exports: [\n');
-  content += indent(indent('CommonModule,\n'));
-  content += indent(indent('ReactiveFormsModule,\n'));
-  content += indent(indent('FlexLayoutModule,\n'));
+  content += indent('CommonModule,\n', 2);
+  content += indent('ReactiveFormsModule,\n', 2);
+  content += indent('FlexLayoutModule,\n', 2);
 
-  content += indent(indent('MatButtonModule,\n'));
-  content += indent(indent('MatButtonToggleModule,\n'));
-  content += indent(indent('MatCardModule,\n'));
-  content += indent(indent('MatCheckboxModule,\n'));
-  content += indent(indent('MatChipsModule,\n'));
-  content += indent(indent('MatDatepickerModule,\n'));
-  content += indent(indent('MatGridListModule,\n'));
-  content += indent(indent('MatIconModule,\n'));
-  content += indent(indent('MatInputModule,\n'));
-  content += indent(indent('MatListModule,\n'));
-  content += indent(indent('MatMenuModule,\n'));
-  content += indent(indent('MatNativeDateModule,\n'));
-  content += indent(indent('MatProgressBarModule,\n'));
-  content += indent(indent('MatProgressSpinnerModule,\n'));
-  content += indent(indent('MatRadioModule,\n'));
-  content += indent(indent('MatSelectModule,\n'));
+  content += indent('MatButtonModule,\n', 2);
+  content += indent('MatButtonToggleModule,\n', 2);
+  content += indent('MatCardModule,\n', 2);
+  content += indent('MatCheckboxModule,\n', 2);
+  content += indent('MatChipsModule,\n', 2);
+  content += indent('MatDatepickerModule,\n', 2);
+  content += indent('MatGridListModule,\n', 2);
+  content += indent('MatIconModule,\n', 2);
+  content += indent('MatInputModule,\n', 2);
+  content += indent('MatListModule,\n', 2);
+  content += indent('MatMenuModule,\n', 2);
+  content += indent('MatNativeDateModule,\n', 2);
+  content += indent('MatProgressBarModule,\n', 2);
+  content += indent('MatProgressSpinnerModule,\n', 2);
+  content += indent('MatRadioModule,\n', 2);
+  content += indent('MatSelectModule,\n', 2);
   content += indent('],\n');
 
   content += '})\n';

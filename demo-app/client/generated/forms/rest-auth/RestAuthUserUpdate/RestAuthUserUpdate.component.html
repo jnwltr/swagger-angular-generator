@@ -3,15 +3,14 @@
   <div fxFlex="60">
   <mat-card-title fxLayoutAlign="center center">RestAuth</mat-card-title>
 
-  <form [formGroup]='RestAuthForm' (ngSubmit)='restauth()' class='full-width'>
+  <form [formGroup]="RestAuthForm" (ngSubmit)="restauth()" class="full-width">
 
-    <div fxLayout='row' fxLayoutWrap >
-      <mat-form-field class='account-form-full-width'>
-        <input matInput type='text' name='data' [formControl]='data' placeholder="data" />
+    <div fxLayout="row" fxLayoutWrap>
+      <mat-form-field class="account-form-full-width">
+        <input matInput type="text" name="data" [formControl]="data" placeholder="data" />
         <mat-error *ngIf="data.hasError('required')">This field is required</mat-error>
       </mat-form-field>
-    </div>
-
+        </div>
   </form>
   </div>
   <div fxFlex></div>

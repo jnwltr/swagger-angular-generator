@@ -30,5 +30,4 @@ export class LogoutLogoutComponent implements OnInit {
   logout() {
     this.logoutService.logout();
   }
-
 }

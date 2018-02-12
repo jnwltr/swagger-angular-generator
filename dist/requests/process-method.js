@@ -25,9 +25,12 @@ function processMethod(method) {
     let usesGlobalType = false;
     let usesQueryParams;
     let paramTypes = [];
+    let paramGroups;
+    const simpleName = method.simpleName;
+    const methodName = method.methodName;
     if (method.paramDef) {
         const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
-        const paramGroups = _.groupBy(paramDef, 'in');
+        paramGroups = _.groupBy(paramDef, 'in');
         const paramsType = _.upperFirst(`${method.simpleName}Params`);
         const processedParams = process_params_1.processParams(paramDef, paramsType);
         paramTypes = Object.keys(paramGroups);
@@ -54,7 +57,8 @@ function processMethod(method) {
             interfaceDef += '\n';
         interfaceDef += `${method.responseDef.enumDeclaration}\n`;
     }
-    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams };
+    const responseDef = method.responseDef;
+    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName };
 }
 exports.processMethod = processMethod;
 /**

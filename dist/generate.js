@@ -30,8 +30,8 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
     const config = { header, dest };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
-    process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
-    definitions_1.processDefinitions(schema.definitions, config);
+    const schemaObjectDefinitions = definitions_1.processDefinitions(schema.definitions, config);
+    process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config, schemaObjectDefinitions);
 }
 exports.generate = generate;
 //# sourceMappingURL=generate.js.map

@@ -30,5 +30,4 @@ export class RestAuthRestAuthLogoutCreateComponent implements OnInit {
   restauth() {
     this.restauthService.RestAuthLogoutCreate();
   }
-
 }

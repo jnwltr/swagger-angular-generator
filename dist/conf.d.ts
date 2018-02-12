@@ -3,6 +3,7 @@ import { MethodName, NativeNames } from './types';
 export declare const outDir = "src/api";
 export declare const defsDir = "defs";
 export declare const apiDir = "controllers";
+export declare const formDir = "forms";
 export declare const apiFile = "conf/api/api-docs.json";
 export declare const modelFile = "model";
 export declare const indentation = 2;

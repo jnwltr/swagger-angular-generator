@@ -32,5 +32,4 @@ export class RestAuthRestAuthUserPartialUpdateComponent implements OnInit {
   restauth() {
     this.restauthService.RestAuthUserPartialUpdate(this.RestAuthForm.value);
   }
-
 }

@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const UPDATE_PATCHORDER_ORDER_ERROR = '[PatchOrder] Load PatchOrder Error
 
 export class UpdatePatchOrderOrderStart implements Action {
   readonly type = UPDATE_PATCHORDER_ORDER_START;
-  constructor(public payload: OrderParams) {
-  }
+  constructor(public payload: OrderParams) {}
 }
 
 export class UpdatePatchOrderOrderSuccess implements Action {
   readonly type = UPDATE_PATCHORDER_ORDER_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class UpdatePatchOrderOrderError implements Action {
   readonly type = UPDATE_PATCHORDER_ORDER_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllUpdatePatchOrderOrderActions

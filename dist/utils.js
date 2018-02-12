@@ -4,6 +4,33 @@ const fs = require("fs");
 const path_1 = require("path");
 const conf = require("./conf");
 /**
+ * Checks if directory exists
+ * @param path
+ */
+function doesDirExists(path) {
+    try {
+        return fs.statSync(path).isDirectory();
+    }
+    catch (e) {
+        if (e.code === 'ENOENT') {
+            return false;
+        }
+        else {
+            throw e;
+        }
+    }
+}
+/**
+ * Creates directory based on provided path
+ * @param path
+ */
+function createDir(path) {
+    if (!doesDirExists(path)) {
+        fs.mkdirSync(path);
+    }
+}
+exports.createDir = createDir;
+/**
  * Recursively deletes the path
  * @param path
  * @param removeSelf whether to remove the directory itself or just its content
@@ -65,9 +92,12 @@ exports.indent = indent;
  * @param file
  * @param content
  */
-function writeFile(file, content, header) {
-    const disable = '/* tslint:disable:max-line-length */';
-    content = `${disable}\n${header}\n${content}`;
+function writeFile(file, content, header, fileType = 'ts', disableFlags = []) {
+    if (fileType === 'ts') {
+        disableFlags.unshift('max-line-length');
+        const disable = `/* tslint:disable:${disableFlags.join(' ')} */`;
+        content = `${disable}\n${header}\n${content}`;
+    }
     fs.writeFileSync(file, content);
     out(`${file} generated`, 'green');
 }

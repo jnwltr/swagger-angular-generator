@@ -3,23 +3,21 @@
   <div fxFlex="60">
   <mat-card-title fxLayoutAlign="center center">Login</mat-card-title>
 
-  <form [formGroup]='LoginForm' (ngSubmit)='login()' class='full-width'>
+  <form [formGroup]="LoginForm" (ngSubmit)="login()" class="full-width">
 
-    <div fxLayout='row' fxLayoutWrap >
-      <mat-form-field class='account-form-full-width'>
-        <input matInput type='text' name='email' [formControl]='email' placeholder="email" />
+    <div fxLayout="row" fxLayoutWrap>
+      <mat-form-field class="account-form-full-width">
+        <input matInput type="text" name="email" [formControl]="email" placeholder="email" />
         <mat-error *ngIf="email.hasError('email')">Email has invalid format</mat-error>
         <mat-error *ngIf="email.hasError('required')">This field is required</mat-error>
       </mat-form-field>
-    </div>
-
-    <div fxLayout='row' fxLayoutWrap >
-      <mat-form-field class='account-form-full-width'>
-        <input matInput type='text' name='password' [formControl]='password' placeholder="password" />
+        </div>
+    <div fxLayout="row" fxLayoutWrap>
+      <mat-form-field class="account-form-full-width">
+        <input matInput type="text" name="password" [formControl]="password" placeholder="password" />
         <mat-error *ngIf="password.hasError('required')">This field is required</mat-error>
       </mat-form-field>
-    </div>
-
+        </div>
   </form>
   </div>
   <div fxFlex></div>

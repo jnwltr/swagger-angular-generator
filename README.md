@@ -132,16 +132,16 @@ can contain a link to the swagger UI method reference, e.g. `http://example.com/
 
 or instead of step 2 and 3 run: `npm run testci`
 
----
+## TODO
 
-### _Pull requests are welcome!_
-
-# TODO
 - forms - add select fields for eums and checkboxes for booleans
 - forms do not currently work for nested data structures
-
 - come up with a way how to define inital states values
 - State initerfaces and initial values move to separate importable file
 - the State interface definition should be equal to the response types
 - reducers should use such states
 - this will make possible to have create/update/get methods share the same store attributes
+
+---
+
+### _Pull requests are welcome!_

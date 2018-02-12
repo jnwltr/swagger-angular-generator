@@ -14,16 +14,15 @@ import {CREATE_ORDER_ORDER_START, CreateOrderOrderError, CreateOrderOrderStart, 
 
 @Injectable()
 export class CreateOrderOrderEffects {
-
-  constructor(
-    private actions: Actions,
-    private orderService: OrderService,
-  ) {}
-
   @Effect()
   CreateOrderOrder = this.actions.ofType<CreateOrderOrderStart>(CREATE_ORDER_ORDER_START).pipe(
     switchMap((action: CreateOrderOrderStart) => this.orderService.order(action.payload).pipe(
       map(CreateOrderOrder => new CreateOrderOrderSuccess(CreateOrderOrder)),
       catchError((error: Error) => of(new CreateOrderOrderError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private orderService: OrderService,
+  ) {}
 }

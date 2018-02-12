@@ -14,16 +14,15 @@ import {LOAD_DELETEORDER_ORDER_START, LoadDeleteOrderOrderError, LoadDeleteOrder
 
 @Injectable()
 export class LoadDeleteOrderOrderEffects {
-
-  constructor(
-    private actions: Actions,
-    private deleteorderService: DeleteOrderService,
-  ) {}
-
   @Effect()
   LoadDeleteOrderOrder = this.actions.ofType<LoadDeleteOrderOrderStart>(LOAD_DELETEORDER_ORDER_START).pipe(
     switchMap((action: LoadDeleteOrderOrderStart) => this.deleteorderService.order().pipe(
       map(LoadDeleteOrderOrder => new LoadDeleteOrderOrderSuccess(LoadDeleteOrderOrder)),
       catchError((error: Error) => of(new LoadDeleteOrderOrderError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private deleteorderService: DeleteOrderService,
+  ) {}
 }

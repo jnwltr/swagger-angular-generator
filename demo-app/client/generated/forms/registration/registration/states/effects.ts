@@ -14,16 +14,15 @@ import {CREATE_REGISTRATION_REGISTRATION_START, CreateRegistrationRegistrationEr
 
 @Injectable()
 export class CreateRegistrationRegistrationEffects {
-
-  constructor(
-    private actions: Actions,
-    private registrationService: RegistrationService,
-  ) {}
-
   @Effect()
   CreateRegistrationRegistration = this.actions.ofType<CreateRegistrationRegistrationStart>(CREATE_REGISTRATION_REGISTRATION_START).pipe(
     switchMap((action: CreateRegistrationRegistrationStart) => this.registrationService.registration(action.payload).pipe(
       map(CreateRegistrationRegistration => new CreateRegistrationRegistrationSuccess(CreateRegistrationRegistration)),
       catchError((error: Error) => of(new CreateRegistrationRegistrationError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private registrationService: RegistrationService,
+  ) {}
 }

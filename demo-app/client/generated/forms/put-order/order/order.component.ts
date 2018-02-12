@@ -36,5 +36,4 @@ export class PutOrderOrderComponent implements OnInit {
   putorder() {
     this.putorderService.order(this.PutOrderForm.value);
   }
-
 }

@@ -34,5 +34,4 @@ export class OrderOrderComponent implements OnInit {
   order() {
     this.orderService.order(this.OrderForm.value);
   }
-
 }

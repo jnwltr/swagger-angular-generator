@@ -6,13 +6,13 @@ import * as _ from 'lodash';
 import * as path from 'path';
 
 import * as conf from '../conf';
+import {ProcessDefinition} from '../definitions';
+import {createForms} from '../forms/generate-form-modules';
 import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
 import {processMethod} from './process-method';
 import {processResponses} from './process-responses';
 import {ControllerMethod, MethodOutput} from './requests.models';
-import {createForms} from '../forms/generate-form-modules';
-import {ProcessDefinition} from '../definitions';
 
 /**
  * Creates and serializes class for api communication for controller

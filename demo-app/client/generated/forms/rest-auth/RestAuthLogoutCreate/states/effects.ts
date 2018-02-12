@@ -14,16 +14,15 @@ import {CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_START, CreateRestAuthRestAuthLogout
 
 @Injectable()
 export class CreateRestAuthRestAuthLogoutCreateEffects {
-
-  constructor(
-    private actions: Actions,
-    private restauthService: RestAuthService,
-  ) {}
-
   @Effect()
   CreateRestAuthRestAuthLogoutCreate = this.actions.ofType<CreateRestAuthRestAuthLogoutCreateStart>(CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_START).pipe(
     switchMap((action: CreateRestAuthRestAuthLogoutCreateStart) => this.restauthService.RestAuthLogoutCreate().pipe(
       map(CreateRestAuthRestAuthLogoutCreate => new CreateRestAuthRestAuthLogoutCreateSuccess(CreateRestAuthRestAuthLogoutCreate)),
       catchError((error: Error) => of(new CreateRestAuthRestAuthLogoutCreateError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private restauthService: RestAuthService,
+  ) {}
 }

@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -15,20 +15,17 @@ export const CREATE_REGISTRATION_REGISTRATION_ERROR = '[Registration] Load Regis
 
 export class CreateRegistrationRegistrationStart implements Action {
   readonly type = CREATE_REGISTRATION_REGISTRATION_START;
-  constructor(public payload: RegistrationParams) {
-  }
+  constructor(public payload: RegistrationParams) {}
 }
 
 export class CreateRegistrationRegistrationSuccess implements Action {
   readonly type = CREATE_REGISTRATION_REGISTRATION_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class CreateRegistrationRegistrationError implements Action {
   readonly type = CREATE_REGISTRATION_REGISTRATION_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllCreateRegistrationRegistrationActions

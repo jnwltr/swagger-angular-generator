@@ -1,29 +1,28 @@
-import {MethodOutput} from '../requests/requests.models';
-import {Config} from '../generate';
-import {createDir} from '../utils';
+import * as _ from 'lodash';
 import * as path from 'path';
 import * as conf from '../conf';
-import * as _ from 'lodash';
-import {createComponentHTML} from './process-html-component';
-import {Parameter} from '../types';
-import {createComponentTs} from './process-ts-component';
-import {createModule} from './process-module';
 import {ProcessDefinition} from '../definitions';
+import {Config} from '../generate';
+import {MethodOutput} from '../requests/requests.models';
+import {Parameter} from '../types';
+import {createDir} from '../utils';
+import {createComponentHTML} from './process-html-component';
+import {createModule} from './process-module';
 import {createRoute} from './process-routes';
+import {createComponentTs} from './process-ts-component';
 import {createSharedModule} from './shared-module';
 import {
     GenerateHttpActions, getActionClassNameBase, getActionTypeNameBase,
     getClassName,
 } from './states/generate-http-actions';
-import {GenerateHttpReducers} from './states/generate-http-reducers';
 import {GenerateHttpEffects} from './states/generate-http-effects';
+import {GenerateHttpReducers} from './states/generate-http-reducers';
 import {getStateOperationPrefix} from './states/shared-states';
 
 export function createForms(config: Config, name: string, processedMethods: MethodOutput[],
                             schemaObjectDefinitions: ProcessDefinition[]) {
 
   const dashedName = name.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
-
   const formBaseDirName = path.join(config.dest, conf.formDir);
   createDir(formBaseDirName);
 
@@ -31,7 +30,6 @@ export function createForms(config: Config, name: string, processedMethods: Meth
   createDir(formDirName);
 
   for (const processedMethod of processedMethods) {
-
     const paramGroups = processedMethod.paramGroups;
     const responseDef = processedMethod.responseDef;
     const simpleName = processedMethod.simpleName;
@@ -54,7 +52,7 @@ export function createForms(config: Config, name: string, processedMethods: Meth
       isGetMethod = false;
       // component.ts
       createComponentTs(config, name, formParamGroups, schemaObjectDefinitions, simpleName, formSubDirName,
-          className);
+                        className);
 
       // component.html
       createComponentHTML(config, name, formParamGroups, schemaObjectDefinitions, formSubDirName, simpleName);

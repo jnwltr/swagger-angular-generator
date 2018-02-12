@@ -1,11 +1,10 @@
-import {Config} from '../generate';
 import * as path from 'path';
+import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
 
 export function createModule(config: Config, name: string, actionClassNameBase: string,
                              formSubDirName: string, simpleName: string, className: string, isGetMethod: boolean) {
-  let content = '';
-  content += `import {NgModule} from '@angular/core';\n`;
+  let content = `import {NgModule} from '@angular/core';\n`;
   content += `import {FormsSharedModule} from '../../forms-shared.module';\n`;
   if (!isGetMethod) {
     content += `import {RouterModule} from '@angular/router';\n`;
@@ -20,20 +19,20 @@ export function createModule(config: Config, name: string, actionClassNameBase: 
   content += '\n';
   content += '@NgModule({\n';
   content += indent('imports: [\n');
-  content += indent(indent('FormsSharedModule,\n'));
+  content += indent('FormsSharedModule,\n', 2);
   if (!isGetMethod) {
-    content += indent(indent('RouterModule.forChild(routes),\n'));
+    content += indent('RouterModule.forChild(routes),\n', 2);
   }
-  content += indent(indent(`StoreModule.forFeature('${actionClassNameBase}', ${actionClassNameBase}Reducer),\n`));
-  content += indent(indent(`EffectsModule.forFeature([${actionClassNameBase}Effects]),\n`));
+  content += indent(`StoreModule.forFeature('${actionClassNameBase}', ${actionClassNameBase}Reducer),\n`, 2);
+  content += indent(`EffectsModule.forFeature([${actionClassNameBase}Effects]),\n`, 2);
   content += indent('],\n');
   content += indent('declarations: [\n');
   if (!isGetMethod) {
-    content += indent(indent(`${className}Component,\n`));
+    content += indent(`${className}Component,\n`, 2);
   }
   content += indent('],\n');
   content += indent('providers: [\n');
-  content += indent(indent(`${name}Service,\n`));
+  content += indent(`${name}Service,\n`, 2);
   content += indent('],\n');
   content += '})\n';
   content += `export class ${className}Module {\n`;

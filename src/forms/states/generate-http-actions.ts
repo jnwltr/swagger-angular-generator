@@ -1,84 +1,84 @@
+import * as _ from 'lodash';
 import * as path from 'path';
-import {indent, writeFile} from '../../utils';
 import {Config} from '../../generate';
 import {ResponseDef} from '../../requests/requests.models';
-import * as _ from 'lodash';
 import {Parameter} from '../../types';
+import {indent, writeFile} from '../../utils';
 
 export function GenerateHttpActions(config: Config, name: string, responseDef: ResponseDef,
                                     actionClassNameBase: string, actionTypeNameBase: string, simpleName: string,
                                     formSubDirName: string, paramGroups: Parameter[]) {
-
   let content = '';
-  content = getActionImports(content, name, simpleName, paramGroups);
-  content = getActionTypes(content, name, actionTypeNameBase);
-
-  content = getActionStartDefinition(content, simpleName, actionClassNameBase, actionTypeNameBase);
-  content = getActionSuccessDefinition(content, actionClassNameBase, actionTypeNameBase, responseDef);
-  content = getActionErrorDefinition(content, actionClassNameBase, actionTypeNameBase);
-
-  content = getActionOverviewType(content, actionClassNameBase);
+  content += getActionImports(name, simpleName, paramGroups);
+  content += getActionTypes(name, actionTypeNameBase);
+  content += getActionStartDefinition(simpleName, actionClassNameBase, actionTypeNameBase);
+  content += getActionSuccessDefinition(actionClassNameBase, actionTypeNameBase, responseDef);
+  content += getActionErrorDefinition(actionClassNameBase, actionTypeNameBase);
+  content += getActionOverviewType(actionClassNameBase);
 
   const actionsFileName = path.join(formSubDirName, `states`, `actions.ts`);
-  writeFile(actionsFileName, content, config.header);
+  writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
 }
 
-export function getActionImports(content: string, name: string, simpleName: string, paramGroups: Parameter[]) {
-  content += `import {Action} from '@ngrx/store';\n`;
+function getActionImports(name: string, simpleName: string, paramGroups: Parameter[]) {
+  let res = `import {Action} from '@ngrx/store';\n`;
   if (paramGroups.length) {
-    content += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
+    res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
   }
-  content += `import * as model from '../../../../model';\n`;
-  content += `\n`;
-  return content;
+  res += `import * as model from '../../../../model';\n`;
+  res += `\n`;
+
+  return res;
 }
 
-export function getActionTypes(content: string, name: string, actionTypeNameBase: string) {
-  content += `export const ${actionTypeNameBase}_START = '[${name}] Load ${name}';\n`;
-  content += `export const ${actionTypeNameBase}_SUCCESS = '[${name}] Load ${name} Success';\n`;
-  content += `export const ${actionTypeNameBase}_ERROR = '[${name}] Load ${name} Error';\n`;
-  content += `\n`;
-  return content;
+function getActionTypes(name: string, actionTypeNameBase: string) {
+  let res = `export const ${actionTypeNameBase}_START = '[${name}] Load ${name}';\n`;
+  res += `export const ${actionTypeNameBase}_SUCCESS = '[${name}] Load ${name} Success';\n`;
+  res += `export const ${actionTypeNameBase}_ERROR = '[${name}] Load ${name} Error';\n`;
+  res += `\n`;
+
+  return res;
 }
 
-export function getActionStartDefinition(content: string, simpleName: string, actionClassNameBase: string,
-                                         actionTypeNameBase: string) {
-  content += `export class ${actionClassNameBase}Start implements Action {\n`;
-  content += indent(`readonly type = ${actionTypeNameBase}_START;\n`);
-  content += indent(`constructor(public payload: ${_.upperFirst(simpleName)}Params) {\n`);
-  content += indent(`}\n`);
-  content += `}\n`;
-  content += `\n`;
-  return content;
+function getActionStartDefinition(simpleName: string, actionClassNameBase: string,
+                                  actionTypeNameBase: string) {
+  let res = `export class ${actionClassNameBase}Start implements Action {\n`;
+  res += indent(`readonly type = ${actionTypeNameBase}_START;\n`);
+  res += indent(`constructor(public payload: ${_.upperFirst(simpleName)}Params) {}\n`);
+  res += `}\n`;
+  res += `\n`;
+
+  return res;
 }
 
-export function getActionSuccessDefinition(content: string, actionClassNameBase: string, actionTypeNameBase: string,
-                                           response: ResponseDef) {
-  content += `export class ${actionClassNameBase}Success implements Action {\n`;
-  content += indent(`readonly type = ${actionTypeNameBase}_SUCCESS;\n`);
-  content += indent(`constructor(public payload: ${response.type}) {\n`);
-  content += indent(`}\n`);
-  content += `}\n`;
-  content += `\n`;
-  return content;
+function getActionSuccessDefinition(actionClassNameBase: string, actionTypeNameBase: string,
+                                    response: ResponseDef) {
+  let res = `export class ${actionClassNameBase}Success implements Action {\n`;
+  res += indent(`readonly type = ${actionTypeNameBase}_SUCCESS;\n`);
+  res += indent(`constructor(public payload: ${response.type}) {}\n`);
+  res += `}\n`;
+  res += `\n`;
+
+  return res;
 }
 
-export function getActionErrorDefinition(content: string, actionClassNameBase: string, actionTypeNameBase: string) {
-  content += `export class ${actionClassNameBase}Error implements Action {\n`;
-  content += indent(`readonly type = ${actionTypeNameBase}_ERROR;\n`);
-  content += indent(`constructor(public payload: string) {\n`);
-  content += indent(`}\n`);
-  content += `}\n`;
-  content += `\n`;
-  return content;
+function getActionErrorDefinition(actionClassNameBase: string, actionTypeNameBase: string) {
+  let res = `export class ${actionClassNameBase}Error implements Action {\n`;
+  res += indent(`readonly type = ${actionTypeNameBase}_ERROR;\n`);
+  res += indent(`constructor(public payload: string) {}\n`);
+  res += `}\n`;
+  res += `\n`;
+
+  return res;
 }
 
-export function getActionOverviewType(content: string, actionClassNameBase: string) {
-  content += `export type All${actionClassNameBase}Actions\n`;
-  content += indent(`= ${actionClassNameBase}Start\n`);
-  content += indent(`| ${actionClassNameBase}Success\n`);
-  content += indent(`| ${actionClassNameBase}Error;\n`);
-  return content;
+function getActionOverviewType(actionClassNameBase: string) {
+  let res = `export type All${actionClassNameBase}Actions\n`;
+  res += indent(`= ${actionClassNameBase}Start\n`);
+  res += indent(`| ${actionClassNameBase}Success\n`);
+  res += indent(`| ${actionClassNameBase}Error;\n`);
+
+  return res;
 }
 
 export function getActionTypeNameBase(name: string, simpleName: string, operationPrefix: string) {

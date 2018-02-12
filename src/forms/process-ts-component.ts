@@ -1,8 +1,8 @@
-import {Config} from '../generate';
 import * as path from 'path';
-import {indent, writeFile} from '../utils';
-import {Parameter, Schema} from '../types';
 import {ProcessDefinition} from '../definitions';
+import {Config} from '../generate';
+import {Parameter, Schema} from '../types';
+import {indent, writeFile} from '../utils';
 
 export interface FieldDefinitionObj {
   content: string;
@@ -16,48 +16,48 @@ export function createComponentTs(config: Config, name: string, paramGroups: Par
   const schemaObjectDefinitionsKeys: string[] = schemaObjectDefinitions.map(s => s.name.toLowerCase());
 
   let content = '';
-  content = getImports(content, name);
-  content = getComponent(simpleName, content);
-
+  content += getImports(name);
+  content += getComponent(simpleName);
   content += `export class ${className}Component implements OnInit {\n`;
   content += indent(`${name}Form: FormGroup;\n`);
   const fieldDefinition: FieldDefinitionObj = getFieldDefinition(paramGroups, schemaObjectDefinitionsKeys,
-                                                                 schemaObjectDefinitions, content);
-  content = fieldDefinition.content + '\n';
-
-  content = getConstructor(content, name);
-  content = getNgOnInit(content, fieldDefinition, name);
-  content = getFormSubmitFunction(content, name, simpleName, paramGroups);
+                                                                 schemaObjectDefinitions);
+  content += fieldDefinition.content + '\n';
+  content += getConstructor(name);
+  content += getNgOnInit(fieldDefinition, name);
+  content += getFormSubmitFunction(name, simpleName, paramGroups);
   content += '}\n';
 
   const componentHTMLFileName = path.join(formSubDirName, `${simpleName}.component.ts`);
   writeFile(componentHTMLFileName, content, config.header);
 }
 
-export function getImports(content: string, name: string) {
-  content += 'import {Component, OnInit} from \'@angular/core\';\n';
-  content += 'import {FormBuilder, FormControl, FormGroup, Validators} from \'@angular/forms\';\n';
-  content += `import {${name}Service} from '../../../controllers/${name}';\n`;
-  content += '\n';
-  return content;
+function getImports(name: string) {
+  let res = 'import {Component, OnInit} from \'@angular/core\';\n';
+  res += 'import {FormBuilder, FormControl, FormGroup, Validators} from \'@angular/forms\';\n';
+  res += `import {${name}Service} from '../../../controllers/${name}';\n`;
+  res += '\n';
+
+  return res;
 }
 
-export function getComponent(simpleName: string, content: string) {
-  content += '@Component({\n';
-  content += indent(`selector: '${simpleName}',\n`);
-  content += indent(`templateUrl: './${simpleName}.component.html',\n`);
-  content += '})\n';
-  content += '\n';
-  return content;
+function getComponent(simpleName: string) {
+  let res = '@Component({\n';
+  res += indent(`selector: '${simpleName}',\n`);
+  res += indent(`templateUrl: './${simpleName}.component.html',\n`);
+  res += '})\n';
+  res += '\n';
+
+  return res;
 }
 
-export function getFieldDefinition(paramGroups: Parameter[], schemaObjectDefinitionsKeys: string[],
-                                   schemaObjectDefinitions: ProcessDefinition[], content: string) {
+function getFieldDefinition(paramGroups: Parameter[], schemaObjectDefinitionsKeys: string[],
+                            schemaObjectDefinitions: ProcessDefinition[]) {
   const paramsArray: string[] = [];
+  let content = '';
 
   // checkbox, select or input
   for (const param of paramGroups) {
-
     if (schemaObjectDefinitionsKeys.includes(param.name.toLowerCase())) {
 
       const objDef: ProcessDefinition = schemaObjectDefinitions.find(
@@ -66,24 +66,24 @@ export function getFieldDefinition(paramGroups: Parameter[], schemaObjectDefinit
 
       Object.entries(properties).forEach(([key, value]) => {
         const validators = getValidators(value);
-        if (objDef.def.required.includes(key)) validators.push('Validators.required');
-
+        if (objDef.def.required && objDef.def.required.includes(key)) {
+          validators.push('Validators.required');
+        }
         content += indent(`${key} = new FormControl('', [${validators.join(', ')}]);\n`);
-
         paramsArray.push(key);
       });
     } else {
       const validators = getValidators(param);
       if (param.required) validators.push('Validators.required');
       content += indent(`${param.name} = new FormControl('', [${validators.join(', ')}]);\n`);
-
       paramsArray.push(param.name);
     }
   }
+
   return {content, paramsArray};
 }
 
-export function getValidators(param: Parameter | Schema) {
+function getValidators(param: Parameter | Schema) {
   const validators: string[] = [];
 
   if (param.format && param.format === 'email') validators.push('Validators.email');
@@ -94,39 +94,39 @@ export function getValidators(param: Parameter | Schema) {
   return validators;
 }
 
-export function getConstructor(content: string, name: string) {
-  content += indent('constructor(\n');
-  content += indent(indent('private formBuilder: FormBuilder,\n'));
-  content += indent(indent(`private ${name.toLowerCase()}Service: ${name}Service,\n`));
-  content += indent(') {}\n');
-  content += '\n';
-  return content;
+function getConstructor(name: string) {
+  let res = indent('constructor(\n');
+  res += indent('private formBuilder: FormBuilder,\n', 2);
+  res += indent(`private ${name.toLowerCase()}Service: ${name}Service,\n`, 2);
+  res += indent(') {}\n');
+  res += '\n';
+
+  return res;
 }
 
-export function getNgOnInit(content: string, fieldDefinition: FieldDefinitionObj, name: string) {
-  content += indent('ngOnInit() {\n');
-  content += indent(indent(`this.${name}Form = this.formBuilder.group({\n`));
+function getNgOnInit(fieldDefinition: FieldDefinitionObj, name: string) {
+  let res = indent('ngOnInit() {\n');
+  res += indent(`this.${name}Form = this.formBuilder.group({\n`, 2);
   for (const pa of fieldDefinition.paramsArray) {
-    content += indent(indent(indent(`${pa}: this.${pa},\n`)));
+    res += indent(`${pa}: this.${pa},\n`, 3);
   }
-  content += indent(indent(`}, {updateOn: 'change'});\n`));
-  content += indent('}\n');
-  content += '\n';
-  return content;
+  res += indent(`}, {updateOn: 'change'});\n`, 2);
+  res += indent('}\n');
+  res += '\n';
+
+  return res;
 }
 
-export function getFormSubmitFunction(content: string, name: string, simpleName: string, paramGroups: Parameter[]) {
-  content += indent(`${name.toLowerCase()}() {\n`);
-  content += indent(indent(`this.${name.toLowerCase()}Service.${simpleName}(${getSubmitFnParameters(name, paramGroups)});\n`));
-  content += indent('}\n');
-  content += '\n';
-  return content;
+function getFormSubmitFunction(name: string, simpleName: string, paramGroups: Parameter[]) {
+  let res = indent(`${name.toLowerCase()}() {\n`);
+  res += indent(
+    `this.${name.toLowerCase()}Service.${simpleName}(${getSubmitFnParameters(name, paramGroups)});\n`, 2);
+  res += indent('}\n');
+
+  return res;
 }
 
-export function getSubmitFnParameters(name: string, paramGroups: Parameter[]) {
-  if (paramGroups.length) {
-    return `this.${name}Form.value`;
-  } else {
-    return '';
-  }
+function getSubmitFnParameters(name: string, paramGroups: Parameter[]) {
+  if (paramGroups.length) return `this.${name}Form.value`;
+  return '';
 }

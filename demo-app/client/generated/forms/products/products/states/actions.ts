@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -14,20 +14,17 @@ export const LOAD_PRODUCTS_PRODUCTS_ERROR = '[Products] Load Products Error';
 
 export class LoadProductsProductsStart implements Action {
   readonly type = LOAD_PRODUCTS_PRODUCTS_START;
-  constructor(public payload: ProductsParams) {
-  }
+  constructor(public payload: ProductsParams) {}
 }
 
 export class LoadProductsProductsSuccess implements Action {
   readonly type = LOAD_PRODUCTS_PRODUCTS_SUCCESS;
-  constructor(public payload: model.Products) {
-  }
+  constructor(public payload: model.Products) {}
 }
 
 export class LoadProductsProductsError implements Action {
   readonly type = LOAD_PRODUCTS_PRODUCTS_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllLoadProductsProductsActions

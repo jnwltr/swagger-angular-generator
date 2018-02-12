@@ -15,7 +15,7 @@ const process_controller_1 = require("./process-controller");
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-function processPaths(pathsWithParameters, swaggerPath, config) {
+function processPaths(pathsWithParameters, swaggerPath, config, schemaObjectDefinitions) {
     utils_1.emptyDir(path.join(config.dest, conf.apiDir));
     const paths = preProcessPaths(pathsWithParameters);
     const controllers = _.flatMap(paths, (methods, url) => (_.map(methods, (method, methodName) => ({
@@ -33,7 +33,7 @@ function processPaths(pathsWithParameters, swaggerPath, config) {
     }))));
     const controllerFiles = _.groupBy(controllers, 'name');
     conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-    _.forEach(controllerFiles, (methods, name) => process_controller_1.processController(methods, name, config));
+    _.forEach(controllerFiles, (methods, name) => process_controller_1.processController(methods, name, config, schemaObjectDefinitions));
 }
 exports.processPaths = processPaths;
 /**

@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.outDir = 'src/api';
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
+exports.formDir = 'forms';
 exports.apiFile = 'conf/api/api-docs.json';
 exports.modelFile = 'model';
 exports.indentation = 2;

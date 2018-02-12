@@ -14,16 +14,15 @@ import {LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_START, LoadRestAuthRestAuthLogoutListEr
 
 @Injectable()
 export class LoadRestAuthRestAuthLogoutListEffects {
-
-  constructor(
-    private actions: Actions,
-    private restauthService: RestAuthService,
-  ) {}
-
   @Effect()
   LoadRestAuthRestAuthLogoutList = this.actions.ofType<LoadRestAuthRestAuthLogoutListStart>(LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_START).pipe(
     switchMap((action: LoadRestAuthRestAuthLogoutListStart) => this.restauthService.RestAuthLogoutList().pipe(
       map(LoadRestAuthRestAuthLogoutList => new LoadRestAuthRestAuthLogoutListSuccess(LoadRestAuthRestAuthLogoutList)),
       catchError((error: Error) => of(new LoadRestAuthRestAuthLogoutListError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private restauthService: RestAuthService,
+  ) {}
 }

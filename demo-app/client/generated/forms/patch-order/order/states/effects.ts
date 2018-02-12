@@ -14,16 +14,15 @@ import {UPDATE_PATCHORDER_ORDER_START, UpdatePatchOrderOrderError, UpdatePatchOr
 
 @Injectable()
 export class UpdatePatchOrderOrderEffects {
-
-  constructor(
-    private actions: Actions,
-    private patchorderService: PatchOrderService,
-  ) {}
-
   @Effect()
   UpdatePatchOrderOrder = this.actions.ofType<UpdatePatchOrderOrderStart>(UPDATE_PATCHORDER_ORDER_START).pipe(
     switchMap((action: UpdatePatchOrderOrderStart) => this.patchorderService.order(action.payload).pipe(
       map(UpdatePatchOrderOrder => new UpdatePatchOrderOrderSuccess(UpdatePatchOrderOrder)),
       catchError((error: Error) => of(new UpdatePatchOrderOrderError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private patchorderService: PatchOrderService,
+  ) {}
 }

@@ -14,16 +14,15 @@ import {LOAD_CAREER_POSITIONS_START, LoadCareerPositionsError, LoadCareerPositio
 
 @Injectable()
 export class LoadCareerPositionsEffects {
-
-  constructor(
-    private actions: Actions,
-    private careerService: CareerService,
-  ) {}
-
   @Effect()
   LoadCareerPositions = this.actions.ofType<LoadCareerPositionsStart>(LOAD_CAREER_POSITIONS_START).pipe(
     switchMap((action: LoadCareerPositionsStart) => this.careerService.positions().pipe(
       map(LoadCareerPositions => new LoadCareerPositionsSuccess(LoadCareerPositions)),
       catchError((error: Error) => of(new LoadCareerPositionsError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private careerService: CareerService,
+  ) {}
 }

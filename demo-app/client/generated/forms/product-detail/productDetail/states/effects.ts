@@ -14,16 +14,15 @@ import {LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START, LoadProductDetailProductDetailEr
 
 @Injectable()
 export class LoadProductDetailProductDetailEffects {
-
-  constructor(
-    private actions: Actions,
-    private productdetailService: ProductDetailService,
-  ) {}
-
   @Effect()
   LoadProductDetailProductDetail = this.actions.ofType<LoadProductDetailProductDetailStart>(LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START).pipe(
     switchMap((action: LoadProductDetailProductDetailStart) => this.productdetailService.productDetail().pipe(
       map(LoadProductDetailProductDetail => new LoadProductDetailProductDetailSuccess(LoadProductDetailProductDetail)),
       catchError((error: Error) => of(new LoadProductDetailProductDetailError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private productdetailService: ProductDetailService,
+  ) {}
 }

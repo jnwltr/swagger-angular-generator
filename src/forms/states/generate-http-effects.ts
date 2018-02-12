@@ -1,64 +1,73 @@
 import * as path from 'path';
-import {indent, writeFile} from '../../utils';
 import {Config} from '../../generate';
 import {Parameter} from '../../types';
+import {indent, writeFile} from '../../utils';
 
 export function GenerateHttpEffects(config: Config, name: string, simpleName: string, actionClassNameBase: string,
                                     actionTypeNameBase: string, formSubDirName: string, paramGroups: Parameter[]) {
 
   let content = '';
-  content = getEffectsImports(content, name, actionTypeNameBase, actionClassNameBase);
-  content = getEffectsStartDefinition(content, actionClassNameBase, name);
-  content = getEffectDefinition(content, actionClassNameBase, actionTypeNameBase, name, simpleName, paramGroups);
+  content += getEffectsImports(name, actionTypeNameBase, actionClassNameBase);
+  content += getEffectsStartDefinition(actionClassNameBase);
+  content += getEffectDefinition(actionClassNameBase, actionTypeNameBase, name, simpleName, paramGroups);
+  content += getConstructorDefinition(name);
+  content += `}\n`;
 
   const effectsFileName = path.join(formSubDirName, `states`, `effects.ts`);
   writeFile(effectsFileName, content, config.header);
 }
 
-export function getEffectsImports(content: string, name: string, actionTypeNameBase: string, actionClassNameBase: string) {
-  content += `import {Injectable} from '@angular/core';\n`;
-  content += `import {Actions, Effect} from '@ngrx/effects';\n`;
-  content += `import {of} from 'rxjs/observable/of';\n`;
-  content += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
-  content += `import {${name}Service} from '../../../../controllers/${name}';\n`;
-  content += `import {${actionTypeNameBase}_START, ${actionClassNameBase}Error, ${actionClassNameBase}Start, ${actionClassNameBase}Success} from './actions';\n`;
-  content += `\n`;
-  return content;
+function getEffectsImports(name: string, actionTypeNameBase: string, actionClassNameBase: string) {
+  let res = `import {Injectable} from '@angular/core';\n`;
+  res += `import {Actions, Effect} from '@ngrx/effects';\n`;
+  res += `import {of} from 'rxjs/observable/of';\n`;
+  res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
+  res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
+  res += `import {` +
+    `${actionTypeNameBase}_START, ` +
+    `${actionClassNameBase}Error, ${actionClassNameBase}Start, ${actionClassNameBase}Success` +
+    `} from './actions';\n`;
+  res += `\n`;
+
+  return res;
 }
 
-export function getEffectsStartDefinition(content: string, actionClassNameBase: string, name: string) {
-  content += `@Injectable()\n`;
-  content += `export class ${actionClassNameBase}Effects {\n`;
-  content += `\n`;
-  content += indent(`constructor(\n`);
-  content += indent(indent(`private actions: Actions,\n`));
-  content += indent(indent(`private ${name.toLowerCase()}Service: ${name}Service,\n`));
-  content += indent(`) {}\n`);
-  content += indent(`\n`);
-  content += `\n`;
-  return content;
+function getEffectsStartDefinition(actionClassNameBase: string) {
+  let res = `@Injectable()\n`;
+  res += `export class ${actionClassNameBase}Effects {\n`;
+
+  return res;
 }
 
-export function getEffectDefinition(content: string, actionClassNameBase: string, actionTypeNameBase: string,
-                                    name: string, simpleName: string, paramGroups: Parameter[]) {
+function getConstructorDefinition(name: string) {
+  let res = `constructor(\n`;
+  res += indent(`private actions: Actions,\n`);
+  res += indent(`private ${name.toLowerCase()}Service: ${name}Service,\n`);
+  res += `) {}\n\n`;
+
+  return indent(res);
+}
+
+function getEffectDefinition(actionClassNameBase: string, actionTypeNameBase: string,
+                             name: string, simpleName: string, paramGroups: Parameter[]) {
   const startActionPayloadDefinition = getStartActionPayloadDefinition(paramGroups);
-  content += indent(`@Effect()\n`);
-  content += indent(
+
+  let res = indent(`@Effect()\n`);
+  res += indent(
       `${actionClassNameBase} = this.actions.ofType<${actionClassNameBase}Start>(${actionTypeNameBase}_START).pipe(\n`);
-  content += indent(indent(
-      `switchMap((action: ${actionClassNameBase}Start) => this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition}).pipe(\n`));
-  content += indent(indent(indent(`map(${actionClassNameBase} => new ${actionClassNameBase}Success(${actionClassNameBase})),\n`)));
-  content += indent(indent(indent(
-      `catchError((error: Error) => of(new ${actionClassNameBase}Error(error.message))),\n`)));
-  content += indent(`)));\n`);
-  content += `}\n`;
-  return content;
+  res += indent(
+    `switchMap((action: ${actionClassNameBase}Start) => ` +
+    `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition}).pipe(\n`,
+    2);
+  res += indent(`map(${actionClassNameBase} => new ${actionClassNameBase}Success(${actionClassNameBase})),\n`, 3);
+  res += indent(`catchError((error: Error) => of(new ${actionClassNameBase}Error(error.message))),\n`, 3);
+  res += indent(`)));\n`);
+  res += '\n';
+
+  return res;
 }
 
-export function getStartActionPayloadDefinition(paramGroups: Parameter[]) {
-  if (paramGroups.length) {
-    return 'action.payload';
-  } else {
-    return '';
-  }
+function getStartActionPayloadDefinition(paramGroups: Parameter[]) {
+  if (paramGroups.length) return 'action.payload';
+  return '';
 }

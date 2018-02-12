@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -14,20 +14,17 @@ export const LOAD_CAREER_POSITIONS_ERROR = '[Career] Load Career Error';
 
 export class LoadCareerPositionsStart implements Action {
   readonly type = LOAD_CAREER_POSITIONS_START;
-  constructor(public payload: PositionsParams) {
-  }
+  constructor(public payload: PositionsParams) {}
 }
 
 export class LoadCareerPositionsSuccess implements Action {
   readonly type = LOAD_CAREER_POSITIONS_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class LoadCareerPositionsError implements Action {
   readonly type = LOAD_CAREER_POSITIONS_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllLoadCareerPositionsActions

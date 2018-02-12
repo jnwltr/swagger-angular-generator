@@ -14,16 +14,15 @@ import {CREATE_LOGOUT_LOGOUT_START, CreateLogoutLogoutError, CreateLogoutLogoutS
 
 @Injectable()
 export class CreateLogoutLogoutEffects {
-
-  constructor(
-    private actions: Actions,
-    private logoutService: LogoutService,
-  ) {}
-
   @Effect()
   CreateLogoutLogout = this.actions.ofType<CreateLogoutLogoutStart>(CREATE_LOGOUT_LOGOUT_START).pipe(
     switchMap((action: CreateLogoutLogoutStart) => this.logoutService.logout().pipe(
       map(CreateLogoutLogout => new CreateLogoutLogoutSuccess(CreateLogoutLogout)),
       catchError((error: Error) => of(new CreateLogoutLogoutError(error.message))),
   )));
+
+  constructor(
+    private actions: Actions,
+    private logoutService: LogoutService,
+  ) {}
 }

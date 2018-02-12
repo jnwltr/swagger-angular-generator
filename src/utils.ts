@@ -92,9 +92,11 @@ export function indent(input: string | string[], level = 1): string {
  * @param file
  * @param content
  */
-export function writeFile(file: string, content: string, header: string, fileType: FileType = 'ts'): void {
+export function writeFile(file: string, content: string, header: string, fileType: FileType = 'ts',
+                          disableFlags: string[] = []): void {
   if (fileType === 'ts') {
-    const disable = '/* tslint:disable:max-line-length */';
+    disableFlags.unshift('max-line-length');
+    const disable = `/* tslint:disable:${disableFlags.join(' ')} */`;
     content = `${disable}\n${header}\n${content}`;
   }
   fs.writeFileSync(file, content);

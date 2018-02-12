@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length max-classes-per-file */
 /**
  * Test Swagger
  * v1
@@ -14,20 +14,17 @@ export const CREATE_LOGOUT_LOGOUT_ERROR = '[Logout] Load Logout Error';
 
 export class CreateLogoutLogoutStart implements Action {
   readonly type = CREATE_LOGOUT_LOGOUT_START;
-  constructor(public payload: LogoutParams) {
-  }
+  constructor(public payload: LogoutParams) {}
 }
 
 export class CreateLogoutLogoutSuccess implements Action {
   readonly type = CREATE_LOGOUT_LOGOUT_SUCCESS;
-  constructor(public payload: object) {
-  }
+  constructor(public payload: object) {}
 }
 
 export class CreateLogoutLogoutError implements Action {
   readonly type = CREATE_LOGOUT_LOGOUT_ERROR;
-  constructor(public payload: string) {
-  }
+  constructor(public payload: string) {}
 }
 
 export type AllCreateLogoutLogoutActions

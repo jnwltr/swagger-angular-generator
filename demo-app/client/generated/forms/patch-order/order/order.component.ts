@@ -34,5 +34,4 @@ export class PatchOrderOrderComponent implements OnInit {
   patchorder() {
     this.patchorderService.order(this.PatchOrderForm.value);
   }
-
 }
