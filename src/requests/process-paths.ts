@@ -11,6 +11,7 @@ import {Method, MethodName} from '../types';
 import {emptyDir} from '../utils';
 import {processController} from './process-controller';
 import {ControllerMethod, Paths} from './requests.models';
+import {ProcessDefinition} from '../definitions';
 
 /**
  * Entry point, processes all possible api requests and exports them
@@ -18,7 +19,8 @@ import {ControllerMethod, Paths} from './requests.models';
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-export function processPaths(paths: Paths, swaggerPath: string, config: Config) {
+export function processPaths(paths: Paths, swaggerPath: string, config: Config,
+                             schemaObjectDefinitions: ProcessDefinition[]) {
   emptyDir(path.join(config.dest, conf.apiDir));
 
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url: string) => (
@@ -39,7 +41,7 @@ export function processPaths(paths: Paths, swaggerPath: string, config: Config) 
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config));
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, schemaObjectDefinitions));
 }
 
 /**

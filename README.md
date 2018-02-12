@@ -103,6 +103,7 @@ generated inside Order.ts
 1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method
 can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
 
+
 ## Development
 
 * at least node 8 is needed
@@ -134,3 +135,13 @@ or instead of step 2 and 3 run: `npm run testci`
 ---
 
 ### _Pull requests are welcome!_
+
+# TODO
+- forms - add select fields for eums and checkboxes for booleans
+- forms do not currently work for nested data structures
+
+- come up with a way how to define inital states values
+- State initerfaces and initial values move to separate importable file
+- the State interface definition should be equal to the response types
+- reducers should use such states
+- this will make possible to have create/update/get methods share the same store attributes

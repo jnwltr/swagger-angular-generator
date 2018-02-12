@@ -36,6 +36,7 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
 
-  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
-  processDefinitions(schema.definitions, config);
+  const schemaObjectDefinitions = processDefinitions(schema.definitions, config);
+  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config,
+               schemaObjectDefinitions);
 }

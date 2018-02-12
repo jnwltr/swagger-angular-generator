@@ -441,6 +441,119 @@
           }
         }
       }
+    },
+
+    "/rest-auth/logout/": {
+      "get": {
+        "operationId": "rest-auth_logout_list",
+        "description": "Calls Django logout method and delete the Token object\nassigned to the current User object.\n\nAccepts/Returns nothing.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      },
+      "post": {
+        "operationId": "rest-auth_logout_create",
+        "description": "Calls Django logout method and delete the Token object\nassigned to the current User object.\n\nAccepts/Returns nothing.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      }
+    },
+
+    "/rest-auth/user/": {
+      "get": {
+        "operationId": "rest-auth_user_read",
+        "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      },
+      "put": {
+        "operationId": "rest-auth_user_update",
+        "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      },
+      "patch": {
+        "operationId": "rest-auth_user_partial_update",
+        "description": "Reads and updates UserModel fields\nAccepts GET, PUT, PATCH methods.\n\nDefault accepted fields: username, first_name, last_name\nDefault display fields: pk, username, email, first_name, last_name\nRead-only fields: pk, email\n\nReturns UserModel fields.",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetails"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "rest-auth"
+        ]
+      }
     }
   },
 
@@ -515,6 +628,43 @@
         },
         "password": {
           "type": "string"
+        }
+      }
+    },
+
+    "UserDetails": {
+      "required": [
+        "username"
+      ],
+      "type": "object",
+      "properties": {
+        "pk": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "username": {
+          "title": "Username",
+          "description": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+          "type": "string",
+          "pattern": "^[\\w.@+-]+$",
+          "maxLength": 150
+        },
+        "email": {
+          "title": "Email address",
+          "type": "string",
+          "format": "email",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 30
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 150
         }
       }
     }
