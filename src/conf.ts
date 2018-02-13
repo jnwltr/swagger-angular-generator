@@ -10,8 +10,8 @@ export const modelFile = 'model';
 export const indentation = 2;
 // part of path in url
 export const swaggerFile = '/swagger-ui.html#!/';
-// mapping from swagger native types to javascript types
 
+// mapping from swagger native types to javascript types
 export const nativeTypes: {[key in NativeNames]: string} = {
   binary: 'number',
   boolean: 'boolean',
@@ -29,8 +29,10 @@ export const nativeTypes: {[key in NativeNames]: string} = {
   string: 'string',
 };
 
-// list of parameter types accepted by methods
-// ordered as they are passed to api service methods
+/* list of parameter types accepted by methods
+* ordered as they are passed to api service methods
+* The 'parameters: []' type is only technical and serves for situations when common parameters are defined
+* on the same level as HTTP methods */
 export const allowedParams: {[key in MethodName]: string[]} = {
   get: ['path', 'query'],
   patch: ['path', 'body', 'query', 'formData'],

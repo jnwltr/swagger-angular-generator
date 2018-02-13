@@ -15,8 +15,9 @@ const process_controller_1 = require("./process-controller");
  * @param paths paths from the schema
  * @param swaggerPath swagger base url
  */
-function processPaths(paths, swaggerPath, config) {
+function processPaths(pathsWithParameters, swaggerPath, config) {
     utils_1.emptyDir(path.join(config.dest, conf.apiDir));
+    const paths = preProcessPaths(pathsWithParameters);
     const controllers = _.flatMap(paths, (methods, url) => (_.map(methods, (method, methodName) => ({
         url,
         name: getName(method),
@@ -52,7 +53,31 @@ function getSimpleName(url) {
     method = method.replace(/[^\w]/g, '');
     return method;
 }
+/**
+ * Returns name of the method
+ * @param method
+ */
 function getName(method) {
     return _.upperFirst(_.camelCase(method.tags[0].replace(/(-rest)?-controller/, '')));
+}
+/**
+ * One of the allowed swagger formats is that under given url, there can be methods like get, post, put etc., but also
+ * parameters that often defines a path parameter common for the HTTP methods.
+ * This method extends HTTP method (get, post ...) parameters with the above mentioned parameters
+ * @param paths
+ */
+function preProcessPaths(paths) {
+    Object.values(paths).forEach(pathValue => {
+        if (pathValue.parameters) {
+            Object.keys(pathValue).forEach(key => {
+                if (key === 'parameters')
+                    return;
+                const method = pathValue[key];
+                method.parameters = method.parameters.concat(pathValue.parameters);
+            });
+        }
+        delete pathValue.parameters;
+    });
+    return paths;
 }
 //# sourceMappingURL=process-paths.js.map

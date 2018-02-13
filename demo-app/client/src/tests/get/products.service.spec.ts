@@ -40,8 +40,8 @@ describe(`ProductsService`, () => {
           return req.method === 'GET'
             && req.url === '/api/products'
             && req.params.toString() === 'stringField=example-producer' +
-                                         '&int32Field=10' +
                                          '&BooleanField=true' +
+                                         '&int32Field=10' +
                                          '&longField=100000' +
                                          '&floatField=10' +
                                          '&doubleField=10' +

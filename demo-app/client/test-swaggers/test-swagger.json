@@ -1,7 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Test Swagger"
+    "title": "Test Swagger",
+    "version": "v1"
   },
   "host": "example.com",
   "basePath": "/swagger",
@@ -28,6 +29,12 @@
             "type": "string"
           },
           {
+            "name": "BooleanField",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
             "name": "int32Field",
             "in": "query",
             "required": false,
@@ -35,29 +42,25 @@
             "format": "int32"
           },
           {
-            "name": "BooleanField",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
             "name": "longField",
             "in": "query",
             "required": false,
-            "type": "long",
+            "type": "integer",
             "format": "int64"
           },
           {
             "name": "floatField",
             "in": "query",
             "required": false,
-            "type": "float"
+            "type": "integer",
+            "format": "float"
           },
           {
             "name": "doubleField",
             "in": "query",
             "required": false,
-            "type": "double"
+            "type": "integer",
+            "format": "double"
           },
           {
             "name": "byteField",
@@ -341,13 +344,6 @@
         ],
         "parameters": [
           {
-            "name": "registrationType",
-            "in": "path",
-            "description": "Registration type",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "email",
             "in": "formData",
             "description": "E-mail",
@@ -378,7 +374,16 @@
             }
           }
         }
-      }
+      },
+      "parameters": [
+          {
+            "name": "registrationType",
+            "in": "path",
+            "description": "Registration type",
+            "required": true,
+            "type": "string"
+          }
+      ]
     },
     "/api/logout": {
       "post": {

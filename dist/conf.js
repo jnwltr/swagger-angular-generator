@@ -26,8 +26,10 @@ exports.nativeTypes = {
     password: 'string',
     string: 'string',
 };
-// list of parameter types accepted by methods
-// ordered as they are passed to api service methods
+/* list of parameter types accepted by methods
+* ordered as they are passed to api service methods
+* The 'parameters: []' type is only technical and serves for situations when common parameters are defined
+* on the same level as HTTP methods */
 exports.allowedParams = {
     get: ['path', 'query'],
     patch: ['path', 'body', 'query', 'formData'],
