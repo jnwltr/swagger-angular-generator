@@ -6,6 +6,14 @@ export interface Paths {
   };
 }
 
+export type MethodOrParameters =
+  {[key in MethodName]?: Method} &
+  {parameters: Parameter[]};
+
+export interface PathsWithParameters {
+  [key: string]: MethodOrParameters;
+}
+
 export interface Dictionary<T> {
   [index: string]: T;
 }

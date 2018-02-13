@@ -1,6 +1,7 @@
 /* tslint:disable:max-line-length */
 /**
  * Test Swagger
+ * v1
  * example.com/swagger
  */
 
@@ -12,12 +13,14 @@ import * as model from '../model';
 
 export interface ProductsParams {
   stringField?: string;
+  BooleanField?: boolean;
   /** format: int32 */
   int32Field?: number;
-  BooleanField?: boolean;
   /** format: int64 */
   longField?: number;
+  /** format: float */
   floatField?: number;
+  /** format: double */
   doubleField?: number;
   /** format: byte */
   byteField?: string;
@@ -40,8 +43,8 @@ export class ProductsService {
   products(params: ProductsParams): Observable<model.Products> {
     const queryParamBase = {
       stringField: params.stringField,
-      int32Field: params.int32Field,
       BooleanField: params.BooleanField,
+      int32Field: params.int32Field,
       longField: params.longField,
       floatField: params.floatField,
       doubleField: params.doubleField,

@@ -1,6 +1,7 @@
 /* tslint:disable:max-line-length */
 /**
  * Test Swagger
+ * v1
  * example.com/swagger
  */
 
@@ -9,8 +10,6 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 export interface RegistrationParams {
-  /** Registration type */
-  registrationType: string;
   /**
    * E-mail
    * format: email
@@ -20,6 +19,8 @@ export interface RegistrationParams {
   password1: string;
   /** Password 2 */
   password2: string;
+  /** Registration type */
+  registrationType: string;
 }
 
 @Injectable()
@@ -31,13 +32,13 @@ export class RegistrationService {
    * http://example.com/swagger/swagger-ui.html#!/Registration/Registration
    */
   registration(params: RegistrationParams): Observable<object> {
-    const pathParams = {
-      registrationType: params.registrationType,
-    };
     const formDataParams = {
       email: params.email,
       password1: params.password1,
       password2: params.password2,
+    };
+    const pathParams = {
+      registrationType: params.registrationType,
     };
     return this.http.post<object>(`/api/registration/${pathParams.registrationType}`, formDataParams);
   }
