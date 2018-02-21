@@ -19,6 +19,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let methodDef = '';
   let interfaceDef = '';
   const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
+
   const allowed: string[] = conf.allowedParams[method.methodName];
   let paramSeparation: string[] = [];
   let paramsSignature = '';
@@ -51,7 +52,8 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   methodDef += indent(paramSeparation);
   if (paramSeparation.length) methodDef += '\n';
 
-  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
+  const body = `return this.http.${method.methodName}`
+    + `<${method.responseDef.type}>(\`\${this.baseUrl}${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
@@ -70,7 +72,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
  * @param paramsType
  */
 function getParamsSignature(processedParams: ProcessParamsOutput, paramsType: string) {
-    return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
+  return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
 }
 
 /**
@@ -78,7 +80,7 @@ function getParamsSignature(processedParams: ProcessParamsOutput, paramsType: st
  * @param processedParams
  */
 function getInterfaceDef(processedParams: ProcessParamsOutput) {
-    return !processedParams.isInterfaceEmpty ? processedParams.paramDef : '';
+  return !processedParams.isInterfaceEmpty ? processedParams.paramDef : '';
 }
 
 /**

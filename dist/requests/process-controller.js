@@ -15,7 +15,7 @@ const process_responses_1 = require("./process-responses");
  * @param controllers list of methods of the controller
  * @param name
  */
-function processController(methods, name, config) {
+function processController(methods, name, config, baseUrl) {
     const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
     let usesGlobalType = false;
     // make simpleNames unique and process responses
@@ -35,8 +35,9 @@ function processController(methods, name, config) {
         angularCommonHttp.push('HttpParams');
     }
     content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
-    content += 'import {Injectable} from \'@angular/core\';\n';
+    content += 'import {Injectable, Inject} from \'@angular/core\';\n';
     content += 'import {Observable} from \'rxjs/Observable\';\n\n';
+    content += `import {BASE_URL} from '../${conf.modelFile}';\n`;
     if (usesGlobalType) {
         content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
@@ -47,7 +48,8 @@ function processController(methods, name, config) {
     }
     content += `@Injectable()\n`;
     content += `export class ${name}Service {\n`;
-    content += utils_1.indent('constructor(private http: HttpClient) {}');
+    content += utils_1.indent(`constructor(private http: HttpClient, ` +
+        `@Inject(BASE_URL) private baseUrl: string='${baseUrl}') {}`);
     content += '\n';
     content += utils_1.indent(_.map(processedMethods, 'methodDef').join('\n\n'));
     content += '\n}\n';

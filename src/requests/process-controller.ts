@@ -6,11 +6,11 @@ import * as _ from 'lodash';
 import * as path from 'path';
 
 import * as conf from '../conf';
-import { Config } from '../generate';
-import { indent, writeFile } from '../utils';
-import { processMethod } from './process-method';
-import { processResponses } from './process-responses';
-import { ControllerMethod } from './requests.models';
+import {Config} from '../generate';
+import {indent, writeFile} from '../utils';
+import {processMethod} from './process-method';
+import {processResponses} from './process-responses';
+import {ControllerMethod} from './requests.models';
 
 /**
  * Creates and serializes class for api communication for controller
@@ -43,9 +43,9 @@ export function processController(methods: ControllerMethod[], name: string, con
   }
   content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
 
-  content += 'import {Injectable, Inject} from \'@angular/core\';\n';
+  content += 'import {Inject, Injectable, Optional} from \'@angular/core\';\n';
   content += 'import {Observable} from \'rxjs/Observable\';\n\n';
-  content += `import {BASE_URL} from '${conf.modelFile}';\n`;
+  content += `import {BASE_URL} from '../${conf.modelFile}';\n`;
 
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
@@ -57,11 +57,13 @@ export function processController(methods: ControllerMethod[], name: string, con
     content += '\n';
   }
 
-  content += `@Injectable()\n`;
-  content += `export class ${name}Service {\n`;
-  content += indent(`constructor(private http: HttpClient, ` +
-    `@Inject(BASE_URL) baseUrl: string='${baseUrl}'    ) {}`);
-  content += '\n';
+  content += `@Injectable()
+  export class ${name}Service {
+    private baseUrl = '${baseUrl}';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }`;
+
   content += indent(_.map(processedMethods, 'methodDef').join('\n\n'));
   content += '\n}\n';
 

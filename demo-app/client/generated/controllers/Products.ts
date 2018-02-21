@@ -2,13 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 import * as model from '../model';
 
 export interface ProductsParams {
@@ -33,12 +34,14 @@ export interface ProductsParams {
 }
 
 @Injectable()
-export class ProductsService {
-  constructor(private http: HttpClient) {}
-
+  export class ProductsService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * Get all products
-   * http://example.com/swagger/swagger-ui.html#!/Products/Products
+   * http://example.com/swagger-ui.html#!/Products/Products
    */
   products(params: ProductsParams): Observable<model.Products> {
     const queryParamBase = {
@@ -62,6 +65,6 @@ export class ProductsService {
       }
     });
 
-    return this.http.get<model.Products>(`/api/products`, {params: queryParams});
+    return this.http.get<model.Products>(`${this.baseUrl}/api/products`, {params: queryParams});
   }
 }

@@ -2,9 +2,11 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
+import {InjectionToken} from '@angular/core';
+export const BASE_URL = new InjectionToken<string>('baseUrl');
 export * from './defs/Products'; // sources: products
 export * from './defs/ProductDetail'; // sources: productDetail
 export * from './defs/OrderDto'; // sources: orderDto

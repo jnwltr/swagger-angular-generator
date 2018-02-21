@@ -5,7 +5,7 @@
     "version": "v1"
   },
   "host": "example.com",
-  "basePath": "/swagger",
+  "basePath": "",
   "schemes": [
     "http"
   ],
@@ -132,7 +132,6 @@
         }
       }
     },
-
     "/api/order": {
       "post": {
         "tags": [
@@ -376,13 +375,13 @@
         }
       },
       "parameters": [
-          {
-            "name": "registrationType",
-            "in": "path",
-            "description": "Registration type",
-            "required": true,
-            "type": "string"
-          }
+        {
+          "name": "registrationType",
+          "in": "path",
+          "description": "Registration type",
+          "required": true,
+          "type": "string"
+        }
       ]
     },
     "/api/logout": {
@@ -448,9 +447,7 @@
       }
     }
   },
-
   "definitions": {
-
     "products": {
       "type": "object",
       "required": [
@@ -471,7 +468,6 @@
         }
       }
     },
-
     "productDetail": {
       "type": "object",
       "properties": {
@@ -488,9 +484,7 @@
           "type": "integer"
         }
       }
-
     },
-
     "orderDto": {
       "type": "object",
       "required": [
@@ -506,7 +500,6 @@
         }
       }
     },
-
     "loginDto": {
       "type": "object",
       "required": [
@@ -523,6 +516,5 @@
         }
       }
     }
-
   }
 }

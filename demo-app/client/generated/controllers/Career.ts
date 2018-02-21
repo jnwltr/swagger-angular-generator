@@ -2,13 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 export interface PositionsParams {
   /**
    * Position Id
@@ -20,18 +21,20 @@ export interface PositionsParams {
 }
 
 @Injectable()
-export class CareerService {
-  constructor(private http: HttpClient) {}
-
+  export class CareerService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * get career
-   * http://example.com/swagger/swagger-ui.html#!/Career/Career
+   * http://example.com/swagger-ui.html#!/Career/Career
    */
   positions(params: PositionsParams): Observable<object> {
     const pathParams = {
       positionId: params.positionId,
       version: params.version,
     };
-    return this.http.get<object>(`/api/career/v${pathParams.version}/positions/${pathParams.positionId}`);
+    return this.http.get<object>(`${this.baseUrl}/api/career/v${pathParams.version}/positions/${pathParams.positionId}`);
   }
 }

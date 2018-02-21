@@ -2,13 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 export interface OrderParams {
   /**
    * order Id
@@ -24,12 +25,14 @@ export interface OrderParams {
 }
 
 @Injectable()
-export class PutOrderService {
-  constructor(private http: HttpClient) {}
-
+  export class PutOrderService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * Put for order
-   * http://example.com/swagger/swagger-ui.html#!/PutOrder/PutOrder
+   * http://example.com/swagger-ui.html#!/PutOrder/PutOrder
    */
   order(params: OrderParams): Observable<object> {
     const pathParams = {
@@ -44,6 +47,6 @@ export class PutOrderService {
     Object.entries(bodyParams || {}).forEach(([key, value]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
-    return this.http.put<object>(`/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+    return this.http.put<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
   }
 }

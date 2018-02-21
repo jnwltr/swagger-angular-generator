@@ -1,7 +1,7 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
-import {ProductDetailService} from '../../../generated/controllers/ProductDetail';
+import { HttpClientModule, HttpRequest } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { async, inject, TestBed } from '@angular/core/testing';
+import { ProductDetailService } from '../../../generated/controllers/ProductDetail';
 
 describe(`ProductDetailService`, () => {
 
@@ -25,13 +25,13 @@ describe(`ProductDetailService`, () => {
       inject([ProductDetailService, HttpTestingController],
         (service: ProductDetailService, backend: HttpTestingController) => {
 
-        service.productDetail({productId: 1}).subscribe();
+          service.productDetail({ productId: 1 }).subscribe();
 
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'GET'
-            && req.url === '/api/product-detail/1';
-        });
-      }),
+          backend.expectOne((req: HttpRequest<any>) => {
+            return req.method === 'GET'
+              && req.url.endsWith('/api/product-detail/1');
+          });
+        }),
     ),
   );
 
