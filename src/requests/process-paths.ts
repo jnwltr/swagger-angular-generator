@@ -6,11 +6,11 @@ import * as _ from 'lodash';
 import * as path from 'path';
 
 import * as conf from '../conf';
-import { Config } from '../generate';
-import { Method, MethodName } from '../types';
-import { emptyDir } from '../utils';
-import { processController } from './process-controller';
-import { ControllerMethod, Paths, PathsWithParameters } from './requests.models';
+import {Config} from '../generate';
+import {Method, MethodName} from '../types';
+import {emptyDir} from '../utils';
+import {processController} from './process-controller';
+import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
 
 /**
  * Entry point, processes all possible api requests and exports them
@@ -24,7 +24,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
   const paths = preProcessPaths(pathsWithParameters);
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url: string) => (
     _.map(methods, (method, methodName: MethodName) => ({
-      url: `$${this.baseUrl}${url}`,
+      url,
       name: getName(method),
       methodName,
       simpleName: getSimpleName(url),
@@ -40,7 +40,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, swaggerPath));
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, config.baseUrl));
 }
 
 /**

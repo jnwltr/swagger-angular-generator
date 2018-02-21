@@ -2,13 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 export interface RegistrationParams {
   /**
    * E-mail
@@ -24,12 +25,14 @@ export interface RegistrationParams {
 }
 
 @Injectable()
-export class RegistrationService {
-  constructor(private http: HttpClient) {}
-
+  export class RegistrationService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * create registration credentials
-   * http://example.com/swagger/swagger-ui.html#!/Registration/Registration
+   * http://example.com/swagger-ui.html#!/Registration/Registration
    */
   registration(params: RegistrationParams): Observable<object> {
     const formDataParams = {
@@ -40,6 +43,6 @@ export class RegistrationService {
     const pathParams = {
       registrationType: params.registrationType,
     };
-    return this.http.post<object>(`/api/registration/${pathParams.registrationType}`, formDataParams);
+    return this.http.post<object>(`${this.baseUrl}/api/registration/${pathParams.registrationType}`, formDataParams);
   }
 }

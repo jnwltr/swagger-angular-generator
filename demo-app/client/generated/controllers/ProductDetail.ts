@@ -2,13 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 import * as model from '../model';
 
 export interface ProductDetailParams {
@@ -20,17 +21,19 @@ export interface ProductDetailParams {
 }
 
 @Injectable()
-export class ProductDetailService {
-  constructor(private http: HttpClient) {}
-
+  export class ProductDetailService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * Get product detail
-   * http://example.com/swagger/swagger-ui.html#!/ProductDetail/ProductDetail
+   * http://example.com/swagger-ui.html#!/ProductDetail/ProductDetail
    */
   productDetail(params: ProductDetailParams): Observable<model.ProductDetail> {
     const pathParams = {
       productId: params.productId,
     };
-    return this.http.get<model.ProductDetail>(`/api/product-detail/${pathParams.productId}`);
+    return this.http.get<model.ProductDetail>(`${this.baseUrl}/api/product-detail/${pathParams.productId}`);
   }
 }
