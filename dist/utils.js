@@ -107,14 +107,15 @@ exports.writeFile = writeFile;
  * @param input string (with new-line separation) or array of lines
  */
 function makeComment(input) {
-    if (typeof input === 'string')
-        input = input.split('\n');
+    if (Array.isArray(input))
+        input = input.join('\n');
+    input = input.split('\n');
     let res = '';
     if (input.length > 1) {
-        res = input.map(c => ` * ${c}`).join('\n');
+        res = input.map(c => c ? ` * ${c}` : ' *').join('\n');
         res = `/**\n${res}\n */\n`;
     }
-    else if (input.length) {
+    else if (input.length && input[0]) {
         res = `/** ${input[0]} */\n`;
     }
     return res;

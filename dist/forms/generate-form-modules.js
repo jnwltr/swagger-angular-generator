@@ -12,7 +12,6 @@ const shared_module_1 = require("./shared-module");
 const generate_http_actions_1 = require("./states/generate-http-actions");
 const generate_http_effects_1 = require("./states/generate-http-effects");
 const generate_http_reducers_1 = require("./states/generate-http-reducers");
-const shared_states_1 = require("./states/shared-states");
 function createForms(config, name, processedMethods, schemaObjectDefinitions) {
     const dashedName = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
     const formBaseDirName = path.join(config.dest, conf.formDir);
@@ -28,14 +27,15 @@ function createForms(config, name, processedMethods, schemaObjectDefinitions) {
         const formSubDirName = path.join(config.dest, conf.formDir, `${dashedName}`, simpleName);
         utils_1.createDir(formSubDirName);
         const formParamGroups = [];
-        if ('body' in paramGroups)
-            _.merge(formParamGroups, paramGroups.body);
+        // TODO! verify the idea behind this
         if ('formData' in paramGroups)
             _.merge(formParamGroups, paramGroups.formData);
-        const operationPrefix = shared_states_1.getStateOperationPrefix(methodName);
-        const actionClassNameBase = generate_http_actions_1.getActionClassNameBase(name, simpleName, operationPrefix);
-        const actionTypeNameBase = generate_http_actions_1.getActionTypeNameBase(name, simpleName, operationPrefix);
-        const className = generate_http_actions_1.getClassName(name, simpleName);
+        else if ('body' in paramGroups)
+            _.merge(formParamGroups, paramGroups.body);
+        if ('query' in paramGroups)
+            _.merge(formParamGroups, paramGroups.query);
+        const actionClassNameBase = generate_http_actions_1.getActionClassNameBase(simpleName);
+        const className = generate_http_actions_1.getClassName(simpleName);
         if (['put', 'patch', 'post'].indexOf(methodName) > -1) {
             isGetMethod = false;
             // component.ts
@@ -46,14 +46,14 @@ function createForms(config, name, processedMethods, schemaObjectDefinitions) {
             process_routes_1.createRoute(config, formSubDirName, simpleName, className);
         }
         // states
-        const statesDirName = path.join(formSubDirName, `states`);
+        const statesDirName = path.join(formSubDirName, 'states');
         utils_1.createDir(statesDirName);
         // actions.ts
-        generate_http_actions_1.GenerateHttpActions(config, name, responseDef, actionClassNameBase, actionTypeNameBase, simpleName, formSubDirName, formParamGroups);
+        generate_http_actions_1.GenerateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParamGroups);
         // reducers.ts
-        generate_http_reducers_1.GenerateHttpReducers(config, actionClassNameBase, actionTypeNameBase, formSubDirName);
+        generate_http_reducers_1.GenerateHttpReducers(config, actionClassNameBase, formSubDirName);
         // effects.ts
-        generate_http_effects_1.GenerateHttpEffects(config, name, simpleName, actionClassNameBase, actionTypeNameBase, formSubDirName, formParamGroups);
+        generate_http_effects_1.GenerateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParamGroups);
         // form-shared-module.ts
         shared_module_1.createSharedModule(config);
         // module.ts

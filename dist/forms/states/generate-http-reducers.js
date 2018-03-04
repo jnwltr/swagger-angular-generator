@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const utils_1 = require("../../utils");
-function GenerateHttpReducers(config, actionClassNameBase, actionTypeNameBase, formSubDirName) {
+function GenerateHttpReducers(config, actionClassNameBase, formSubDirName) {
     // TODO implement initial state logic
     let content = '';
     content += getReducerImports();
     content += getStateInteface(actionClassNameBase);
     content += getInitialState(actionClassNameBase);
     content += getFeatureSelector(actionClassNameBase);
-    content += getReducerDefinition(actionTypeNameBase, actionClassNameBase);
+    content += getReducerDefinition(actionClassNameBase);
     const reducersFileName = path.join(formSubDirName, `states`, `reducers.ts`);
     utils_1.writeFile(reducersFileName, content, config.header);
 }
@@ -39,24 +39,18 @@ function getFeatureSelector(actionClassNameBase) {
     return `export const get${actionClassNameBase}StateSelector = ` +
         `createFeatureSelector<${actionClassNameBase}State>('${actionClassNameBase}');\n\n`;
 }
-function getReducerDefinition(actionTypeNameBase, actionClassNameBase) {
+function getReducerDefinition(actionClassNameBase) {
     let res = `export function ${actionClassNameBase}Reducer(\n`;
     res += utils_1.indent(`state: ${actionClassNameBase}State = initial${actionClassNameBase}State,\n`);
-    res += utils_1.indent(`action: actions.All${actionClassNameBase}Actions): ${actionClassNameBase}State {\n`);
-    res += `\n`;
+    res += utils_1.indent(`action: actions.${actionClassNameBase}Action): ${actionClassNameBase}State {\n\n`);
     res += utils_1.indent(`switch (action.type) {\n`);
-    res += utils_1.indent(`case actions.${actionTypeNameBase}_START:\n`);
-    res += utils_1.indent(`return {...state, loading: true, error: null};\n`);
-    res += `\n`;
-    res += utils_1.indent(`case actions.${actionTypeNameBase}_SUCCESS:\n`);
-    res += utils_1.indent(`return {...state, data: action.payload, loading: false};\n`);
-    res += `\n`;
-    res += utils_1.indent(`case actions.${actionTypeNameBase}_ERROR:\n`);
-    res += utils_1.indent(`return {...state, error: action.payload, loading: false};\n`);
-    res += `\n`;
-    res += utils_1.indent(`default:\n`);
-    res += utils_1.indent(`return state;\n`, 2);
-    res += utils_1.indent(`}\n`);
+    res += utils_1.indent([
+        'case actions.Actions.START: return {...state, loading: true, error: null};',
+        'case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};',
+        'case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};',
+        'default: return state;',
+    ], 2);
+    res += utils_1.indent(`\n}\n`);
     res += `}\n`;
     return res;
 }

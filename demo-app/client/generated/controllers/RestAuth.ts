@@ -25,9 +25,9 @@ export class RestAuthService {
 
   /**
    * Calls Django logout method and delete the Token object
-  assigned to the current User object.
-
-  Accepts/Returns nothing.
+   * assigned to the current User object.
+   *
+   * Accepts/Returns nothing.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_list
    */
   RestAuthLogoutList(): Observable<void> {
@@ -36,9 +36,9 @@ export class RestAuthService {
 
   /**
    * Calls Django logout method and delete the Token object
-  assigned to the current User object.
-
-  Accepts/Returns nothing.
+   * assigned to the current User object.
+   *
+   * Accepts/Returns nothing.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_create
    */
   RestAuthLogoutCreate(): Observable<void> {
@@ -47,13 +47,13 @@ export class RestAuthService {
 
   /**
    * Reads and updates UserModel fields
-  Accepts GET, PUT, PATCH methods.
-
-  Default accepted fields: username, first_name, last_name
-  Default display fields: pk, username, email, first_name, last_name
-  Read-only fields: pk, email
-
-  Returns UserModel fields.
+   * Accepts GET, PUT, PATCH methods.
+   *
+   * Default accepted fields: username, first_name, last_name
+   * Default display fields: pk, username, email, first_name, last_name
+   * Read-only fields: pk, email
+   *
+   * Returns UserModel fields.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_read
    */
   RestAuthUserRead(): Observable<model.UserDetails> {
@@ -62,13 +62,13 @@ export class RestAuthService {
 
   /**
    * Reads and updates UserModel fields
-  Accepts GET, PUT, PATCH methods.
-
-  Default accepted fields: username, first_name, last_name
-  Default display fields: pk, username, email, first_name, last_name
-  Read-only fields: pk, email
-
-  Returns UserModel fields.
+   * Accepts GET, PUT, PATCH methods.
+   *
+   * Default accepted fields: username, first_name, last_name
+   * Default display fields: pk, username, email, first_name, last_name
+   * Read-only fields: pk, email
+   *
+   * Returns UserModel fields.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_update
    */
   RestAuthUserUpdate(params: RestAuthUserUpdateParams): Observable<model.UserDetails> {
@@ -82,13 +82,13 @@ export class RestAuthService {
 
   /**
    * Reads and updates UserModel fields
-  Accepts GET, PUT, PATCH methods.
-
-  Default accepted fields: username, first_name, last_name
-  Default display fields: pk, username, email, first_name, last_name
-  Read-only fields: pk, email
-
-  Returns UserModel fields.
+   * Accepts GET, PUT, PATCH methods.
+   *
+   * Default accepted fields: username, first_name, last_name
+   * Default display fields: pk, username, email, first_name, last_name
+   * Read-only fields: pk, email
+   *
+   * Returns UserModel fields.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_partial_update
    */
   RestAuthUserPartialUpdate(params: RestAuthUserPartialUpdateParams): Observable<model.UserDetails> {

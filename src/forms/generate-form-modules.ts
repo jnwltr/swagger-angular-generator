@@ -11,13 +11,9 @@ import {createModule} from './process-module';
 import {createRoute} from './process-routes';
 import {createComponentTs} from './process-ts-component';
 import {createSharedModule} from './shared-module';
-import {
-    GenerateHttpActions, getActionClassNameBase, getActionTypeNameBase,
-    getClassName,
-} from './states/generate-http-actions';
+import {GenerateHttpActions, getActionClassNameBase, getClassName} from './states/generate-http-actions';
 import {GenerateHttpEffects} from './states/generate-http-effects';
 import {GenerateHttpReducers} from './states/generate-http-reducers';
-import {getStateOperationPrefix} from './states/shared-states';
 
 export function createForms(config: Config, name: string, processedMethods: MethodOutput[],
                             schemaObjectDefinitions: ProcessDefinition[]) {
@@ -40,13 +36,13 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     createDir(formSubDirName);
 
     const formParamGroups: Parameter[] = [];
-    if ('body' in paramGroups) _.merge(formParamGroups, paramGroups.body);
+    // TODO! verify the idea behind this
     if ('formData' in paramGroups) _.merge(formParamGroups, paramGroups.formData);
+    else if ('body' in paramGroups) _.merge(formParamGroups, paramGroups.body);
+    if ('query' in paramGroups) _.merge(formParamGroups, paramGroups.query);
 
-    const operationPrefix = getStateOperationPrefix(methodName);
-    const actionClassNameBase = getActionClassNameBase(name, simpleName, operationPrefix);
-    const actionTypeNameBase = getActionTypeNameBase(name, simpleName, operationPrefix);
-    const className = getClassName(name, simpleName);
+    const actionClassNameBase = getActionClassNameBase(simpleName);
+    const className = getClassName(simpleName);
 
     if (['put', 'patch', 'post'].indexOf(methodName) > -1) {
       isGetMethod = false;
@@ -62,19 +58,17 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     }
 
     // states
-    const statesDirName = path.join(formSubDirName, `states`);
+    const statesDirName = path.join(formSubDirName, 'states');
     createDir(statesDirName);
 
     // actions.ts
-    GenerateHttpActions(config, name, responseDef, actionClassNameBase, actionTypeNameBase, simpleName,
-        formSubDirName, formParamGroups);
+    GenerateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParamGroups);
 
     // reducers.ts
-    GenerateHttpReducers(config, actionClassNameBase, actionTypeNameBase, formSubDirName);
+    GenerateHttpReducers(config, actionClassNameBase, formSubDirName);
 
     // effects.ts
-    GenerateHttpEffects(config, name, simpleName, actionClassNameBase, actionTypeNameBase, formSubDirName,
-        formParamGroups);
+    GenerateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParamGroups);
 
     // form-shared-module.ts
     createSharedModule(config);

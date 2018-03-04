@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// TODO! remove
 function getStateOperationPrefix(methodName) {
     let operationPrefix = '';
     if (['put', 'patch'].indexOf(methodName) > -1) {
