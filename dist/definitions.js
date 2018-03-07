@@ -27,7 +27,9 @@ function processDefinitions(defs, config) {
                 previous.push(source);
         }
     });
-    let allExports = '';
+    let allExports = `import { InjectionToken } from \'@angular/core\';
+  export const BASE_URL = new InjectionToken<string>('baseUrl');
+  `;
     _.forOwn(files, (sources, def) => {
         allExports += createExport(def) + createExportComments(def, sources) + '\n';
     });

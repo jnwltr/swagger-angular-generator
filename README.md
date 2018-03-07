@@ -92,6 +92,24 @@ export class MyComponent implements OnInit {
 }
 ```
 
+## How to change service url base
+
+The base url of the API is extracted from the swagger file, but in case of need, it can be changed.
+Just in the module that you provide the generated service add:
+
+```ts
+import {BASE_URL} from '[relative-path-to-destination-directory]/model';
+```
+
+And, in the list of providers, provide the new value:
+
+```ts
+providers:[
+  ...
+  {provide: BASE_URL, useValue: 'https://custom_api.domain/api'}
+]
+```
+
 ## Assumptions / limitations
 
 1. swagger file is in [version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) format, it must be json

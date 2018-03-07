@@ -40,7 +40,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config));
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, config.baseUrl));
 }
 
 /**
