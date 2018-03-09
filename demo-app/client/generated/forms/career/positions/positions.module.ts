@@ -6,18 +6,18 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {CareerService} from '../../../controllers/Career';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {LoadCareerPositionsReducer} from './states/reducers';
-import {LoadCareerPositionsEffects} from './states/effects';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {CareerService} from '../../../controllers/Career';
+import {PositionsEffects} from './states/effects';
+import {PositionsReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
-    StoreModule.forFeature('LoadCareerPositions', LoadCareerPositionsReducer),
-    EffectsModule.forFeature([LoadCareerPositionsEffects]),
+    StoreModule.forFeature('Positions', PositionsReducer),
+    EffectsModule.forFeature([PositionsEffects]),
   ],
   declarations: [
   ],
@@ -25,5 +25,5 @@ import {LoadCareerPositionsEffects} from './states/effects';
     CareerService,
   ],
 })
-export class CareerPositionsModule {
+export class PositionsModule {
 }

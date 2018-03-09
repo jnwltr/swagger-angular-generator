@@ -14,7 +14,7 @@ import {RestAuthService} from '../../../controllers/RestAuth';
   templateUrl: './RestAuthLogoutCreate.component.html',
 })
 
-export class RestAuthRestAuthLogoutCreateComponent implements OnInit {
+export class RestAuthLogoutCreateComponent implements OnInit {
   RestAuthForm: FormGroup;
 
   constructor(

@@ -5,9 +5,8 @@
  * example.com/swagger
  */
 
-import {Routes} from '@angular/router';
-import {PutOrderOrderComponent} from './order.component';
+import {OrderComponent} from './order.component';
 
 export const routes: Routes = [
-  {path: '', component: PutOrderOrderComponent, pathMatch: 'full'},
+  {path: '', component: OrderComponent, pathMatch: 'full'},
 ];

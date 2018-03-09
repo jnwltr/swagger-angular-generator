@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {LogoutService} from '../../../../controllers/Logout';
-import {CREATE_LOGOUT_LOGOUT_START, CreateLogoutLogoutError, CreateLogoutLogoutStart, CreateLogoutLogoutSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class CreateLogoutLogoutEffects {
+export class LogoutEffects {
   @Effect()
-  CreateLogoutLogout = this.actions.ofType<CreateLogoutLogoutStart>(CREATE_LOGOUT_LOGOUT_START).pipe(
-    switchMap((action: CreateLogoutLogoutStart) => this.logoutService.logout().pipe(
-      map(CreateLogoutLogout => new CreateLogoutLogoutSuccess(CreateLogoutLogout)),
-      catchError((error: Error) => of(new CreateLogoutLogoutError(error.message))),
+  Logout = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.logoutService.logout().pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private logoutService: LogoutService,
   ) {}
 }

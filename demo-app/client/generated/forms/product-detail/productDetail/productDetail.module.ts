@@ -6,18 +6,18 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {ProductDetailService} from '../../../controllers/ProductDetail';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {LoadProductDetailProductDetailReducer} from './states/reducers';
-import {LoadProductDetailProductDetailEffects} from './states/effects';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {ProductDetailService} from '../../../controllers/ProductDetail';
+import {ProductDetailEffects} from './states/effects';
+import {ProductDetailReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
-    StoreModule.forFeature('LoadProductDetailProductDetail', LoadProductDetailProductDetailReducer),
-    EffectsModule.forFeature([LoadProductDetailProductDetailEffects]),
+    StoreModule.forFeature('ProductDetail', ProductDetailReducer),
+    EffectsModule.forFeature([ProductDetailEffects]),
   ],
   declarations: [
   ],
@@ -25,5 +25,5 @@ import {LoadProductDetailProductDetailEffects} from './states/effects';
     ProductDetailService,
   ],
 })
-export class ProductDetailProductDetailModule {
+export class ProductDetailModule {
 }

@@ -9,26 +9,25 @@ import {Action} from '@ngrx/store';
 import {OrderParams} from '../../../../controllers/Order';
 import * as model from '../../../../model';
 
-export const CREATE_ORDER_ORDER_START = '[Order] Load Order';
-export const CREATE_ORDER_ORDER_SUCCESS = '[Order] Load Order Success';
-export const CREATE_ORDER_ORDER_ERROR = '[Order] Load Order Error';
+export enum Actions {
+  START = '[order] Start',
+  SUCCESS = '[order] Success',
+  ERROR = '[order] Error',
+}
 
-export class CreateOrderOrderStart implements Action {
-  readonly type = CREATE_ORDER_ORDER_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: OrderParams) {}
 }
 
-export class CreateOrderOrderSuccess implements Action {
-  readonly type = CREATE_ORDER_ORDER_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: object) {}
 }
 
-export class CreateOrderOrderError implements Action {
-  readonly type = CREATE_ORDER_ORDER_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllCreateOrderOrderActions
-  = CreateOrderOrderStart
-  | CreateOrderOrderSuccess
-  | CreateOrderOrderError;
+export type OrderAction = Start | Success | Error;

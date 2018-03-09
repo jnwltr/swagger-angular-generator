@@ -6,18 +6,18 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RestAuthService} from '../../../controllers/RestAuth';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {LoadRestAuthRestAuthLogoutListReducer} from './states/reducers';
-import {LoadRestAuthRestAuthLogoutListEffects} from './states/effects';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {RestAuthService} from '../../../controllers/RestAuth';
+import {RestAuthLogoutListEffects} from './states/effects';
+import {RestAuthLogoutListReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
-    StoreModule.forFeature('LoadRestAuthRestAuthLogoutList', LoadRestAuthRestAuthLogoutListReducer),
-    EffectsModule.forFeature([LoadRestAuthRestAuthLogoutListEffects]),
+    StoreModule.forFeature('RestAuthLogoutList', RestAuthLogoutListReducer),
+    EffectsModule.forFeature([RestAuthLogoutListEffects]),
   ],
   declarations: [
   ],
@@ -25,5 +25,5 @@ import {LoadRestAuthRestAuthLogoutListEffects} from './states/effects';
     RestAuthService,
   ],
 })
-export class RestAuthRestAuthLogoutListModule {
+export class RestAuthLogoutListModule {
 }

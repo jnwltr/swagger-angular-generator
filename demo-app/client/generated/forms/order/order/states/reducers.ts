@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface CreateOrderOrderState {
+export interface OrderState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialCreateOrderOrderState: CreateOrderOrderState = {
+export const initialOrderState: OrderState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getCreateOrderOrderStateSelector = createFeatureSelector<CreateOrderOrderState>('CreateOrderOrder');
+export const getOrderStateSelector = createFeatureSelector<OrderState>('Order');
 
-export function CreateOrderOrderReducer(
-  state: CreateOrderOrderState = initialCreateOrderOrderState,
-  action: actions.AllCreateOrderOrderActions): CreateOrderOrderState {
-
+export function OrderReducer(
+  state: OrderState = initialOrderState,
+  action: actions.OrderAction): OrderState {
   switch (action.type) {
-  case actions.CREATE_ORDER_ORDER_START:
-  return {...state, loading: true, error: null};
-
-  case actions.CREATE_ORDER_ORDER_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.CREATE_ORDER_ORDER_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

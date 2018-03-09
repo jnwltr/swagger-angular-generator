@@ -6,29 +6,27 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RouterModule} from '@angular/router';
-import {routes} from './registration.routes';
-import {RegistrationRegistrationComponent} from './registration.component';
-import {RegistrationService} from '../../../controllers/Registration';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {CreateRegistrationRegistrationReducer} from './states/reducers';
-import {CreateRegistrationRegistrationEffects} from './states/effects';
+import {RegistrationComponent} from './registration.component';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {RegistrationService} from '../../../controllers/Registration';
+import {RegistrationEffects} from './states/effects';
+import {RegistrationReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('CreateRegistrationRegistration', CreateRegistrationRegistrationReducer),
-    EffectsModule.forFeature([CreateRegistrationRegistrationEffects]),
+    StoreModule.forFeature('Registration', RegistrationReducer),
+    EffectsModule.forFeature([RegistrationEffects]),
   ],
   declarations: [
-    RegistrationRegistrationComponent,
+    RegistrationComponent,
   ],
   providers: [
     RegistrationService,
   ],
 })
-export class RegistrationRegistrationModule {
+export class RegistrationModule {
 }

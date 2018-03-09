@@ -6,29 +6,27 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RouterModule} from '@angular/router';
-import {routes} from './order.routes';
-import {OrderOrderComponent} from './order.component';
-import {OrderService} from '../../../controllers/Order';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {CreateOrderOrderReducer} from './states/reducers';
-import {CreateOrderOrderEffects} from './states/effects';
+import {OrderComponent} from './order.component';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {OrderService} from '../../../controllers/Order';
+import {OrderEffects} from './states/effects';
+import {OrderReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('CreateOrderOrder', CreateOrderOrderReducer),
-    EffectsModule.forFeature([CreateOrderOrderEffects]),
+    StoreModule.forFeature('Order', OrderReducer),
+    EffectsModule.forFeature([OrderEffects]),
   ],
   declarations: [
-    OrderOrderComponent,
+    OrderComponent,
   ],
   providers: [
     OrderService,
   ],
 })
-export class OrderOrderModule {
+export class OrderModule {
 }

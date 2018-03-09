@@ -6,18 +6,18 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {DeleteOrderService} from '../../../controllers/DeleteOrder';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {LoadDeleteOrderOrderReducer} from './states/reducers';
-import {LoadDeleteOrderOrderEffects} from './states/effects';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {DeleteOrderService} from '../../../controllers/DeleteOrder';
+import {OrderEffects} from './states/effects';
+import {OrderReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
-    StoreModule.forFeature('LoadDeleteOrderOrder', LoadDeleteOrderOrderReducer),
-    EffectsModule.forFeature([LoadDeleteOrderOrderEffects]),
+    StoreModule.forFeature('Order', OrderReducer),
+    EffectsModule.forFeature([OrderEffects]),
   ],
   declarations: [
   ],
@@ -25,5 +25,5 @@ import {LoadDeleteOrderOrderEffects} from './states/effects';
     DeleteOrderService,
   ],
 })
-export class DeleteOrderOrderModule {
+export class OrderModule {
 }

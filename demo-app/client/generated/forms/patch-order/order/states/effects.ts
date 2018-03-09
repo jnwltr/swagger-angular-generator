@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {PatchOrderService} from '../../../../controllers/PatchOrder';
-import {UPDATE_PATCHORDER_ORDER_START, UpdatePatchOrderOrderError, UpdatePatchOrderOrderStart, UpdatePatchOrderOrderSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class UpdatePatchOrderOrderEffects {
+export class OrderEffects {
   @Effect()
-  UpdatePatchOrderOrder = this.actions.ofType<UpdatePatchOrderOrderStart>(UPDATE_PATCHORDER_ORDER_START).pipe(
-    switchMap((action: UpdatePatchOrderOrderStart) => this.patchorderService.order(action.payload).pipe(
-      map(UpdatePatchOrderOrder => new UpdatePatchOrderOrderSuccess(UpdatePatchOrderOrder)),
-      catchError((error: Error) => of(new UpdatePatchOrderOrderError(error.message))),
+  Order = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.patchorderService.order(action.payload).pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private patchorderService: PatchOrderService,
   ) {}
 }

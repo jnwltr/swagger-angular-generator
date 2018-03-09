@@ -6,29 +6,27 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RouterModule} from '@angular/router';
-import {routes} from './order.routes';
-import {PatchOrderOrderComponent} from './order.component';
-import {PatchOrderService} from '../../../controllers/PatchOrder';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {UpdatePatchOrderOrderReducer} from './states/reducers';
-import {UpdatePatchOrderOrderEffects} from './states/effects';
+import {OrderComponent} from './order.component';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {PatchOrderService} from '../../../controllers/PatchOrder';
+import {OrderEffects} from './states/effects';
+import {OrderReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('UpdatePatchOrderOrder', UpdatePatchOrderOrderReducer),
-    EffectsModule.forFeature([UpdatePatchOrderOrderEffects]),
+    StoreModule.forFeature('Order', OrderReducer),
+    EffectsModule.forFeature([OrderEffects]),
   ],
   declarations: [
-    PatchOrderOrderComponent,
+    OrderComponent,
   ],
   providers: [
     PatchOrderService,
   ],
 })
-export class PatchOrderOrderModule {
+export class OrderModule {
 }

@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {ProductDetailService} from '../../../../controllers/ProductDetail';
-import {LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START, LoadProductDetailProductDetailError, LoadProductDetailProductDetailStart, LoadProductDetailProductDetailSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class LoadProductDetailProductDetailEffects {
+export class ProductDetailEffects {
   @Effect()
-  LoadProductDetailProductDetail = this.actions.ofType<LoadProductDetailProductDetailStart>(LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START).pipe(
-    switchMap((action: LoadProductDetailProductDetailStart) => this.productdetailService.productDetail().pipe(
-      map(LoadProductDetailProductDetail => new LoadProductDetailProductDetailSuccess(LoadProductDetailProductDetail)),
-      catchError((error: Error) => of(new LoadProductDetailProductDetailError(error.message))),
+  ProductDetail = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.productdetailService.productDetail().pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private productdetailService: ProductDetailService,
   ) {}
 }

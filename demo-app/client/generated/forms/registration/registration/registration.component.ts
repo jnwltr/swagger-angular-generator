@@ -14,7 +14,7 @@ import {RegistrationService} from '../../../controllers/Registration';
   templateUrl: './registration.component.html',
 })
 
-export class RegistrationRegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit {
   RegistrationForm: FormGroup;
   email = new FormControl('', [Validators.email, Validators.required]);
   password1 = new FormControl('', [Validators.required]);

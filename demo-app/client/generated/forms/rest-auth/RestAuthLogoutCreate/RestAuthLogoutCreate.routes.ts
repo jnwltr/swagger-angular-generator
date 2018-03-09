@@ -5,9 +5,8 @@
  * example.com/swagger
  */
 
-import {Routes} from '@angular/router';
-import {RestAuthRestAuthLogoutCreateComponent} from './RestAuthLogoutCreate.component';
+import {RestAuthLogoutCreateComponent} from './RestAuthLogoutCreate.component';
 
 export const routes: Routes = [
-  {path: '', component: RestAuthRestAuthLogoutCreateComponent, pathMatch: 'full'},
+  {path: '', component: RestAuthLogoutCreateComponent, pathMatch: 'full'},
 ];

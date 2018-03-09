@@ -14,10 +14,9 @@ import {OrderService} from '../../../controllers/Order';
   templateUrl: './order.component.html',
 })
 
-export class OrderOrderComponent implements OnInit {
+export class OrderComponent implements OnInit {
   OrderForm: FormGroup;
-  id = new FormControl('', [Validators.required]);
-  name = new FormControl('', []);
+  producer = new FormControl('', []);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,8 +25,7 @@ export class OrderOrderComponent implements OnInit {
 
   ngOnInit() {
     this.OrderForm = this.formBuilder.group({
-      id: this.id,
-      name: this.name,
+      producer: this.producer,
     }, {updateOn: 'change'});
   }
 

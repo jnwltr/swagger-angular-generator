@@ -8,26 +8,25 @@
 import {Action} from '@ngrx/store';
 import * as model from '../../../../model';
 
-export const LOAD_RESTAUTH_RESTAUTHUSERREAD_START = '[RestAuth] Load RestAuth';
-export const LOAD_RESTAUTH_RESTAUTHUSERREAD_SUCCESS = '[RestAuth] Load RestAuth Success';
-export const LOAD_RESTAUTH_RESTAUTHUSERREAD_ERROR = '[RestAuth] Load RestAuth Error';
+export enum Actions {
+  START = '[RestAuthUserRead] Start',
+  SUCCESS = '[RestAuthUserRead] Success',
+  ERROR = '[RestAuthUserRead] Error',
+}
 
-export class LoadRestAuthRestAuthUserReadStart implements Action {
-  readonly type = LOAD_RESTAUTH_RESTAUTHUSERREAD_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: RestAuthUserReadParams) {}
 }
 
-export class LoadRestAuthRestAuthUserReadSuccess implements Action {
-  readonly type = LOAD_RESTAUTH_RESTAUTHUSERREAD_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: model.UserDetails) {}
 }
 
-export class LoadRestAuthRestAuthUserReadError implements Action {
-  readonly type = LOAD_RESTAUTH_RESTAUTHUSERREAD_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllLoadRestAuthRestAuthUserReadActions
-  = LoadRestAuthRestAuthUserReadStart
-  | LoadRestAuthRestAuthUserReadSuccess
-  | LoadRestAuthRestAuthUserReadError;
+export type RestAuthUserReadAction = Start | Success | Error;

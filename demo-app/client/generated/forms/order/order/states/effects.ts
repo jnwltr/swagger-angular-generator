@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {OrderService} from '../../../../controllers/Order';
-import {CREATE_ORDER_ORDER_START, CreateOrderOrderError, CreateOrderOrderStart, CreateOrderOrderSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class CreateOrderOrderEffects {
+export class OrderEffects {
   @Effect()
-  CreateOrderOrder = this.actions.ofType<CreateOrderOrderStart>(CREATE_ORDER_ORDER_START).pipe(
-    switchMap((action: CreateOrderOrderStart) => this.orderService.order(action.payload).pipe(
-      map(CreateOrderOrder => new CreateOrderOrderSuccess(CreateOrderOrder)),
-      catchError((error: Error) => of(new CreateOrderOrderError(error.message))),
+  Order = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.orderService.order(action.payload).pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private orderService: OrderService,
   ) {}
 }

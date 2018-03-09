@@ -14,7 +14,7 @@ import {LoginService} from '../../../controllers/Login';
   templateUrl: './login.component.html',
 })
 
-export class LoginLoginComponent implements OnInit {
+export class LoginComponent implements OnInit {
   LoginForm: FormGroup;
   email = new FormControl('', [Validators.email, Validators.required]);
   password = new FormControl('', [Validators.required]);

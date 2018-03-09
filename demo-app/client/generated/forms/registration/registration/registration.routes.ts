@@ -5,9 +5,8 @@
  * example.com/swagger
  */
 
-import {Routes} from '@angular/router';
-import {RegistrationRegistrationComponent} from './registration.component';
+import {RegistrationComponent} from './registration.component';
 
 export const routes: Routes = [
-  {path: '', component: RegistrationRegistrationComponent, pathMatch: 'full'},
+  {path: '', component: RegistrationComponent, pathMatch: 'full'},
 ];

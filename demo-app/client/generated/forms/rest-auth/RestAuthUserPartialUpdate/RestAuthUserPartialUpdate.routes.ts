@@ -5,9 +5,8 @@
  * example.com/swagger
  */
 
-import {Routes} from '@angular/router';
-import {RestAuthRestAuthUserPartialUpdateComponent} from './RestAuthUserPartialUpdate.component';
+import {RestAuthUserPartialUpdateComponent} from './RestAuthUserPartialUpdate.component';
 
 export const routes: Routes = [
-  {path: '', component: RestAuthRestAuthUserPartialUpdateComponent, pathMatch: 'full'},
+  {path: '', component: RestAuthUserPartialUpdateComponent, pathMatch: 'full'},
 ];

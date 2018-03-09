@@ -8,26 +8,25 @@
 import {Action} from '@ngrx/store';
 import * as model from '../../../../model';
 
-export const LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START = '[ProductDetail] Load ProductDetail';
-export const LOAD_PRODUCTDETAIL_PRODUCTDETAIL_SUCCESS = '[ProductDetail] Load ProductDetail Success';
-export const LOAD_PRODUCTDETAIL_PRODUCTDETAIL_ERROR = '[ProductDetail] Load ProductDetail Error';
+export enum Actions {
+  START = '[productDetail] Start',
+  SUCCESS = '[productDetail] Success',
+  ERROR = '[productDetail] Error',
+}
 
-export class LoadProductDetailProductDetailStart implements Action {
-  readonly type = LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: ProductDetailParams) {}
 }
 
-export class LoadProductDetailProductDetailSuccess implements Action {
-  readonly type = LOAD_PRODUCTDETAIL_PRODUCTDETAIL_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: model.ProductDetail) {}
 }
 
-export class LoadProductDetailProductDetailError implements Action {
-  readonly type = LOAD_PRODUCTDETAIL_PRODUCTDETAIL_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllLoadProductDetailProductDetailActions
-  = LoadProductDetailProductDetailStart
-  | LoadProductDetailProductDetailSuccess
-  | LoadProductDetailProductDetailError;
+export type ProductDetailAction = Start | Success | Error;

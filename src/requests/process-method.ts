@@ -26,7 +26,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let usesGlobalType = false;
   let usesQueryParams: boolean;
   let paramTypes: string[] = [];
-  let paramGroups: Dictionary<Parameter[]>;
+  let paramGroups: Dictionary<Parameter[]> = {};
   const simpleName = method.simpleName;
   const methodName = method.methodName;
 

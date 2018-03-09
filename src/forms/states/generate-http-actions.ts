@@ -3,7 +3,7 @@ import * as path from 'path';
 import {Config} from '../../generate';
 import {ResponseDef} from '../../requests/requests.models';
 import {Parameter} from '../../types';
-import {indent, writeFile} from '../../utils';
+import {indent, out, writeFile} from '../../utils';
 
 export function GenerateHttpActions(config: Config, name: string, responseDef: ResponseDef,
                                     actionClassNameBase: string, simpleName: string,
@@ -57,6 +57,7 @@ function getActionStartDefinition(name: string) {
 function getActionSuccessDefinition(response: ResponseDef) {
   let res = `export class Success implements Action {\n`;
   res += indent(`readonly type = Actions.SUCCESS;\n`);
+  out(response.type, 'red');
   res += indent(`constructor(public payload: ${response.type}) {}\n`);
   res += `}\n`;
   res += `\n`;

@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {RegistrationService} from '../../../../controllers/Registration';
-import {CREATE_REGISTRATION_REGISTRATION_START, CreateRegistrationRegistrationError, CreateRegistrationRegistrationStart, CreateRegistrationRegistrationSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class CreateRegistrationRegistrationEffects {
+export class RegistrationEffects {
   @Effect()
-  CreateRegistrationRegistration = this.actions.ofType<CreateRegistrationRegistrationStart>(CREATE_REGISTRATION_REGISTRATION_START).pipe(
-    switchMap((action: CreateRegistrationRegistrationStart) => this.registrationService.registration(action.payload).pipe(
-      map(CreateRegistrationRegistration => new CreateRegistrationRegistrationSuccess(CreateRegistrationRegistration)),
-      catchError((error: Error) => of(new CreateRegistrationRegistrationError(error.message))),
+  Registration = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.registrationService.registration(action.payload).pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private registrationService: RegistrationService,
   ) {}
 }

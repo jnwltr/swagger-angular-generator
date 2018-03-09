@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface LoadProductDetailProductDetailState {
+export interface ProductDetailState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialLoadProductDetailProductDetailState: LoadProductDetailProductDetailState = {
+export const initialProductDetailState: ProductDetailState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getLoadProductDetailProductDetailStateSelector = createFeatureSelector<LoadProductDetailProductDetailState>('LoadProductDetailProductDetail');
+export const getProductDetailStateSelector = createFeatureSelector<ProductDetailState>('ProductDetail');
 
-export function LoadProductDetailProductDetailReducer(
-  state: LoadProductDetailProductDetailState = initialLoadProductDetailProductDetailState,
-  action: actions.AllLoadProductDetailProductDetailActions): LoadProductDetailProductDetailState {
-
+export function ProductDetailReducer(
+  state: ProductDetailState = initialProductDetailState,
+  action: actions.ProductDetailAction): ProductDetailState {
   switch (action.type) {
-  case actions.LOAD_PRODUCTDETAIL_PRODUCTDETAIL_START:
-  return {...state, loading: true, error: null};
-
-  case actions.LOAD_PRODUCTDETAIL_PRODUCTDETAIL_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.LOAD_PRODUCTDETAIL_PRODUCTDETAIL_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

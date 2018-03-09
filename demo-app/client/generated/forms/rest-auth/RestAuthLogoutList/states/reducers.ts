@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface LoadRestAuthRestAuthLogoutListState {
+export interface RestAuthLogoutListState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialLoadRestAuthRestAuthLogoutListState: LoadRestAuthRestAuthLogoutListState = {
+export const initialRestAuthLogoutListState: RestAuthLogoutListState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getLoadRestAuthRestAuthLogoutListStateSelector = createFeatureSelector<LoadRestAuthRestAuthLogoutListState>('LoadRestAuthRestAuthLogoutList');
+export const getRestAuthLogoutListStateSelector = createFeatureSelector<RestAuthLogoutListState>('RestAuthLogoutList');
 
-export function LoadRestAuthRestAuthLogoutListReducer(
-  state: LoadRestAuthRestAuthLogoutListState = initialLoadRestAuthRestAuthLogoutListState,
-  action: actions.AllLoadRestAuthRestAuthLogoutListActions): LoadRestAuthRestAuthLogoutListState {
-
+export function RestAuthLogoutListReducer(
+  state: RestAuthLogoutListState = initialRestAuthLogoutListState,
+  action: actions.RestAuthLogoutListAction): RestAuthLogoutListState {
   switch (action.type) {
-  case actions.LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_START:
-  return {...state, loading: true, error: null};
-
-  case actions.LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

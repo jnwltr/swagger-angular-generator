@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface CreateRegistrationRegistrationState {
+export interface RegistrationState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialCreateRegistrationRegistrationState: CreateRegistrationRegistrationState = {
+export const initialRegistrationState: RegistrationState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getCreateRegistrationRegistrationStateSelector = createFeatureSelector<CreateRegistrationRegistrationState>('CreateRegistrationRegistration');
+export const getRegistrationStateSelector = createFeatureSelector<RegistrationState>('Registration');
 
-export function CreateRegistrationRegistrationReducer(
-  state: CreateRegistrationRegistrationState = initialCreateRegistrationRegistrationState,
-  action: actions.AllCreateRegistrationRegistrationActions): CreateRegistrationRegistrationState {
-
+export function RegistrationReducer(
+  state: RegistrationState = initialRegistrationState,
+  action: actions.RegistrationAction): RegistrationState {
   switch (action.type) {
-  case actions.CREATE_REGISTRATION_REGISTRATION_START:
-  return {...state, loading: true, error: null};
-
-  case actions.CREATE_REGISTRATION_REGISTRATION_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.CREATE_REGISTRATION_REGISTRATION_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

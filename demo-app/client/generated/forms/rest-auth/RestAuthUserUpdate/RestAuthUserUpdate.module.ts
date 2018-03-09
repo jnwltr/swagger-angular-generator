@@ -6,29 +6,27 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RouterModule} from '@angular/router';
-import {routes} from './RestAuthUserUpdate.routes';
-import {RestAuthRestAuthUserUpdateComponent} from './RestAuthUserUpdate.component';
-import {RestAuthService} from '../../../controllers/RestAuth';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {UpdateRestAuthRestAuthUserUpdateReducer} from './states/reducers';
-import {UpdateRestAuthRestAuthUserUpdateEffects} from './states/effects';
+import {RestAuthUserUpdateComponent} from './RestAuthUserUpdate.component';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {RestAuthService} from '../../../controllers/RestAuth';
+import {RestAuthUserUpdateEffects} from './states/effects';
+import {RestAuthUserUpdateReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('UpdateRestAuthRestAuthUserUpdate', UpdateRestAuthRestAuthUserUpdateReducer),
-    EffectsModule.forFeature([UpdateRestAuthRestAuthUserUpdateEffects]),
+    StoreModule.forFeature('RestAuthUserUpdate', RestAuthUserUpdateReducer),
+    EffectsModule.forFeature([RestAuthUserUpdateEffects]),
   ],
   declarations: [
-    RestAuthRestAuthUserUpdateComponent,
+    RestAuthUserUpdateComponent,
   ],
   providers: [
     RestAuthService,
   ],
 })
-export class RestAuthRestAuthUserUpdateModule {
+export class RestAuthUserUpdateModule {
 }

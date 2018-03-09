@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {CareerService} from '../../../../controllers/Career';
-import {LOAD_CAREER_POSITIONS_START, LoadCareerPositionsError, LoadCareerPositionsStart, LoadCareerPositionsSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class LoadCareerPositionsEffects {
+export class PositionsEffects {
   @Effect()
-  LoadCareerPositions = this.actions.ofType<LoadCareerPositionsStart>(LOAD_CAREER_POSITIONS_START).pipe(
-    switchMap((action: LoadCareerPositionsStart) => this.careerService.positions().pipe(
-      map(LoadCareerPositions => new LoadCareerPositionsSuccess(LoadCareerPositions)),
-      catchError((error: Error) => of(new LoadCareerPositionsError(error.message))),
+  Positions = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.careerService.positions().pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private careerService: CareerService,
   ) {}
 }

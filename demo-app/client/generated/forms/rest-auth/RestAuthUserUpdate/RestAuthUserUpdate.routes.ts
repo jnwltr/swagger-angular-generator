@@ -5,9 +5,8 @@
  * example.com/swagger
  */
 
-import {Routes} from '@angular/router';
-import {RestAuthRestAuthUserUpdateComponent} from './RestAuthUserUpdate.component';
+import {RestAuthUserUpdateComponent} from './RestAuthUserUpdate.component';
 
 export const routes: Routes = [
-  {path: '', component: RestAuthRestAuthUserUpdateComponent, pathMatch: 'full'},
+  {path: '', component: RestAuthUserUpdateComponent, pathMatch: 'full'},
 ];

@@ -8,26 +8,25 @@
 import {Action} from '@ngrx/store';
 import * as model from '../../../../model';
 
-export const CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_START = '[RestAuth] Load RestAuth';
-export const CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_SUCCESS = '[RestAuth] Load RestAuth Success';
-export const CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_ERROR = '[RestAuth] Load RestAuth Error';
+export enum Actions {
+  START = '[RestAuthLogoutCreate] Start',
+  SUCCESS = '[RestAuthLogoutCreate] Success',
+  ERROR = '[RestAuthLogoutCreate] Error',
+}
 
-export class CreateRestAuthRestAuthLogoutCreateStart implements Action {
-  readonly type = CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: RestAuthLogoutCreateParams) {}
 }
 
-export class CreateRestAuthRestAuthLogoutCreateSuccess implements Action {
-  readonly type = CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: void) {}
 }
 
-export class CreateRestAuthRestAuthLogoutCreateError implements Action {
-  readonly type = CREATE_RESTAUTH_RESTAUTHLOGOUTCREATE_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllCreateRestAuthRestAuthLogoutCreateActions
-  = CreateRestAuthRestAuthLogoutCreateStart
-  | CreateRestAuthRestAuthLogoutCreateSuccess
-  | CreateRestAuthRestAuthLogoutCreateError;
+export type RestAuthLogoutCreateAction = Start | Success | Error;

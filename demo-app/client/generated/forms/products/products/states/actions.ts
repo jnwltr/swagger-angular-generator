@@ -6,28 +6,28 @@
  */
 
 import {Action} from '@ngrx/store';
+import {ProductsParams} from '../../../../controllers/Products';
 import * as model from '../../../../model';
 
-export const LOAD_PRODUCTS_PRODUCTS_START = '[Products] Load Products';
-export const LOAD_PRODUCTS_PRODUCTS_SUCCESS = '[Products] Load Products Success';
-export const LOAD_PRODUCTS_PRODUCTS_ERROR = '[Products] Load Products Error';
+export enum Actions {
+  START = '[products] Start',
+  SUCCESS = '[products] Success',
+  ERROR = '[products] Error',
+}
 
-export class LoadProductsProductsStart implements Action {
-  readonly type = LOAD_PRODUCTS_PRODUCTS_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: ProductsParams) {}
 }
 
-export class LoadProductsProductsSuccess implements Action {
-  readonly type = LOAD_PRODUCTS_PRODUCTS_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: model.Products) {}
 }
 
-export class LoadProductsProductsError implements Action {
-  readonly type = LOAD_PRODUCTS_PRODUCTS_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllLoadProductsProductsActions
-  = LoadProductsProductsStart
-  | LoadProductsProductsSuccess
-  | LoadProductsProductsError;
+export type ProductsAction = Start | Success | Error;

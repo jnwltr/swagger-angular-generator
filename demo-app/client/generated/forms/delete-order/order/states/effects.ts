@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {DeleteOrderService} from '../../../../controllers/DeleteOrder';
-import {LOAD_DELETEORDER_ORDER_START, LoadDeleteOrderOrderError, LoadDeleteOrderOrderStart, LoadDeleteOrderOrderSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class LoadDeleteOrderOrderEffects {
+export class OrderEffects {
   @Effect()
-  LoadDeleteOrderOrder = this.actions.ofType<LoadDeleteOrderOrderStart>(LOAD_DELETEORDER_ORDER_START).pipe(
-    switchMap((action: LoadDeleteOrderOrderStart) => this.deleteorderService.order().pipe(
-      map(LoadDeleteOrderOrder => new LoadDeleteOrderOrderSuccess(LoadDeleteOrderOrder)),
-      catchError((error: Error) => of(new LoadDeleteOrderOrderError(error.message))),
+  Order = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.deleteorderService.order().pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private deleteorderService: DeleteOrderService,
   ) {}
 }

@@ -6,18 +6,18 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RestAuthService} from '../../../controllers/RestAuth';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {LoadRestAuthRestAuthUserReadReducer} from './states/reducers';
-import {LoadRestAuthRestAuthUserReadEffects} from './states/effects';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {RestAuthService} from '../../../controllers/RestAuth';
+import {RestAuthUserReadEffects} from './states/effects';
+import {RestAuthUserReadReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
-    StoreModule.forFeature('LoadRestAuthRestAuthUserRead', LoadRestAuthRestAuthUserReadReducer),
-    EffectsModule.forFeature([LoadRestAuthRestAuthUserReadEffects]),
+    StoreModule.forFeature('RestAuthUserRead', RestAuthUserReadReducer),
+    EffectsModule.forFeature([RestAuthUserReadEffects]),
   ],
   declarations: [
   ],
@@ -25,5 +25,5 @@ import {LoadRestAuthRestAuthUserReadEffects} from './states/effects';
     RestAuthService,
   ],
 })
-export class RestAuthRestAuthUserReadModule {
+export class RestAuthUserReadModule {
 }

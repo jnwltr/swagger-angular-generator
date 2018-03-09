@@ -8,26 +8,25 @@
 import {Action} from '@ngrx/store';
 import * as model from '../../../../model';
 
-export const CREATE_LOGOUT_LOGOUT_START = '[Logout] Load Logout';
-export const CREATE_LOGOUT_LOGOUT_SUCCESS = '[Logout] Load Logout Success';
-export const CREATE_LOGOUT_LOGOUT_ERROR = '[Logout] Load Logout Error';
+export enum Actions {
+  START = '[logout] Start',
+  SUCCESS = '[logout] Success',
+  ERROR = '[logout] Error',
+}
 
-export class CreateLogoutLogoutStart implements Action {
-  readonly type = CREATE_LOGOUT_LOGOUT_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: LogoutParams) {}
 }
 
-export class CreateLogoutLogoutSuccess implements Action {
-  readonly type = CREATE_LOGOUT_LOGOUT_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: object) {}
 }
 
-export class CreateLogoutLogoutError implements Action {
-  readonly type = CREATE_LOGOUT_LOGOUT_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllCreateLogoutLogoutActions
-  = CreateLogoutLogoutStart
-  | CreateLogoutLogoutSuccess
-  | CreateLogoutLogoutError;
+export type LogoutAction = Start | Success | Error;

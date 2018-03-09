@@ -6,28 +6,27 @@
  */
 
 import {Action} from '@ngrx/store';
-import * as model from '../../../../model';
+import {PositionsParams} from '../../../../controllers/Career';
 
-export const LOAD_CAREER_POSITIONS_START = '[Career] Load Career';
-export const LOAD_CAREER_POSITIONS_SUCCESS = '[Career] Load Career Success';
-export const LOAD_CAREER_POSITIONS_ERROR = '[Career] Load Career Error';
+export enum Actions {
+  START = '[positions] Start',
+  SUCCESS = '[positions] Success',
+  ERROR = '[positions] Error',
+}
 
-export class LoadCareerPositionsStart implements Action {
-  readonly type = LOAD_CAREER_POSITIONS_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: PositionsParams) {}
 }
 
-export class LoadCareerPositionsSuccess implements Action {
-  readonly type = LOAD_CAREER_POSITIONS_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: object) {}
 }
 
-export class LoadCareerPositionsError implements Action {
-  readonly type = LOAD_CAREER_POSITIONS_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllLoadCareerPositionsActions
-  = LoadCareerPositionsStart
-  | LoadCareerPositionsSuccess
-  | LoadCareerPositionsError;
+export type PositionsAction = Start | Success | Error;

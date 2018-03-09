@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface UpdateRestAuthRestAuthUserPartialUpdateState {
+export interface RestAuthUserPartialUpdateState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialUpdateRestAuthRestAuthUserPartialUpdateState: UpdateRestAuthRestAuthUserPartialUpdateState = {
+export const initialRestAuthUserPartialUpdateState: RestAuthUserPartialUpdateState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getUpdateRestAuthRestAuthUserPartialUpdateStateSelector = createFeatureSelector<UpdateRestAuthRestAuthUserPartialUpdateState>('UpdateRestAuthRestAuthUserPartialUpdate');
+export const getRestAuthUserPartialUpdateStateSelector = createFeatureSelector<RestAuthUserPartialUpdateState>('RestAuthUserPartialUpdate');
 
-export function UpdateRestAuthRestAuthUserPartialUpdateReducer(
-  state: UpdateRestAuthRestAuthUserPartialUpdateState = initialUpdateRestAuthRestAuthUserPartialUpdateState,
-  action: actions.AllUpdateRestAuthRestAuthUserPartialUpdateActions): UpdateRestAuthRestAuthUserPartialUpdateState {
-
+export function RestAuthUserPartialUpdateReducer(
+  state: RestAuthUserPartialUpdateState = initialRestAuthUserPartialUpdateState,
+  action: actions.RestAuthUserPartialUpdateAction): RestAuthUserPartialUpdateState {
   switch (action.type) {
-  case actions.UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_START:
-  return {...state, loading: true, error: null};
-
-  case actions.UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

@@ -5,9 +5,8 @@
  * example.com/swagger
  */
 
-import {Routes} from '@angular/router';
-import {LogoutLogoutComponent} from './logout.component';
+import {LogoutComponent} from './logout.component';
 
 export const routes: Routes = [
-  {path: '', component: LogoutLogoutComponent, pathMatch: 'full'},
+  {path: '', component: LogoutComponent, pathMatch: 'full'},
 ];

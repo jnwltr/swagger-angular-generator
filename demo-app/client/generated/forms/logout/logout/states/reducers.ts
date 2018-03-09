@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface CreateLogoutLogoutState {
+export interface LogoutState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialCreateLogoutLogoutState: CreateLogoutLogoutState = {
+export const initialLogoutState: LogoutState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getCreateLogoutLogoutStateSelector = createFeatureSelector<CreateLogoutLogoutState>('CreateLogoutLogout');
+export const getLogoutStateSelector = createFeatureSelector<LogoutState>('Logout');
 
-export function CreateLogoutLogoutReducer(
-  state: CreateLogoutLogoutState = initialCreateLogoutLogoutState,
-  action: actions.AllCreateLogoutLogoutActions): CreateLogoutLogoutState {
-
+export function LogoutReducer(
+  state: LogoutState = initialLogoutState,
+  action: actions.LogoutAction): LogoutState {
   switch (action.type) {
-  case actions.CREATE_LOGOUT_LOGOUT_START:
-  return {...state, loading: true, error: null};
-
-  case actions.CREATE_LOGOUT_LOGOUT_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.CREATE_LOGOUT_LOGOUT_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

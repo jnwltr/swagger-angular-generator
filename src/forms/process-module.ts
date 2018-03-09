@@ -5,24 +5,20 @@ import {indent, writeFile} from '../utils';
 export function createModule(config: Config, name: string, actionClassNameBase: string,
                              formSubDirName: string, simpleName: string, className: string, isGetMethod: boolean) {
   let content = `import {NgModule} from '@angular/core';\n`;
-  content += `import {FormsSharedModule} from '../../forms-shared.module';\n`;
-  if (!isGetMethod) {
-    content += `import {RouterModule} from '@angular/router';\n`;
-    content += `import {routes} from './${simpleName}.routes';\n`;
-    content += `import {${className}Component} from './${simpleName}.component';\n`;
-  }
-  content += `import {${name}Service} from '../../../controllers/${name}';\n`;
   content += `import {EffectsModule} from '@ngrx/effects';\n`;
   content += `import {StoreModule} from '@ngrx/store';\n`;
-  content += `import {${actionClassNameBase}Reducer} from './states/reducers';\n`;
+  content += '\n';
+  content += `import {${name}Service} from '../../../controllers/${name}';\n`;
+  content += `import {FormsSharedModule} from '../../forms-shared.module';\n`;
+  if (!isGetMethod) {
+    content += `import {${className}Component} from './${simpleName}.component';\n`;
+  }
   content += `import {${actionClassNameBase}Effects} from './states/effects';\n`;
+  content += `import {${actionClassNameBase}Reducer} from './states/reducers';\n`;
   content += '\n';
   content += '@NgModule({\n';
   content += indent('imports: [\n');
   content += indent('FormsSharedModule,\n', 2);
-  if (!isGetMethod) {
-    content += indent('RouterModule.forChild(routes),\n', 2);
-  }
   content += indent(`StoreModule.forFeature('${actionClassNameBase}', ${actionClassNameBase}Reducer),\n`, 2);
   content += indent(`EffectsModule.forFeature([${actionClassNameBase}Effects]),\n`, 2);
   content += indent('],\n');

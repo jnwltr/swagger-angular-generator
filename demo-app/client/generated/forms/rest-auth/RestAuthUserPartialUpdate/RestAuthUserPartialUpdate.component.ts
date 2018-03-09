@@ -14,7 +14,7 @@ import {RestAuthService} from '../../../controllers/RestAuth';
   templateUrl: './RestAuthUserPartialUpdate.component.html',
 })
 
-export class RestAuthRestAuthUserPartialUpdateComponent implements OnInit {
+export class RestAuthUserPartialUpdateComponent implements OnInit {
   RestAuthForm: FormGroup;
   data = new FormControl('', [Validators.required]);
 

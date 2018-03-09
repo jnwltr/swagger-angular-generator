@@ -8,35 +8,27 @@
 import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
-export interface UpdateRestAuthRestAuthUserUpdateState {
+export interface RestAuthUserUpdateState {
   data: object;
   loading: boolean;
   error: string;
 }
 
-export const initialUpdateRestAuthRestAuthUserUpdateState: UpdateRestAuthRestAuthUserUpdateState = {
+export const initialRestAuthUserUpdateState: RestAuthUserUpdateState = {
   data: {},
   loading: false,
   error: '',
 };
 
-export const getUpdateRestAuthRestAuthUserUpdateStateSelector = createFeatureSelector<UpdateRestAuthRestAuthUserUpdateState>('UpdateRestAuthRestAuthUserUpdate');
+export const getRestAuthUserUpdateStateSelector = createFeatureSelector<RestAuthUserUpdateState>('RestAuthUserUpdate');
 
-export function UpdateRestAuthRestAuthUserUpdateReducer(
-  state: UpdateRestAuthRestAuthUserUpdateState = initialUpdateRestAuthRestAuthUserUpdateState,
-  action: actions.AllUpdateRestAuthRestAuthUserUpdateActions): UpdateRestAuthRestAuthUserUpdateState {
-
+export function RestAuthUserUpdateReducer(
+  state: RestAuthUserUpdateState = initialRestAuthUserUpdateState,
+  action: actions.RestAuthUserUpdateAction): RestAuthUserUpdateState {
   switch (action.type) {
-  case actions.UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_START:
-  return {...state, loading: true, error: null};
-
-  case actions.UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_SUCCESS:
-  return {...state, data: action.payload, loading: false};
-
-  case actions.UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_ERROR:
-  return {...state, error: action.payload, loading: false};
-
-  default:
-    return state;
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
   }
 }

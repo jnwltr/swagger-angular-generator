@@ -6,29 +6,27 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RouterModule} from '@angular/router';
-import {routes} from './RestAuthLogoutCreate.routes';
-import {RestAuthRestAuthLogoutCreateComponent} from './RestAuthLogoutCreate.component';
-import {RestAuthService} from '../../../controllers/RestAuth';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {CreateRestAuthRestAuthLogoutCreateReducer} from './states/reducers';
-import {CreateRestAuthRestAuthLogoutCreateEffects} from './states/effects';
+import {RestAuthLogoutCreateComponent} from './RestAuthLogoutCreate.component';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {RestAuthService} from '../../../controllers/RestAuth';
+import {RestAuthLogoutCreateEffects} from './states/effects';
+import {RestAuthLogoutCreateReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('CreateRestAuthRestAuthLogoutCreate', CreateRestAuthRestAuthLogoutCreateReducer),
-    EffectsModule.forFeature([CreateRestAuthRestAuthLogoutCreateEffects]),
+    StoreModule.forFeature('RestAuthLogoutCreate', RestAuthLogoutCreateReducer),
+    EffectsModule.forFeature([RestAuthLogoutCreateEffects]),
   ],
   declarations: [
-    RestAuthRestAuthLogoutCreateComponent,
+    RestAuthLogoutCreateComponent,
   ],
   providers: [
     RestAuthService,
   ],
 })
-export class RestAuthRestAuthLogoutCreateModule {
+export class RestAuthLogoutCreateModule {
 }

@@ -1,14 +1,13 @@
 import * as _ from 'lodash';
 import * as path from 'path';
+
 import * as conf from '../conf';
 import {ProcessDefinition} from '../definitions';
 import {Config} from '../generate';
 import {MethodOutput} from '../requests/requests.models';
 import {Parameter} from '../types';
-import {createDir} from '../utils';
-import {createComponentHTML} from './process-html-component';
+import {createDir, emptyDir} from '../utils';
 import {createModule} from './process-module';
-import {createRoute} from './process-routes';
 import {createComponentTs} from './process-ts-component';
 import {createSharedModule} from './shared-module';
 import {GenerateHttpActions, getActionClassNameBase, getClassName} from './states/generate-http-actions';
@@ -18,11 +17,11 @@ import {GenerateHttpReducers} from './states/generate-http-reducers';
 export function createForms(config: Config, name: string, processedMethods: MethodOutput[],
                             schemaObjectDefinitions: ProcessDefinition[]) {
 
-  const dashedName = name.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
-  const formBaseDirName = path.join(config.dest, conf.formDir);
-  createDir(formBaseDirName);
+  const kebabName = _.kebabCase(name);
+  const formBaseDir = path.join(config.dest, conf.formDir);
+  emptyDir(formBaseDir);
 
-  const formDirName = path.join(config.dest, conf.formDir, `${dashedName}`);
+  const formDirName = path.join(formBaseDir, `${kebabName}`);
   createDir(formDirName);
 
   for (const processedMethod of processedMethods) {
@@ -32,7 +31,7 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     const methodName = processedMethod.methodName;
     let isGetMethod = true;
 
-    const formSubDirName = path.join(config.dest, conf.formDir, `${dashedName}`, simpleName);
+    const formSubDirName = path.join(formBaseDir, `${kebabName}`, simpleName);
     createDir(formSubDirName);
 
     const formParamGroups: Parameter[] = [];
@@ -49,12 +48,6 @@ export function createForms(config: Config, name: string, processedMethods: Meth
       // component.ts
       createComponentTs(config, name, formParamGroups, schemaObjectDefinitions, simpleName, formSubDirName,
                         className);
-
-      // component.html
-      createComponentHTML(config, name, formParamGroups, schemaObjectDefinitions, formSubDirName, simpleName);
-
-      // routes.ts
-      createRoute(config, formSubDirName, simpleName, className);
     }
 
     // states

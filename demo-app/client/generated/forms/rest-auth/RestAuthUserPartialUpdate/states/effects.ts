@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {RestAuthService} from '../../../../controllers/RestAuth';
-import {UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_START, UpdateRestAuthRestAuthUserPartialUpdateError, UpdateRestAuthRestAuthUserPartialUpdateStart, UpdateRestAuthRestAuthUserPartialUpdateSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class UpdateRestAuthRestAuthUserPartialUpdateEffects {
+export class RestAuthUserPartialUpdateEffects {
   @Effect()
-  UpdateRestAuthRestAuthUserPartialUpdate = this.actions.ofType<UpdateRestAuthRestAuthUserPartialUpdateStart>(UPDATE_RESTAUTH_RESTAUTHUSERPARTIALUPDATE_START).pipe(
-    switchMap((action: UpdateRestAuthRestAuthUserPartialUpdateStart) => this.restauthService.RestAuthUserPartialUpdate(action.payload).pipe(
-      map(UpdateRestAuthRestAuthUserPartialUpdate => new UpdateRestAuthRestAuthUserPartialUpdateSuccess(UpdateRestAuthRestAuthUserPartialUpdate)),
-      catchError((error: Error) => of(new UpdateRestAuthRestAuthUserPartialUpdateError(error.message))),
+  RestAuthUserPartialUpdate = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.restauthService.RestAuthUserPartialUpdate(action.payload).pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private restauthService: RestAuthService,
   ) {}
 }

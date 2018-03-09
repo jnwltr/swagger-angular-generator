@@ -8,26 +8,25 @@
 import {Action} from '@ngrx/store';
 import * as model from '../../../../model';
 
-export const LOAD_DELETEORDER_ORDER_START = '[DeleteOrder] Load DeleteOrder';
-export const LOAD_DELETEORDER_ORDER_SUCCESS = '[DeleteOrder] Load DeleteOrder Success';
-export const LOAD_DELETEORDER_ORDER_ERROR = '[DeleteOrder] Load DeleteOrder Error';
+export enum Actions {
+  START = '[order] Start',
+  SUCCESS = '[order] Success',
+  ERROR = '[order] Error',
+}
 
-export class LoadDeleteOrderOrderStart implements Action {
-  readonly type = LOAD_DELETEORDER_ORDER_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: OrderParams) {}
 }
 
-export class LoadDeleteOrderOrderSuccess implements Action {
-  readonly type = LOAD_DELETEORDER_ORDER_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: object) {}
 }
 
-export class LoadDeleteOrderOrderError implements Action {
-  readonly type = LOAD_DELETEORDER_ORDER_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllLoadDeleteOrderOrderActions
-  = LoadDeleteOrderOrderStart
-  | LoadDeleteOrderOrderSuccess
-  | LoadDeleteOrderOrderError;
+export type OrderAction = Start | Success | Error;

@@ -14,7 +14,7 @@ import {PutOrderService} from '../../../controllers/PutOrder';
   templateUrl: './order.component.html',
 })
 
-export class PutOrderOrderComponent implements OnInit {
+export class OrderComponent implements OnInit {
   PutOrderForm: FormGroup;
   producer = new FormControl('', [Validators.required]);
   model = new FormControl('', [Validators.required]);

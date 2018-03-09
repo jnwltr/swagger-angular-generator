@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {RestAuthService} from '../../../../controllers/RestAuth';
-import {LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_START, LoadRestAuthRestAuthLogoutListError, LoadRestAuthRestAuthLogoutListStart, LoadRestAuthRestAuthLogoutListSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class LoadRestAuthRestAuthLogoutListEffects {
+export class RestAuthLogoutListEffects {
   @Effect()
-  LoadRestAuthRestAuthLogoutList = this.actions.ofType<LoadRestAuthRestAuthLogoutListStart>(LOAD_RESTAUTH_RESTAUTHLOGOUTLIST_START).pipe(
-    switchMap((action: LoadRestAuthRestAuthLogoutListStart) => this.restauthService.RestAuthLogoutList().pipe(
-      map(LoadRestAuthRestAuthLogoutList => new LoadRestAuthRestAuthLogoutListSuccess(LoadRestAuthRestAuthLogoutList)),
-      catchError((error: Error) => of(new LoadRestAuthRestAuthLogoutListError(error.message))),
+  RestAuthLogoutList = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.restauthService.RestAuthLogoutList().pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private restauthService: RestAuthService,
   ) {}
 }

@@ -7,7 +7,7 @@ import {FileType} from './types';
  * Checks if directory exists
  * @param path
  */
-function doesDirExists(path: string) {
+function doesDirExist(path: string) {
   try {
     return fs.statSync(path).isDirectory();
   } catch (e) {
@@ -24,13 +24,11 @@ function doesDirExists(path: string) {
  * @param path
  */
 export function createDir(path: string) {
-  if (!doesDirExists(path)) {
-    fs.mkdirSync(path);
-  }
+  if (!doesDirExist(path)) fs.mkdirSync(path);
 }
 
 /**
- * Recursively deletes the path
+ * Recursively deletes the path and optionally creates self as an empty directory
  * @param path
  * @param removeSelf whether to remove the directory itself or just its content
  */

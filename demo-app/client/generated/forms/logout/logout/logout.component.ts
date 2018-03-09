@@ -14,7 +14,7 @@ import {LogoutService} from '../../../controllers/Logout';
   templateUrl: './logout.component.html',
 })
 
-export class LogoutLogoutComponent implements OnInit {
+export class LogoutComponent implements OnInit {
   LogoutForm: FormGroup;
 
   constructor(

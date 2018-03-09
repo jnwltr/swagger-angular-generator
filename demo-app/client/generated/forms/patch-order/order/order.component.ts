@@ -14,7 +14,7 @@ import {PatchOrderService} from '../../../controllers/PatchOrder';
   templateUrl: './order.component.html',
 })
 
-export class PatchOrderOrderComponent implements OnInit {
+export class OrderComponent implements OnInit {
   PatchOrderForm: FormGroup;
   producer = new FormControl('', []);
   model = new FormControl('', []);

@@ -9,26 +9,25 @@ import {Action} from '@ngrx/store';
 import {RestAuthUserUpdateParams} from '../../../../controllers/RestAuth';
 import * as model from '../../../../model';
 
-export const UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_START = '[RestAuth] Load RestAuth';
-export const UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_SUCCESS = '[RestAuth] Load RestAuth Success';
-export const UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_ERROR = '[RestAuth] Load RestAuth Error';
+export enum Actions {
+  START = '[RestAuthUserUpdate] Start',
+  SUCCESS = '[RestAuthUserUpdate] Success',
+  ERROR = '[RestAuthUserUpdate] Error',
+}
 
-export class UpdateRestAuthRestAuthUserUpdateStart implements Action {
-  readonly type = UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_START;
+export class Start implements Action {
+  readonly type = Actions.START;
   constructor(public payload: RestAuthUserUpdateParams) {}
 }
 
-export class UpdateRestAuthRestAuthUserUpdateSuccess implements Action {
-  readonly type = UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_SUCCESS;
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
   constructor(public payload: model.UserDetails) {}
 }
 
-export class UpdateRestAuthRestAuthUserUpdateError implements Action {
-  readonly type = UPDATE_RESTAUTH_RESTAUTHUSERUPDATE_ERROR;
+export class Error implements Action {
+  readonly type = Actions.ERROR;
   constructor(public payload: string) {}
 }
 
-export type AllUpdateRestAuthRestAuthUserUpdateActions
-  = UpdateRestAuthRestAuthUserUpdateStart
-  | UpdateRestAuthRestAuthUserUpdateSuccess
-  | UpdateRestAuthRestAuthUserUpdateError;
+export type RestAuthUserUpdateAction = Start | Success | Error;

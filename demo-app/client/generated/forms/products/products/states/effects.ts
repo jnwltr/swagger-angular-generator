@@ -10,19 +10,19 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {ProductsService} from '../../../../controllers/Products';
-import {LOAD_PRODUCTS_PRODUCTS_START, LoadProductsProductsError, LoadProductsProductsStart, LoadProductsProductsSuccess} from './actions';
+import * as actions from './actions';
 
 @Injectable()
-export class LoadProductsProductsEffects {
+export class ProductsEffects {
   @Effect()
-  LoadProductsProducts = this.actions.ofType<LoadProductsProductsStart>(LOAD_PRODUCTS_PRODUCTS_START).pipe(
-    switchMap((action: LoadProductsProductsStart) => this.productsService.products().pipe(
-      map(LoadProductsProducts => new LoadProductsProductsSuccess(LoadProductsProducts)),
-      catchError((error: Error) => of(new LoadProductsProductsError(error.message))),
+  Products = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.productsService.products(action.payload).pipe(
+      map(result => new actions.Success(result)),
+      catchError((error: Error) => of(new actions.Error(error.message))),
   )));
 
   constructor(
-    private actions: Actions,
+    private storeActions: Actions,
     private productsService: ProductsService,
   ) {}
 }

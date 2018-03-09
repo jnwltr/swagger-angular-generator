@@ -6,29 +6,27 @@
  */
 
 import {NgModule} from '@angular/core';
-import {FormsSharedModule} from '../../forms-shared.module';
-import {RouterModule} from '@angular/router';
-import {routes} from './logout.routes';
-import {LogoutLogoutComponent} from './logout.component';
-import {LogoutService} from '../../../controllers/Logout';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {CreateLogoutLogoutReducer} from './states/reducers';
-import {CreateLogoutLogoutEffects} from './states/effects';
+import {LogoutComponent} from './logout.component';
+import {FormsSharedModule} from '../../forms-shared.module';
+import {LogoutService} from '../../../controllers/Logout';
+import {LogoutEffects} from './states/effects';
+import {LogoutReducer} from './states/reducers';
 
 @NgModule({
   imports: [
     FormsSharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('CreateLogoutLogout', CreateLogoutLogoutReducer),
-    EffectsModule.forFeature([CreateLogoutLogoutEffects]),
+    StoreModule.forFeature('Logout', LogoutReducer),
+    EffectsModule.forFeature([LogoutEffects]),
   ],
   declarations: [
-    LogoutLogoutComponent,
+    LogoutComponent,
   ],
   providers: [
     LogoutService,
   ],
 })
-export class LogoutLogoutModule {
+export class LogoutModule {
 }
