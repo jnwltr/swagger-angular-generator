@@ -11,7 +11,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc --outDir dist",
     "postbuild": "npm run generate",
-    "prepublishOnly": "npm run build",
+    "preversion": "npm run build",
     "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",

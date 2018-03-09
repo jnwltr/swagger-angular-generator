@@ -4,7 +4,6 @@ import {async, inject, TestBed} from '@angular/core/testing';
 import {CareerService} from '../../../generated/controllers/Career';
 
 describe(`CareerDetailService`, () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -21,18 +20,14 @@ describe(`CareerDetailService`, () => {
 
   it(`should check request parameters are correct`,
     async(
-
       inject([CareerService, HttpTestingController],
         (service: CareerService, backend: HttpTestingController) => {
-
-        service.positions({version: '2', positionId: 220}).subscribe();
-
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'GET'
-            && req.url === '/api/career/v2/positions/220';
-        });
+          service.positions({version: '2', positionId: 220}).subscribe();
+          backend.expectOne((req: HttpRequest<any>) => {
+            return req.method === 'GET'
+              && req.url === '/api/career/v2/positions/220';
+          });
       }),
     ),
   );
-
 });
