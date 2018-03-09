@@ -22,7 +22,8 @@ function processController(methods, name, config) {
     const simpleNames = _.map(methods, 'simpleName');
     methods.forEach(controller => {
         if (simpleNames.filter(n => n === controller.simpleName).length > 1) {
-            controller.simpleName = _.lowerFirst(controller.operationId);
+            const preserveCapitals = controller.operationId.replace(/([A-Z])/g, '-$1');
+            controller.simpleName = _.lowerFirst(_.camelCase(preserveCapitals));
         }
         controller.responseDef = process_responses_1.processResponses(controller.responses, controller.simpleName);
         usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
