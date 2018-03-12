@@ -132,7 +132,6 @@
         }
       }
     },
-
     "/api/order": {
       "post": {
         "tags": [
@@ -174,7 +173,7 @@
     "/api/order/{orderId}": {
       "patch": {
         "tags": [
-          "PatchOrder"
+          "Order"
         ],
         "summary": "Patches order",
         "operationId": "PatchOrder",
@@ -219,10 +218,10 @@
       },
       "put": {
         "tags": [
-          "PutOrder"
+          "Order"
         ],
         "summary": "Put for order",
-        "operationId": "PutOrder",
+        "operationId": "Put-Order",
         "consumes": [
           "application/json"
         ],
@@ -271,10 +270,10 @@
       },
       "delete": {
         "tags": [
-          "DeleteOrder"
+          "Order"
         ],
         "summary": "Delete order",
-        "operationId": "DeleteOrder",
+        "operationId": "deleteORDER",
         "consumes": [],
         "produces": [
           "application/json"
@@ -376,13 +375,13 @@
         }
       },
       "parameters": [
-          {
-            "name": "registrationType",
-            "in": "path",
-            "description": "Registration type",
-            "required": true,
-            "type": "string"
-          }
+        {
+          "name": "registrationType",
+          "in": "path",
+          "description": "Registration type",
+          "required": true,
+          "type": "string"
+        }
       ]
     },
     "/api/logout": {
@@ -448,9 +447,7 @@
       }
     }
   },
-
   "definitions": {
-
     "products": {
       "type": "object",
       "required": [
@@ -471,7 +468,6 @@
         }
       }
     },
-
     "productDetail": {
       "type": "object",
       "properties": {
@@ -488,9 +484,7 @@
           "type": "integer"
         }
       }
-
     },
-
     "orderDto": {
       "type": "object",
       "required": [
@@ -506,7 +500,6 @@
         }
       }
     },
-
     "loginDto": {
       "type": "object",
       "required": [
@@ -523,6 +516,5 @@
         }
       }
     }
-
   }
 }

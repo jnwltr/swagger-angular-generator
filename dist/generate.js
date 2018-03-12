@@ -18,8 +18,9 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
         schema = JSON.parse(content.toString());
     }
     catch (e) {
-        if (e instanceof SyntaxError)
-            utils_1.out(`${src} is not a valid JSON scheme`, 'red');
+        if (e instanceof SyntaxError) {
+            utils_1.out(`${src} is either not a valid JSON scheme or contains non-printable characters`, 'red');
+        }
         else
             utils_1.out(`JSON scheme file '${src}' does not exist`, 'red');
         utils_1.out(`${e}`);

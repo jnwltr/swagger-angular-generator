@@ -1,6 +1,6 @@
 {
   "name": "swagger-angular-generator",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Generator of API layer in TypeScript for Angular 2+ apps",
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
@@ -11,7 +11,8 @@
     "prebuild": "rm -rf dist",
     "build": "tsc --outDir dist",
     "postbuild": "npm run generate",
-    "prepublishOnly": "npm run build",
+    "preversion": "npm run build",
+    "postversion": "git status",
     "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",
