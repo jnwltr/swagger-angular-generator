@@ -16,11 +16,19 @@ function processParams(def, paramsType) {
     let paramDef = '';
     paramDef += `export interface ${paramsType} {\n`;
     const params = _.map(def, p => common_1.processProperty(Object.assign({
-        enum: p.enum,
-        items: p.items,
-        type: p.type,
+        allowEmptyValue: p.allowEmptyValue,
+        default: p.default,
         description: p.description,
+        enum: p.enum,
         format: p.format,
+        items: p.items,
+        maximum: p.maximum,
+        maxLength: p.maxLength,
+        minimum: p.minimum,
+        minLength: p.minLength,
+        pattern: p.pattern,
+        type: p.type,
+        uniqueItems: p.uniqueItems,
     }, p.schema), p.name, paramsType, p.required));
     const isInterfaceEmpty = !params.length;
     const usesGlobalType = params.some(p => !p.native);

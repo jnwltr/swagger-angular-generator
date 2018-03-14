@@ -30,7 +30,7 @@ export class RestAuthService {
    * Accepts/Returns nothing.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_list
    */
-  RestAuthLogoutList(): Observable<void> {
+  restAuthLogoutList(): Observable<void> {
     return this.http.get<void>(`/rest-auth/logout/`);
   }
 
@@ -41,7 +41,7 @@ export class RestAuthService {
    * Accepts/Returns nothing.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_create
    */
-  RestAuthLogoutCreate(): Observable<void> {
+  restAuthLogoutCreate(): Observable<void> {
     return this.http.post<void>(`/rest-auth/logout/`, {});
   }
 
@@ -56,7 +56,7 @@ export class RestAuthService {
    * Returns UserModel fields.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_read
    */
-  RestAuthUserRead(): Observable<model.UserDetails> {
+  restAuthUserRead(): Observable<model.UserDetails> {
     return this.http.get<model.UserDetails>(`/rest-auth/user/`);
   }
 
@@ -71,7 +71,7 @@ export class RestAuthService {
    * Returns UserModel fields.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_update
    */
-  RestAuthUserUpdate(params: RestAuthUserUpdateParams): Observable<model.UserDetails> {
+  restAuthUserUpdate(params: RestAuthUserUpdateParams): Observable<model.UserDetails> {
     const bodyParams = params.data;
     const bodyParamsWithoutUndefined: any = {};
     Object.entries(bodyParams || {}).forEach(([key, value]) => {
@@ -91,7 +91,7 @@ export class RestAuthService {
    * Returns UserModel fields.
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_partial_update
    */
-  RestAuthUserPartialUpdate(params: RestAuthUserPartialUpdateParams): Observable<model.UserDetails> {
+  restAuthUserPartialUpdate(params: RestAuthUserPartialUpdateParams): Observable<model.UserDetails> {
     const bodyParams = params.data;
     const bodyParamsWithoutUndefined: any = {};
     Object.entries(bodyParams || {}).forEach(([key, value]) => {

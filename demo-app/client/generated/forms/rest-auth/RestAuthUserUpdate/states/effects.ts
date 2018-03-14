@@ -16,7 +16,7 @@ import * as actions from './actions';
 export class RestAuthUserUpdateEffects {
   @Effect()
   RestAuthUserUpdate = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
-    switchMap((action: actions.Start) => this.restauthService.RestAuthUserUpdate(action.payload).pipe(
+    switchMap((action: actions.Start) => this.restauthService.restAuthUserUpdate(action.payload).pipe(
       map(result => new actions.Success(result)),
       catchError((error: Error) => of(new actions.Error(error.message))),
   )));

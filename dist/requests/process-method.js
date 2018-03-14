@@ -25,7 +25,7 @@ function processMethod(method) {
     let usesGlobalType = false;
     let usesQueryParams;
     let paramTypes = [];
-    let paramGroups;
+    let paramGroups = {};
     const simpleName = method.simpleName;
     const methodName = method.methodName;
     if (method.paramDef) {

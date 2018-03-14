@@ -1,31 +1,35 @@
+import * as _ from 'lodash';
 import * as path from 'path';
-import {ProcessDefinition} from '../definitions';
+import {translateType} from '../common';
+import {modelFile} from '../conf';
+import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
 import {Parameter, Schema} from '../types';
 import {indent, writeFile} from '../utils';
 
 export interface FieldDefinitionObj {
   content: string;
-  paramsArray: string[];
+  params: string[];
 }
 
-export function createComponentTs(config: Config, name: string, paramGroups: Parameter[],
-                                  schemaObjectDefinitions: ProcessDefinition[], simpleName: string,
+export function createComponentTs(config: Config, name: string, params: Parameter[],
+                                  definitions: ProcessedDefinition[], simpleName: string,
                                   formSubDirName: string, className: string) {
-
-  const schemaObjectDefinitionsKeys: string[] = schemaObjectDefinitions.map(s => s.name.toLowerCase());
-
   let content = '';
   content += getImports(name);
   content += getComponent(simpleName);
   content += `export class ${className}Component implements OnInit {\n`;
   content += indent(`${name}Form: FormGroup;\n`);
-  const fieldDefinition: FieldDefinitionObj = getFieldDefinition(paramGroups, schemaObjectDefinitionsKeys,
-                                                                 schemaObjectDefinitions);
+  const fieldDefinition: FieldDefinitionObj = getFieldDefinition(params, definitions);
+
+  // TODO! test
+  const definitionsMap = _.groupBy(definitions, 'originalName');
+  walkParamOrProp(params, definitionsMap);
+
   content += fieldDefinition.content + '\n';
   content += getConstructor(name);
-  content += getNgOnInit(fieldDefinition, name);
-  content += getFormSubmitFunction(name, simpleName, paramGroups);
+  content += getNgOnInit(fieldDefinition.params, name);
+  content += getFormSubmitFunction(name, simpleName, params);
   content += '}\n';
 
   const componentHTMLFileName = path.join(formSubDirName, `${simpleName}.component.ts`);
@@ -51,36 +55,71 @@ function getComponent(simpleName: string) {
   return res;
 }
 
-function getFieldDefinition(paramGroups: Parameter[], schemaObjectDefinitionsKeys: string[],
-                            schemaObjectDefinitions: ProcessDefinition[]) {
-  const paramsArray: string[] = [];
+function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
+                         definitions: _.Dictionary<ProcessedDefinition[]>): void {
+  // parameters
+  if (Array.isArray(definition)) {
+    definition.forEach(param => {
+      const type = param.type;
+      const ref = _.get(param, 'schema.$ref');
+      const child = makeField(type, ref, definitions);
+      if (child) walkParamOrProp(child, definitions);
+    });
+  // object definition
+  } else {
+    Object.entries(definition.def.properties).forEach(([paramName, param]) => {
+      const type = param.type;
+      const ref = param.$ref;
+      const child = makeField(type, ref, definitions);
+      if (child) walkParamOrProp(child, definitions);
+    });
+  }
+}
+
+function makeField(type: string, ref: string,
+                   definitions: _.Dictionary<ProcessedDefinition[]>,
+                  ): ProcessedDefinition | void {
+  console.log(`type: ${type}, $ref: ${ref}`);
+  if (type) {
+    console.log(`primitive: ${type}`);
+    return;
+  } else {
+    const refType = ref.replace(/^#\/definitions\//, '');
+    console.log(`composite: ${definitions[refType][0].name}`);
+    return definitions[refType][0];
+  }
+}
+
+function getFieldDefinition(params: Parameter[], definitions: ProcessedDefinition[]): FieldDefinitionObj {
+  const paramsList: string[] = [];
   let content = '';
 
   // checkbox, select or input
-  for (const param of paramGroups) {
-    if (schemaObjectDefinitionsKeys.includes(param.name.toLowerCase())) {
+  for (const param of params) {
+    const ref = _.get(param, 'schema.$ref');
+    if (ref) {
+      const objectDef = definitions.find(d => {
+        return `${modelFile}.${d.name}` === translateType(ref).type;
+      });
+      const properties = objectDef.def.properties;
 
-      const objDef: ProcessDefinition = schemaObjectDefinitions.find(
-          obj => obj.name.toLowerCase() === param.name.toLowerCase());
-      const properties = objDef.def.properties;
-
-      Object.entries(properties).forEach(([key, value]) => {
-        const validators = getValidators(value);
-        if (objDef.def.required && objDef.def.required.includes(key)) {
+      Object.entries(properties).forEach(([propertyName, property]) => {
+        const validators = getValidators(property);
+        if (objectDef.def.required && objectDef.def.required.includes(propertyName)) {
           validators.push('Validators.required');
         }
-        content += indent(`${key} = new FormControl('', [${validators.join(', ')}]);\n`);
-        paramsArray.push(key);
+        content += indent(`${propertyName} = new FormControl('', [${validators.join(', ')}]);\n`);
+        paramsList.push(propertyName);
       });
-    } else {
+    } else if (param.type) {
       const validators = getValidators(param);
       if (param.required) validators.push('Validators.required');
       content += indent(`${param.name} = new FormControl('', [${validators.join(', ')}]);\n`);
-      paramsArray.push(param.name);
+      paramsList.push(param.name);
     }
   }
 
-  return {content, paramsArray};
+  return {content, params: paramsList};
 }
 
 function getValidators(param: Parameter | Schema) {
@@ -104,11 +143,11 @@ function getConstructor(name: string) {
   return res;
 }
 
-function getNgOnInit(fieldDefinition: FieldDefinitionObj, name: string) {
+function getNgOnInit(params: string[], name: string) {
   let res = indent('ngOnInit() {\n');
   res += indent(`this.${name}Form = this.formBuilder.group({\n`, 2);
-  for (const pa of fieldDefinition.paramsArray) {
-    res += indent(`${pa}: this.${pa},\n`, 3);
+  for (const param of params) {
+    res += indent(`${param}: this.${param},\n`, 3);
   }
   res += indent(`}, {updateOn: 'change'});\n`, 2);
   res += indent('}\n');

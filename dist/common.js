@@ -49,7 +49,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                             prop.additionalProperties.$ref);
                         additionalType = defType.type;
                     }
-                    type = `{ [key: string]: ${additionalType} }`;
+                    type = `{[key: string]: ${additionalType}}`;
                 }
                 else {
                     defType = translateType(prop.type);
@@ -64,6 +64,9 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     else if (Array.isArray(required) && !required.includes(name)) {
         optional = '?';
     }
+    let readOnly = '';
+    if (prop.readOnly)
+        readOnly = 'readonly ';
     const comments = [];
     if (prop.description)
         comments.push(prop.description);
@@ -77,7 +80,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     if (name) {
         if (name.match(/-/))
             name = `'${name}'`;
-        property = `${comment}${name}${optional}: ${type};`;
+        property = `${comment}${readOnly}${name}${optional}: ${type};`;
     }
     else
         property = `${type}`;
@@ -137,6 +140,7 @@ function translateType(type) {
     }
     return { type, native: true };
 }
+exports.translateType = translateType;
 /**
  * Checks whether the type should reference internally defined type
  * and returns its reference to globally exported interfaces

@@ -25,7 +25,8 @@ function getReducerImports() {
 
 function getStateInteface(actionClassNameBase: string) {
   let res = `export interface ${actionClassNameBase}State {\n`;
-  res += indent(`data: object;\n`);
+  // TODO! check if store selection returns typed object
+  res += indent(`data: any;\n`);
   res += indent(`loading: boolean;\n`);
   res += indent(`error: string;\n`);
   res += `}\n\n`;

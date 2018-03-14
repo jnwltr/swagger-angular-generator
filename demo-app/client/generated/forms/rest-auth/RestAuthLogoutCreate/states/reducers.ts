@@ -9,7 +9,7 @@ import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
 export interface RestAuthLogoutCreateState {
-  data: object;
+  data: any;
   loading: boolean;
   error: string;
 }

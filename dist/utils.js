@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
-const path_1 = require("path");
 const conf = require("./conf");
 /**
  * Checks if directory exists
  * @param path
  */
-function doesDirExists(path) {
+function doesDirExist(path) {
     try {
         return fs.statSync(path).isDirectory();
     }
@@ -25,13 +24,12 @@ function doesDirExists(path) {
  * @param path
  */
 function createDir(path) {
-    if (!doesDirExists(path)) {
+    if (!doesDirExist(path))
         fs.mkdirSync(path);
-    }
 }
 exports.createDir = createDir;
 /**
- * Recursively deletes the path
+ * Recursively deletes the path and optionally creates self as an empty directory
  * @param path
  * @param removeSelf whether to remove the directory itself or just its content
  */
@@ -52,27 +50,6 @@ function emptyDir(path, removeSelf = false) {
         fs.rmdirSync(path);
 }
 exports.emptyDir = emptyDir;
-/**
- * Recursively copies the src to dest
- * @param src file or directory
- * @param dst directory
- */
-function copyDir(src, dst) {
-    const target = `${dst}/${path_1.basename(src)}`;
-    if (!fs.lstatSync(src).isDirectory())
-        fs.copyFileSync(src, target);
-    else {
-        if (fs.existsSync(target) &&
-            fs.lstatSync(target).isDirectory()) {
-            emptyDir(target, true);
-        }
-        fs.mkdirSync(target);
-        fs.readdirSync(src).forEach(file => {
-            copyDir(`${src}/${file}`, target);
-        });
-    }
-}
-exports.copyDir = copyDir;
 /**
  * Indents the input
  * @param input string (with new-line separation) or array of lines

@@ -24,21 +24,29 @@ export function processParams(def: Parameter[], paramsType: string): ProcessPara
   paramDef += `export interface ${paramsType} {\n`;
 
   const params = _.map(def, p => processProperty({
-    // TODO(janwalter) might be unnecessary for v3.0+ of OpenAPI spec
-    // https://swagger.io/specification/#parameterObject
-    ...{
-      enum: p.enum,
-      items: p.items,
-      type: p.type,
-      description: p.description,
-      format: p.format,
+      // TODO(janwalter) might be unnecessary for v3.0+ of OpenAPI spec
+      // https://swagger.io/specification/#parameterObject
+      ...{
+        allowEmptyValue: p.allowEmptyValue,
+        default: p.default,
+        description: p.description,
+        enum: p.enum,
+        format: p.format,
+        items: p.items,
+        maximum: p.maximum,
+        maxLength: p.maxLength,
+        minimum: p.minimum,
+        minLength: p.minLength,
+        pattern: p.pattern,
+        type: p.type,
+        uniqueItems: p.uniqueItems,
+      },
+      ...p.schema, // move level up so inside $ref is present if defined
     },
-    ...p.schema, // move level up
-    }, p.name, paramsType, p.required),
+    p.name, paramsType, p.required),
   );
 
   const isInterfaceEmpty = !params.length;
-
   const usesGlobalType = params.some(p => !p.native);
 
   paramDef += indent(_.map(params, 'property') as string[]);

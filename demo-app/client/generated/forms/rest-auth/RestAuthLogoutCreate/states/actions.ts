@@ -6,12 +6,11 @@
  */
 
 import {Action} from '@ngrx/store';
-import * as model from '../../../../model';
 
 export enum Actions {
-  START = '[RestAuthLogoutCreate] Start',
-  SUCCESS = '[RestAuthLogoutCreate] Success',
-  ERROR = '[RestAuthLogoutCreate] Error',
+  START = '[restAuthLogoutCreate] Start',
+  SUCCESS = '[restAuthLogoutCreate] Success',
+  ERROR = '[restAuthLogoutCreate] Error',
 }
 
 export class Start implements Action {

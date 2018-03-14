@@ -10,8 +10,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {RestAuthService} from '../../../controllers/RestAuth';
 
 @Component({
-  selector: 'RestAuthUserPartialUpdate',
-  templateUrl: './RestAuthUserPartialUpdate.component.html',
+  selector: 'restAuthUserPartialUpdate',
+  templateUrl: './restAuthUserPartialUpdate.component.html',
 })
 
 export class RestAuthUserPartialUpdateComponent implements OnInit {
@@ -30,6 +30,6 @@ export class RestAuthUserPartialUpdateComponent implements OnInit {
   }
 
   restauth() {
-    this.restauthService.RestAuthUserPartialUpdate(this.RestAuthForm.value);
+    this.restauthService.restAuthUserPartialUpdate(this.RestAuthForm.value);
   }
 }

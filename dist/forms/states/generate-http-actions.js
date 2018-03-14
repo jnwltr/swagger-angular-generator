@@ -5,7 +5,7 @@ const path = require("path");
 const utils_1 = require("../../utils");
 function GenerateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, paramGroups) {
     let content = '';
-    content += getActionImports(name, simpleName, paramGroups);
+    content += getActionImports(name, simpleName, paramGroups, responseDef.type.startsWith('model.'));
     content += getActionTypes(simpleName);
     content += getActionStartDefinition(simpleName);
     content += getActionSuccessDefinition(responseDef);
@@ -15,12 +15,13 @@ function GenerateHttpActions(config, name, responseDef, actionClassNameBase, sim
     utils_1.writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
 }
 exports.GenerateHttpActions = GenerateHttpActions;
-function getActionImports(name, simpleName, paramGroups) {
+function getActionImports(name, simpleName, paramGroups, importModels) {
     let res = `import {Action} from '@ngrx/store';\n`;
     if (paramGroups.length) {
         res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
     }
-    res += `import * as model from '../../../../model';\n`;
+    if (importModels)
+        res += `import * as model from '../../../../model';\n`;
     res += `\n`;
     return res;
 }

@@ -8,8 +8,9 @@
 import {NgModule} from '@angular/core';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
-import {FormsSharedModule} from '../../forms-shared.module';
+
 import {RestAuthService} from '../../../controllers/RestAuth';
+import {FormsSharedModule} from '../../forms-shared.module';
 import {RestAuthLogoutListEffects} from './states/effects';
 import {RestAuthLogoutListReducer} from './states/reducers';
 

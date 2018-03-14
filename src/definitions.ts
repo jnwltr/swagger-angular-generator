@@ -19,8 +19,9 @@ export interface Definition {
   description?: string;
 }
 
-export interface ProcessDefinition {
+export interface ProcessedDefinition {
   name: string;
+  originalName: string;
   def: Definition;
 }
 
@@ -29,19 +30,19 @@ export interface ProcessDefinition {
  * to individual files
  * @param defs definitions from the schema
  */
-export function processDefinitions(defs: { [key: string]: Definition }, config: Config): ProcessDefinition[] {
+export function processDefinitions(defs: {[key: string]: Definition}, config: Config): ProcessedDefinition[] {
   emptyDir(path.join(config.dest, conf.defsDir));
 
-  const schemaObjectDefinitions: ProcessDefinition[] = [];
+  const definitions: ProcessedDefinition[] = [];
+  const files: {[key: string]: string[]} = {};
 
-  const files: { [key: string]: string[] } = {};
   _.forOwn(defs, (v, source) => {
     const file = processDefinition(v, source, config);
     if (file.name) {
       const previous = files[file.name];
       if (previous === undefined) files[file.name] = [source];
       else previous.push(source);
-      schemaObjectDefinitions.push(file);
+      definitions.push(file);
     }
   });
 
@@ -53,7 +54,7 @@ export function processDefinitions(defs: { [key: string]: Definition }, config: 
   const filename = path.join(config.dest, `${conf.modelFile}.ts`);
   writeFile(filename, allExports, config.header);
 
-  return schemaObjectDefinitions;
+  return definitions;
 }
 
 /**
@@ -61,9 +62,10 @@ export function processDefinitions(defs: { [key: string]: Definition }, config: 
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def: Definition, name: string, config: Config): ProcessDefinition {
+function processDefinition(def: Definition, name: string, config: Config): ProcessedDefinition {
   if (!isWritable(name)) return;
 
+  const originalName = name;
   name = normalizeDef(name);
 
   let output = '';
@@ -85,7 +87,7 @@ function processDefinition(def: Definition, name: string, config: Config): Proce
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
   writeFile(filename, output, config.header);
 
-  return {name, def};
+  return {name, def, originalName};
 }
 
 /**

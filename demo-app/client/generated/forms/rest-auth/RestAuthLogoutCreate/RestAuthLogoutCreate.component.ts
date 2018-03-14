@@ -10,8 +10,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {RestAuthService} from '../../../controllers/RestAuth';
 
 @Component({
-  selector: 'RestAuthLogoutCreate',
-  templateUrl: './RestAuthLogoutCreate.component.html',
+  selector: 'restAuthLogoutCreate',
+  templateUrl: './restAuthLogoutCreate.component.html',
 })
 
 export class RestAuthLogoutCreateComponent implements OnInit {
@@ -28,6 +28,6 @@ export class RestAuthLogoutCreateComponent implements OnInit {
   }
 
   restauth() {
-    this.restauthService.RestAuthLogoutCreate();
+    this.restauthService.restAuthLogoutCreate();
   }
 }

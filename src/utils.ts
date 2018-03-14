@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import {basename} from 'path';
 import * as conf from './conf';
 import {FileType} from './types';
 
@@ -46,28 +45,6 @@ export function emptyDir(path: string, removeSelf = false) {
   });
 
   if (removeSelf) fs.rmdirSync(path);
-}
-
-/**
- * Recursively copies the src to dest
- * @param src file or directory
- * @param dst directory
- */
-export function copyDir(src: string, dst: string) {
-  const target = `${dst}/${basename(src)}`;
-
-  if (!fs.lstatSync(src).isDirectory()) fs.copyFileSync(src, target);
-  else {
-    if (fs.existsSync(target) &&
-        fs.lstatSync(target).isDirectory()) {
-      emptyDir(target, true);
-    }
-
-    fs.mkdirSync(target);
-    fs.readdirSync(src).forEach(file => {
-      copyDir(`${src}/${file}`, target);
-    });
-  }
 }
 
 /**

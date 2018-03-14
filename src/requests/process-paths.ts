@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import * as path from 'path';
 
 import * as conf from '../conf';
-import {ProcessDefinition} from '../definitions';
+import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
 import {Method, MethodName} from '../types';
 import {emptyDir} from '../utils';
@@ -20,7 +20,8 @@ import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
  * @param swaggerPath swagger base url
  */
 export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config,
-                             schemaObjectDefinitions: ProcessDefinition[]) {
+                             definitions: ProcessedDefinition[]) {
+  emptyDir(path.join(config.dest, conf.formDir));
   emptyDir(path.join(config.dest, conf.apiDir));
 
   const paths = preProcessPaths(pathsWithParameters);
@@ -42,7 +43,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, schemaObjectDefinitions));
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, definitions));
 }
 
 /**

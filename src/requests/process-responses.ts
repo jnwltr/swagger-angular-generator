@@ -16,7 +16,7 @@ export function processResponses(httpResponse: HttpResponse, name: string) {
   const responses = _.filter(httpResponse, (r, status: HttpCode) => (
     r.schema && Math.floor(Number(status) / 100) === 2));
   const properties = _.map(responses, response => (
-    processProperty(response.schema, undefined, `${name}`)
+    processProperty(response.schema, undefined, name)
   ));
 
   const property = _.map(properties, 'property');

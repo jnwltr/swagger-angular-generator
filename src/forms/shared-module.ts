@@ -19,7 +19,6 @@ export function createSharedModule(config: Config) {
   content += indent('exports: [\n');
   content += indent('CommonModule,\n', 2);
   content += indent('ReactiveFormsModule,\n', 2);
-  content += indent('FlexLayoutModule,\n', 2);
   content += indent('],\n');
 
   content += '})\n';

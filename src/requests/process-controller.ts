@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import * as path from 'path';
 
 import * as conf from '../conf';
-import {ProcessDefinition} from '../definitions';
+import {ProcessedDefinition} from '../definitions';
 import {createForms} from '../forms/generate-form-modules';
 import {Config} from '../generate';
 import {indent, writeFile} from '../utils';
@@ -20,7 +20,7 @@ import {ControllerMethod, MethodOutput} from './requests.models';
  * @param name
  */
 export function processController(methods: ControllerMethod[], name: string, config: Config,
-                                  schemaObjectDefinitions: ProcessDefinition[]) {
+                                  definitions: ProcessedDefinition[]) {
   const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
   let usesGlobalType = false;
 
@@ -75,5 +75,5 @@ export function processController(methods: ControllerMethod[], name: string, con
   writeFile(filename, content, config.header);
 
   /* forms */
-  createForms(config, name, processedMethods, schemaObjectDefinitions);
+  createForms(config, name, processedMethods, definitions);
 }

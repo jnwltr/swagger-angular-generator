@@ -16,7 +16,7 @@ const utils_1 = require("./utils");
  */
 function processDefinitions(defs, config) {
     utils_1.emptyDir(path.join(config.dest, conf.defsDir));
-    const schemaObjectDefinitions = [];
+    const definitions = [];
     const files = {};
     _.forOwn(defs, (v, source) => {
         const file = processDefinition(v, source, config);
@@ -26,7 +26,7 @@ function processDefinitions(defs, config) {
                 files[file.name] = [source];
             else
                 previous.push(source);
-            schemaObjectDefinitions.push(file);
+            definitions.push(file);
         }
     });
     let allExports = '';
@@ -35,7 +35,7 @@ function processDefinitions(defs, config) {
     });
     const filename = path.join(config.dest, `${conf.modelFile}.ts`);
     utils_1.writeFile(filename, allExports, config.header);
-    return schemaObjectDefinitions;
+    return definitions;
 }
 exports.processDefinitions = processDefinitions;
 /**
@@ -46,6 +46,7 @@ exports.processDefinitions = processDefinitions;
 function processDefinition(def, name, config) {
     if (!isWritable(name))
         return;
+    const originalName = name;
     name = common_1.normalizeDef(name);
     let output = '';
     const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
@@ -64,7 +65,7 @@ function processDefinition(def, name, config) {
         output += `\n${enumLines}\n`;
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
-    return { name, def };
+    return { name, def, originalName };
 }
 /**
  * Creates single export line for `def` name

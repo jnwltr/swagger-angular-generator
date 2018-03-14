@@ -16,7 +16,7 @@ const process_responses_1 = require("./process-responses");
  * @param controllers list of methods of the controller
  * @param name
  */
-function processController(methods, name, config, schemaObjectDefinitions) {
+function processController(methods, name, config, definitions) {
     const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
     let usesGlobalType = false;
     // make simpleNames unique and process responses
@@ -59,7 +59,7 @@ function processController(methods, name, config, schemaObjectDefinitions) {
     /* controllers */
     utils_1.writeFile(filename, content, config.header);
     /* forms */
-    generate_form_modules_1.createForms(config, name, processedMethods, schemaObjectDefinitions);
+    generate_form_modules_1.createForms(config, name, processedMethods, definitions);
 }
 exports.processController = processController;
 //# sourceMappingURL=process-controller.js.map
