@@ -1,44 +1,49 @@
-import { HttpClientModule, HttpRequest } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
-import { PatchOrderService } from '../../../generated/controllers/PatchOrder';
+import { HttpClientModule, HttpRequest } from '@angular/common/http'
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing'
+import { async, inject, TestBed } from '@angular/core/testing'
+import { OrderService } from '../../../generated/controllers/Order'
 
-describe(`PatchOrderService`, () => {
-
+describe(`Order patch`, () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [PatchOrderService],
-    });
-  });
+      imports: [HttpClientModule, HttpClientTestingModule],
+      providers: [OrderService]
+    })
+  })
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
-    backend.verify();
-  }));
+  afterEach(
+    inject([HttpTestingController], (backend: HttpTestingController) => {
+      backend.verify()
+    })
+  )
 
-  it(`should check request parameters are correct`,
+  it(
+    `should check request parameters are correct`,
     async(
-
-      inject([PatchOrderService, HttpTestingController],
-        (service: PatchOrderService, backend: HttpTestingController) => {
-
-          service.order({
-            orderId: '100',
-            model: 'test-model',
-          },
-          ).subscribe();
+      inject(
+        [OrderService, HttpTestingController],
+        (service: OrderService, backend: HttpTestingController) => {
+          service
+            .patchOrder({
+              orderId: '100',
+              model: 'test-model'
+            })
+            .subscribe()
 
           backend.expectOne((req: HttpRequest<any>) => {
-            return req.method === 'PATCH'
-              && req.url === 'http://example.com/api/order/100'
-              && req.body.model === 'test-model'
-              && JSON.stringify(Object.keys(req.body)) === JSON.stringify(['model']);
-          });
-        }),
-    ),
-  );
-
-});
+            return (
+              req.method === 'PATCH' &&
+              req.url === 'http://example.com/api/order/100' &&
+              req.body.model === 'test-model' &&
+              JSON.stringify(Object.keys(req.body)) ===
+                JSON.stringify(['model'])
+            )
+          })
+        }
+      )
+    )
+  )
+})

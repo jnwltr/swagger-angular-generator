@@ -18,6 +18,40 @@ export interface OrderParams {
   producer?: string;
 }
 
+export interface PatchOrderParams {
+  /**
+   * order Id
+   * format: uuid
+   */
+  orderId: string;
+  /** producer */
+  producer?: string;
+  /** model */
+  model?: string;
+}
+
+export interface PutOrderParams {
+  /**
+   * order Id
+   * format: uuid
+   */
+  orderId: string;
+  /** car producer */
+  producer: string;
+  /** car model */
+  model: string;
+  /** customer name */
+  customerName: string;
+}
+
+export interface DeleteORDERParams {
+  /**
+   * order Id
+   * format: uuid
+   */
+  orderId: string;
+}
+
 @Injectable()
   export class OrderService {
     private baseUrl = 'http://example.com';
@@ -47,5 +81,55 @@ export interface OrderParams {
     });
 
     return this.http.post<object>(`${this.baseUrl}/api/order`, bodyParamsWithoutUndefined, {params: queryParams});
+  }
+
+  /**
+   * Patches order
+   * http://example.com/swagger-ui.html#!/Order/PatchOrder
+   */
+  patchOrder(params: PatchOrderParams): Observable<object> {
+    const pathParams = {
+      orderId: params.orderId,
+    };
+    const bodyParams = {
+      producer: params.producer,
+      model: params.model,
+    };
+    const bodyParamsWithoutUndefined: any = {};
+    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
+    });
+    return this.http.patch<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+  }
+
+  /**
+   * Put for order
+   * http://example.com/swagger-ui.html#!/Order/Put-Order
+   */
+  putOrder(params: PutOrderParams): Observable<object> {
+    const pathParams = {
+      orderId: params.orderId,
+    };
+    const bodyParams = {
+      producer: params.producer,
+      model: params.model,
+      customerName: params.customerName,
+    };
+    const bodyParamsWithoutUndefined: any = {};
+    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
+    });
+    return this.http.put<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+  }
+
+  /**
+   * Delete order
+   * http://example.com/swagger-ui.html#!/Order/deleteORDER
+   */
+  deleteORDER(params: DeleteORDERParams): Observable<object> {
+    const pathParams = {
+      orderId: params.orderId,
+    };
+    return this.http.delete<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`);
   }
 }

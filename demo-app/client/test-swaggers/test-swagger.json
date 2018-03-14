@@ -173,7 +173,7 @@
     "/api/order/{orderId}": {
       "patch": {
         "tags": [
-          "PatchOrder"
+          "Order"
         ],
         "summary": "Patches order",
         "operationId": "PatchOrder",
@@ -218,10 +218,10 @@
       },
       "put": {
         "tags": [
-          "PutOrder"
+          "Order"
         ],
         "summary": "Put for order",
-        "operationId": "PutOrder",
+        "operationId": "Put-Order",
         "consumes": [
           "application/json"
         ],
@@ -270,10 +270,10 @@
       },
       "delete": {
         "tags": [
-          "DeleteOrder"
+          "Order"
         ],
         "summary": "Delete order",
-        "operationId": "DeleteOrder",
+        "operationId": "deleteORDER",
         "consumes": [],
         "produces": [
           "application/json"

@@ -25,7 +25,8 @@ export function processController(methods: ControllerMethod[], name: string, con
   const simpleNames = _.map(methods, 'simpleName');
   methods.forEach(controller => {
     if (simpleNames.filter(n => n === controller.simpleName).length > 1) {
-      controller.simpleName = _.upperFirst(_.camelCase(controller.operationId));
+      const preserveCapitals = controller.operationId.replace(/([A-Z])/g, '-$1');
+      controller.simpleName = _.lowerFirst(_.camelCase(preserveCapitals));
     }
 
     controller.responseDef = processResponses(controller.responses, controller.simpleName);
