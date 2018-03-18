@@ -2,22 +2,25 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 @Injectable()
-export class LogoutService {
-  constructor(private http: HttpClient) {}
-
+  export class LogoutService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * Logout - empty post body
-   * http://example.com/swagger/swagger-ui.html#!/Logout/Logout
+   * http://example.com/swagger-ui.html#!/Logout/Logout
    */
   logout(): Observable<object> {
-    return this.http.post<object>(`/api/logout`, {});
+    return this.http.post<object>(`${this.baseUrl}/api/logout`, {});
   }
 }

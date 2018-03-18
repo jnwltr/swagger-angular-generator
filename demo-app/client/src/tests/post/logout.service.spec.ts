@@ -1,7 +1,7 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
-import {LogoutService} from '../../../generated/controllers/Logout';
+import { HttpClientModule, HttpRequest } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { async, inject, TestBed } from '@angular/core/testing';
+import { LogoutService } from '../../../generated/controllers/Logout';
 
 describe(`OrderService`, () => {
 
@@ -25,14 +25,14 @@ describe(`OrderService`, () => {
       inject([LogoutService, HttpTestingController],
         (service: LogoutService, backend: HttpTestingController) => {
 
-        service.logout().subscribe();
+          service.logout().subscribe();
 
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'POST'
-            && req.url === '/api/logout'
-            && JSON.stringify(req.body) === '{}';
-        });
-      }),
+          backend.expectOne((req: HttpRequest<any>) => {
+            return req.method === 'POST'
+              && req.url === 'http://example.com/api/logout'
+              && JSON.stringify(req.body) === '{}';
+          });
+        }),
     ),
   );
 

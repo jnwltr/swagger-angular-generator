@@ -1,15 +1,14 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import {AppComponent} from './app.component';
+import { AppComponent } from './app.component';
 
-import {DeleteOrderService} from '../../generated/controllers/DeleteOrder';
-import {OrderService} from '../../generated/controllers/Order';
-import {PatchOrderService} from '../../generated/controllers/PatchOrder';
-import {ProductDetailService} from '../../generated/controllers/ProductDetail';
-import {ProductsService} from '../../generated/controllers/Products';
-import {PutOrderService} from '../../generated/controllers/PutOrder';
-
+import { DeleteOrderService } from '../../generated/controllers/DeleteOrder';
+import { OrderService } from '../../generated/controllers/Order';
+import { PatchOrderService } from '../../generated/controllers/PatchOrder';
+import { ProductDetailService } from '../../generated/controllers/ProductDetail';
+import { ProductsService } from '../../generated/controllers/Products';
+import { PutOrderService } from '../../generated/controllers/PutOrder';
 @NgModule({
   declarations: [
     AppComponent,

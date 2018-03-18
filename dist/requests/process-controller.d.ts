@@ -5,4 +5,4 @@ import { ControllerMethod } from './requests.models';
  * @param controllers list of methods of the controller
  * @param name
  */
-export declare function processController(methods: ControllerMethod[], name: string, config: Config): void;
+export declare function processController(methods: ControllerMethod[], name: string, config: Config, baseUrl: string): void;

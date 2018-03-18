@@ -2,13 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import {BASE_URL} from '../model';
 import * as model from '../model';
 
 export interface OrderParams {
@@ -52,12 +53,14 @@ export interface DeleteORDERParams {
 }
 
 @Injectable()
-export class OrderService {
-  constructor(private http: HttpClient) {}
-
+  export class OrderService {
+    private baseUrl = 'http://example.com';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }
   /**
    * create order
-   * http://example.com/swagger/swagger-ui.html#!/Order/Order
+   * http://example.com/swagger-ui.html#!/Order/Order
    */
   order(params: OrderParams): Observable<object> {
     const bodyParams = params.orderDto;
@@ -77,12 +80,12 @@ export class OrderService {
       }
     });
 
-    return this.http.post<object>(`/api/order`, bodyParamsWithoutUndefined, {params: queryParams});
+    return this.http.post<object>(`${this.baseUrl}/api/order`, bodyParamsWithoutUndefined, {params: queryParams});
   }
 
   /**
    * Patches order
-   * http://example.com/swagger/swagger-ui.html#!/Order/PatchOrder
+   * http://example.com/swagger-ui.html#!/Order/PatchOrder
    */
   patchOrder(params: PatchOrderParams): Observable<object> {
     const pathParams = {
@@ -96,12 +99,12 @@ export class OrderService {
     Object.entries(bodyParams || {}).forEach(([key, value]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
-    return this.http.patch<object>(`/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+    return this.http.patch<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
   }
 
   /**
    * Put for order
-   * http://example.com/swagger/swagger-ui.html#!/Order/Put-Order
+   * http://example.com/swagger-ui.html#!/Order/Put-Order
    */
   putOrder(params: PutOrderParams): Observable<object> {
     const pathParams = {
@@ -116,17 +119,17 @@ export class OrderService {
     Object.entries(bodyParams || {}).forEach(([key, value]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
-    return this.http.put<object>(`/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+    return this.http.put<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
   }
 
   /**
    * Delete order
-   * http://example.com/swagger/swagger-ui.html#!/Order/deleteORDER
+   * http://example.com/swagger-ui.html#!/Order/deleteORDER
    */
   deleteORDER(params: DeleteORDERParams): Observable<object> {
     const pathParams = {
       orderId: params.orderId,
     };
-    return this.http.delete<object>(`/api/order/${pathParams.orderId}`);
+    return this.http.delete<object>(`${this.baseUrl}/api/order/${pathParams.orderId}`);
   }
 }

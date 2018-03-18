@@ -9,6 +9,7 @@ import {out, processHeader} from './utils';
 export interface Config {
   header: string;
   dest: string;
+  baseUrl: string;
 }
 
 /**
@@ -32,7 +33,11 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
   }
 
   const header = processHeader(schema);
-  const config: Config = {header, dest};
+  const config: Config = {
+    header,
+    dest,
+    baseUrl: `${(schema.schemes || [])[0] || 'http'}://${schema.host}${schema.basePath}`,
+  };
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
 

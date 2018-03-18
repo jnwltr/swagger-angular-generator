@@ -27,7 +27,11 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
         return;
     }
     const header = utils_1.processHeader(schema);
-    const config = { header, dest };
+    const config = {
+        header,
+        dest,
+        baseUrl: `${(schema.schemes || [])[0] || 'http'}://${schema.host}${schema.basePath}`,
+    };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
     process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);

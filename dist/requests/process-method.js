@@ -45,7 +45,8 @@ function processMethod(method) {
     methodDef += utils_1.indent(paramSeparation);
     if (paramSeparation.length)
         methodDef += '\n';
-    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
+    const body = `return this.http.${method.methodName}`
+        + `<${method.responseDef.type}>(\`\${this.baseUrl}${url}\`${params});`;
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;

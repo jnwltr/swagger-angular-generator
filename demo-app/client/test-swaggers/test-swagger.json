@@ -5,7 +5,7 @@
     "version": "v1"
   },
   "host": "example.com",
-  "basePath": "/swagger",
+  "basePath": "",
   "schemes": [
     "http"
   ],

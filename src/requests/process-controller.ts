@@ -17,7 +17,7 @@ import {ControllerMethod} from './requests.models';
  * @param controllers list of methods of the controller
  * @param name
  */
-export function processController(methods: ControllerMethod[], name: string, config: Config) {
+export function processController(methods: ControllerMethod[], name: string, config: Config, baseUrl: string) {
   const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
   let usesGlobalType = false;
 
@@ -44,8 +44,9 @@ export function processController(methods: ControllerMethod[], name: string, con
   }
   content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
 
-  content += 'import {Injectable} from \'@angular/core\';\n';
+  content += 'import {Inject, Injectable, Optional} from \'@angular/core\';\n';
   content += 'import {Observable} from \'rxjs/Observable\';\n\n';
+  content += `import {BASE_URL} from '../${conf.modelFile}';\n`;
 
   if (usesGlobalType) {
     content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
@@ -57,16 +58,19 @@ export function processController(methods: ControllerMethod[], name: string, con
     content += '\n';
   }
 
-  content += `@Injectable()\n`;
-  content += `export class ${name}Service {\n`;
-  content += indent('constructor(private http: HttpClient) {}');
-  content += '\n';
+  content += `@Injectable()
+  export class ${name}Service {
+    private baseUrl = '${baseUrl}';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }`;
+
   content += indent(_.map(processedMethods, 'methodDef').join('\n\n'));
   content += '\n}\n';
 
   if (conf.adHocExceptions.api[name]) {
     content = content.replace(conf.adHocExceptions.api[name][0],
-                              conf.adHocExceptions.api[name][1]);
+      conf.adHocExceptions.api[name][1]);
   }
 
   writeFile(filename, content, config.header);
