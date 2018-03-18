@@ -36,7 +36,7 @@ function processController(methods, name, config, baseUrl) {
         angularCommonHttp.push('HttpParams');
     }
     content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
-    content += 'import {Injectable, Inject} from \'@angular/core\';\n';
+    content += 'import {Inject, Injectable, Optional} from \'@angular/core\';\n';
     content += 'import {Observable} from \'rxjs/Observable\';\n\n';
     content += `import {BASE_URL} from '../${conf.modelFile}';\n`;
     if (usesGlobalType) {
@@ -47,11 +47,12 @@ function processController(methods, name, config, baseUrl) {
         content += interfaceDef;
         content += '\n';
     }
-    content += `@Injectable()\n`;
-    content += `export class ${name}Service {\n`;
-    content += utils_1.indent(`constructor(private http: HttpClient, ` +
-        `@Inject(BASE_URL) private baseUrl: string='${baseUrl}') {}`);
-    content += '\n';
+    content += `@Injectable()
+  export class ${name}Service {
+    private baseUrl = '${baseUrl}';
+    constructor(private http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl: string) {
+      if (baseUrl) this.baseUrl = baseUrl;
+    }`;
     content += utils_1.indent(_.map(processedMethods, 'methodDef').join('\n\n'));
     content += '\n}\n';
     if (conf.adHocExceptions.api[name]) {

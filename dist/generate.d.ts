@@ -1,6 +1,7 @@
 export interface Config {
     header: string;
     dest: string;
+    baseUrl: string;
 }
 /**
  * Generates API layer for the project based on src to dest
