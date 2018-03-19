@@ -12,7 +12,7 @@ const generate_http_effects_1 = require("./states/generate-http-effects");
 const generate_http_reducers_1 = require("./states/generate-http-reducers");
 function createForms(config, name, processedMethods, definitions) {
     const kebabName = _.kebabCase(name);
-    const formBaseDir = path.join(config.dest, conf.formDir);
+    const formBaseDir = path.join(config.dest, conf.storeDir);
     const formDirName = path.join(formBaseDir, `${kebabName}`);
     utils_1.createDir(formDirName);
     for (const processedMethod of processedMethods) {
@@ -38,11 +38,11 @@ function createForms(config, name, processedMethods, definitions) {
         const statesDirName = path.join(formSubDirName, 'states');
         utils_1.createDir(statesDirName);
         // actions.ts
-        generate_http_actions_1.GenerateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
+        generate_http_actions_1.generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
         // reducers.ts
-        generate_http_reducers_1.GenerateHttpReducers(config, actionClassNameBase, formSubDirName);
+        generate_http_reducers_1.generateHttpReducers(config, actionClassNameBase, formSubDirName, responseDef.type);
         // effects.ts
-        generate_http_effects_1.GenerateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
+        generate_http_effects_1.generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
         // form-shared-module.ts
         shared_module_1.createSharedModule(config);
         // module.ts

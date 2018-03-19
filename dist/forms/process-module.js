@@ -8,31 +8,28 @@ function createModule(config, name, actionClassNameBase, formSubDirName, simpleN
     content += `import {StoreModule} from '@ngrx/store';\n`;
     content += '\n';
     content += `import {${name}Service} from '../../../controllers/${name}';\n`;
-    content += `import {FormsSharedModule} from '../../forms-shared.module';\n`;
     content += `import {${actionClassNameBase}Effects} from './states/effects';\n`;
     content += `import {${actionClassNameBase}Reducer} from './states/reducers';\n`;
+    content += `import {selectorName} from './states/reducers';\n`;
     content += '\n';
-    if (!isGetMethod) {
-        content += `import {${className}Component} from './${simpleName}.component';\n`;
-        content += '\n';
-    }
     content += '@NgModule({\n';
     content += utils_1.indent('imports: [\n');
-    content += utils_1.indent('FormsSharedModule,\n', 2);
-    content += utils_1.indent(`StoreModule.forFeature('${actionClassNameBase}', ${actionClassNameBase}Reducer),\n`, 2);
+    // TODO! use or remove
+    // content += indent('FormsSharedModule,\n', 2);
+    content += utils_1.indent(`StoreModule.forFeature(selectorName, ${actionClassNameBase}Reducer),\n`, 2);
     content += utils_1.indent(`EffectsModule.forFeature([${actionClassNameBase}Effects]),\n`, 2);
     content += utils_1.indent('],\n');
-    content += utils_1.indent('declarations: [\n');
-    if (!isGetMethod) {
-        content += utils_1.indent(`${className}Component,\n`, 2);
-    }
-    content += utils_1.indent('],\n');
+    // TODO! use for forms or remove
+    // content += indent('declarations: [\n');
+    // if (!isGetMethod) {
+    //   content += indent(`${className}Component,\n`, 2);
+    // }
+    // content += indent('],\n');
     content += utils_1.indent('providers: [\n');
     content += utils_1.indent(`${name}Service,\n`, 2);
     content += utils_1.indent('],\n');
     content += '})\n';
-    content += `export class ${className}Module {\n`;
-    content += '}\n';
+    content += `export class ${className}Module {}\n`;
     const moduleFileName = path.join(formSubDirName, `${simpleName}.module.ts`);
     utils_1.writeFile(moduleFileName, content, config.header);
 }

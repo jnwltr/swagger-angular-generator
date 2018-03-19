@@ -76,7 +76,7 @@ function writeFile(file, content, header, fileType = 'ts', disableFlags = []) {
         content = `${disable}\n${header}\n${content}`;
     }
     fs.writeFileSync(file, content);
-    out(`${file} generated`, 'green');
+    out(`${file} generated`, TermColors.green);
 }
 exports.writeFile = writeFile;
 /**
@@ -115,10 +115,12 @@ function processHeader(schemaDef) {
     return makeComment(res);
 }
 exports.processHeader = processHeader;
-exports.termColors = {
-    green: '\x1b[32m',
-    red: '\x1b[31m',
-};
+var TermColors;
+(function (TermColors) {
+    TermColors["green"] = "\u001B[32m";
+    TermColors["red"] = "\u001B[31m";
+    TermColors["default"] = "\u001B[0m";
+})(TermColors = exports.TermColors || (exports.TermColors = {}));
 /**
  * Outputs text in optional color
  * @param text
@@ -128,7 +130,7 @@ function out(text, color) {
     if (Array.isArray(text))
         text = text.join('\n');
     if (color)
-        text = `${exports.termColors[color]}${text}`;
+        text = `${color}${text}${TermColors.default}`;
     process.stdout.write(`${text}\n`);
 }
 exports.out = out;

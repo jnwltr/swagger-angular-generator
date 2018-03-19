@@ -19,10 +19,10 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
     }
     catch (e) {
         if (e instanceof SyntaxError) {
-            utils_1.out(`${src} is either not a valid JSON scheme or contains non-printable characters`, 'red');
+            utils_1.out(`${src} is either not a valid JSON scheme or contains non-printable characters`, utils_1.TermColors.red);
         }
         else
-            utils_1.out(`JSON scheme file '${src}' does not exist`, 'red');
+            utils_1.out(`JSON scheme file '${src}' does not exist`, utils_1.TermColors.red);
         utils_1.out(`${e}`);
         return;
     }

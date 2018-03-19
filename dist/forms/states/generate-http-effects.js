@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const utils_1 = require("../../utils");
-function GenerateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, paramGroups) {
+function generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, paramGroups) {
     let content = '';
     content += getEffectsImports(name);
     content += getEffectsStartDefinition(actionClassNameBase);
@@ -12,10 +12,12 @@ function GenerateHttpEffects(config, name, simpleName, actionClassNameBase, form
     const effectsFileName = path.join(formSubDirName, `states`, `effects.ts`);
     utils_1.writeFile(effectsFileName, content, config.header);
 }
-exports.GenerateHttpEffects = GenerateHttpEffects;
+exports.generateHttpEffects = generateHttpEffects;
 function getEffectsImports(name) {
-    let res = `import {Injectable} from '@angular/core';\n`;
+    let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
+    res += `import {Injectable} from '@angular/core';\n`;
     res += `import {Actions, Effect} from '@ngrx/effects';\n`;
+    res += '\n';
     res += `import {of} from 'rxjs/observable/of';\n`;
     res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
     res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
@@ -40,10 +42,10 @@ function getEffectDefinition(actionClassNameBase, name, simpleName, paramGroups)
     let res = utils_1.indent(`@Effect()\n`);
     res += utils_1.indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
     res += utils_1.indent(`switchMap((action: actions.Start) => ` +
-        `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition}).pipe(\n`, 2);
-    res += utils_1.indent(`map(result => new actions.Success(result)),\n`, 3);
-    res += utils_1.indent(`catchError((error: Error) => of(new actions.Error(error.message))),\n`, 3);
-    res += utils_1.indent(`)));\n`);
+        `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})),\n` +
+        `map(result => new actions.Success(result)),\n` +
+        `catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),\n`, 2);
+    res += utils_1.indent(`);\n`);
     res += '\n';
     return res;
 }

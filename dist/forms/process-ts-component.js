@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
-const path = require("path");
+const nodePath = require("path");
+const common_1 = require("../common");
 const utils_1 = require("../utils");
 function createComponentTs(config, name, params, definitions, simpleName, formSubDirName, className) {
     let content = '';
@@ -13,13 +14,13 @@ function createComponentTs(config, name, params, definitions, simpleName, formSu
     const fieldDefinition = getFieldDefinition(params, definitionsKeys, definitions);
     // TODO! test
     const definitionsMap = _.groupBy(definitions, 'originalName');
-    walkParamOrProp(params, definitionsMap);
+    walkParamOrProp(params, undefined, definitionsMap);
     content += fieldDefinition.content + '\n';
     content += getConstructor(name);
     content += getNgOnInit(fieldDefinition.params, name);
     content += getFormSubmitFunction(name, simpleName, params);
     content += '}\n';
-    const componentHTMLFileName = path.join(formSubDirName, `${simpleName}.component.ts`);
+    const componentHTMLFileName = nodePath.join(formSubDirName, `${simpleName}.component.ts`);
     utils_1.writeFile(componentHTMLFileName, content, config.header);
 }
 exports.createComponentTs = createComponentTs;
@@ -38,39 +39,52 @@ function getComponent(simpleName) {
     res += '\n';
     return res;
 }
-function walkParamOrProp(definition, definitions) {
+function walkParamOrProp(definition, path = [], definitions) {
     // parameters
     if (Array.isArray(definition)) {
         definition.forEach(param => {
-            const type = param.type;
+            const name = param.name;
+            const newPath = [...path, name];
             const ref = _.get(param, 'schema.$ref');
-            const child = makeField(type, ref, definitions);
-            if (child)
-                walkParamOrProp(child, definitions);
+            const child = makeField(param, ref, name, newPath, param.required, definitions);
+            if (child.definition)
+                walkParamOrProp(child.definition, newPath, definitions);
         });
         // object definition
     }
     else {
         Object.entries(definition.def.properties).forEach(([paramName, param]) => {
-            const type = param.type;
+            const name = paramName;
+            const newPath = [...path, name];
             const ref = param.$ref;
-            const child = makeField(type, ref, definitions);
-            if (child)
-                walkParamOrProp(child, definitions);
+            const required = definition.def.required && definition.def.required.includes(name);
+            const child = makeField(param, ref, name, newPath, required, definitions);
+            if (child.definition)
+                walkParamOrProp(child.definition, newPath, definitions);
         });
     }
 }
-function makeField(type, ref, definitions) {
-    console.log(`type: ${type}, $ref: ${ref}`);
+function makeField(param, ref, name, path, required, definitions) {
+    let definition;
+    const type = param.type;
+    utils_1.out(`\nname: ${name}, path: ${path.join('.')}, type: ${type}, $ref: ${ref}`);
+    utils_1.out(JSON.stringify(common_1.translateType(type || ref)), utils_1.TermColors.red);
     if (type) {
-        console.log(`primitive: ${type}`);
-        return;
+        utils_1.out(`inline: ${type}`);
+        // if (type in nativeTypes) {
+        //   const typedType = type as NativeNames;
+        //   const nativeType = nativeTypes[typedType];
+        // }
     }
     else {
         const refType = ref.replace(/^#\/definitions\//, '');
-        console.log(`composite: ${definitions[refType][0].name}`);
-        return definitions[refType][0];
+        utils_1.out(`referenced: ${definitions[refType][0].name}`);
+        definition = definitions[refType][0];
     }
+    const validators = getValidators(param);
+    if (required)
+        validators.push('Validators.required');
+    return { definition, validators };
 }
 function getFieldDefinition(paramGroups, definitionKeys, definitions) {
     const paramsList = [];

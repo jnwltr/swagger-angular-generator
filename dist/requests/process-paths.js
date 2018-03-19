@@ -16,7 +16,7 @@ const process_controller_1 = require("./process-controller");
  * @param swaggerPath swagger base url
  */
 function processPaths(pathsWithParameters, swaggerPath, config, definitions) {
-    utils_1.emptyDir(path.join(config.dest, conf.formDir));
+    utils_1.emptyDir(path.join(config.dest, conf.storeDir));
     utils_1.emptyDir(path.join(config.dest, conf.apiDir));
     const paths = preProcessPaths(pathsWithParameters);
     const controllers = _.flatMap(paths, (methods, url) => (_.map(methods, (method, methodName) => ({

@@ -24,6 +24,6 @@ export function createSharedModule(config: Config) {
   content += '})\n';
   content += `export class FormsSharedModule {}\n`;
 
-  const moduleFileName = path.join(config.dest, conf.formDir, `forms-shared.module.ts`);
+  const moduleFileName = path.join(config.dest, conf.storeDir, `forms-shared.module.ts`);
   writeFile(moduleFileName, content, config.header);
 }

@@ -3,7 +3,7 @@ import {Config} from '../../generate';
 import {Parameter} from '../../types';
 import {indent, writeFile} from '../../utils';
 
-export function GenerateHttpEffects(config: Config, name: string, simpleName: string, actionClassNameBase: string,
+export function generateHttpEffects(config: Config, name: string, simpleName: string, actionClassNameBase: string,
                                     formSubDirName: string, paramGroups: Parameter[]) {
   let content = '';
   content += getEffectsImports(name);
@@ -17,8 +17,10 @@ export function GenerateHttpEffects(config: Config, name: string, simpleName: st
 }
 
 function getEffectsImports(name: string) {
-  let res = `import {Injectable} from '@angular/core';\n`;
+  let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
+  res += `import {Injectable} from '@angular/core';\n`;
   res += `import {Actions, Effect} from '@ngrx/effects';\n`;
+  res += '\n';
   res += `import {of} from 'rxjs/observable/of';\n`;
   res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
   res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
@@ -51,11 +53,11 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
   res += indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
   res += indent(
     `switchMap((action: actions.Start) => ` +
-    `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition}).pipe(\n`,
+    `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})),\n` +
+    `map(result => new actions.Success(result)),\n` +
+    `catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),\n`,
     2);
-  res += indent(`map(result => new actions.Success(result)),\n`, 3);
-  res += indent(`catchError((error: Error) => of(new actions.Error(error.message))),\n`, 3);
-  res += indent(`)));\n`);
+  res += indent(`);\n`);
   res += '\n';
 
   return res;

@@ -5,7 +5,7 @@ import {ResponseDef} from '../../requests/requests.models';
 import {Parameter} from '../../types';
 import {indent, writeFile} from '../../utils';
 
-export function GenerateHttpActions(config: Config, name: string, responseDef: ResponseDef,
+export function generateHttpActions(config: Config, name: string, responseDef: ResponseDef,
                                     actionClassNameBase: string, simpleName: string,
                                     formSubDirName: string, paramGroups: Parameter[]) {
   let content = '';

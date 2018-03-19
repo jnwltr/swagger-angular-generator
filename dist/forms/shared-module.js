@@ -20,7 +20,7 @@ function createSharedModule(config) {
     content += utils_1.indent('],\n');
     content += '})\n';
     content += `export class FormsSharedModule {}\n`;
-    const moduleFileName = path.join(config.dest, conf.formDir, `forms-shared.module.ts`);
+    const moduleFileName = path.join(config.dest, conf.storeDir, `forms-shared.module.ts`);
     utils_1.writeFile(moduleFileName, content, config.header);
 }
 exports.createSharedModule = createSharedModule;

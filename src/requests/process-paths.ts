@@ -21,7 +21,7 @@ import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
  */
 export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config,
                              definitions: ProcessedDefinition[]) {
-  emptyDir(path.join(config.dest, conf.formDir));
+  emptyDir(path.join(config.dest, conf.storeDir));
   emptyDir(path.join(config.dest, conf.apiDir));
 
   const paths = preProcessPaths(pathsWithParameters);

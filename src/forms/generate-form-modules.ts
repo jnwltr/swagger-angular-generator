@@ -10,14 +10,14 @@ import {createDir} from '../utils';
 import {createModule} from './process-module';
 import {createComponentTs} from './process-ts-component';
 import {createSharedModule} from './shared-module';
-import {GenerateHttpActions, getActionClassNameBase, getClassName} from './states/generate-http-actions';
-import {GenerateHttpEffects} from './states/generate-http-effects';
-import {GenerateHttpReducers} from './states/generate-http-reducers';
+import {generateHttpActions, getActionClassNameBase, getClassName} from './states/generate-http-actions';
+import {generateHttpEffects} from './states/generate-http-effects';
+import {generateHttpReducers} from './states/generate-http-reducers';
 
 export function createForms(config: Config, name: string, processedMethods: MethodOutput[],
                             definitions: ProcessedDefinition[]) {
   const kebabName = _.kebabCase(name);
-  const formBaseDir = path.join(config.dest, conf.formDir);
+  const formBaseDir = path.join(config.dest, conf.storeDir);
   const formDirName = path.join(formBaseDir, `${kebabName}`);
   createDir(formDirName);
 
@@ -50,11 +50,11 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     createDir(statesDirName);
 
     // actions.ts
-    GenerateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
+    generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
     // reducers.ts
-    GenerateHttpReducers(config, actionClassNameBase, formSubDirName);
+    generateHttpReducers(config, actionClassNameBase, formSubDirName, responseDef.type);
     // effects.ts
-    GenerateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
+    generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
     // form-shared-module.ts
     createSharedModule(config);
     // module.ts

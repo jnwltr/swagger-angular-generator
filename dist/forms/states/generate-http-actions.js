@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const path = require("path");
 const utils_1 = require("../../utils");
-function GenerateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, paramGroups) {
+function generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, paramGroups) {
     let content = '';
     content += getActionImports(name, simpleName, paramGroups, responseDef.type.startsWith('model.'));
     content += getActionTypes(simpleName);
@@ -14,7 +14,7 @@ function GenerateHttpActions(config, name, responseDef, actionClassNameBase, sim
     const actionsFileName = path.join(formSubDirName, `states`, `actions.ts`);
     utils_1.writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
 }
-exports.GenerateHttpActions = GenerateHttpActions;
+exports.generateHttpActions = generateHttpActions;
 function getActionImports(name, simpleName, paramGroups, importModels) {
     let res = `import {Action} from '@ngrx/store';\n`;
     if (paramGroups.length) {

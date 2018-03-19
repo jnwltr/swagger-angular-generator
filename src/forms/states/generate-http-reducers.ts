@@ -3,11 +3,12 @@ import * as path from 'path';
 import {Config} from '../../generate';
 import {indent, writeFile} from '../../utils';
 
-export function GenerateHttpReducers(config: Config, actionClassNameBase: string, formSubDirName: string) {
+export function generateHttpReducers(config: Config, actionClassNameBase: string,
+                                     formSubDirName: string, responseType: string) {
   // TODO implement initial state logic
   let content = '';
   content += getReducerImports();
-  content += getStateInteface(actionClassNameBase);
+  content += getStateInteface(actionClassNameBase, responseType);
   content += getInitialState(actionClassNameBase);
   content += getFeatureSelector(actionClassNameBase);
   content += getReducerDefinition(actionClassNameBase);
@@ -17,16 +18,16 @@ export function GenerateHttpReducers(config: Config, actionClassNameBase: string
 }
 
 function getReducerImports() {
-  let res = `import {createFeatureSelector} from '@ngrx/store';\n`;
+  let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
+  res += `import * as model from '../../../../model';\n`;
   res += `import * as actions from './actions';\n\n`;
 
   return res;
 }
 
-function getStateInteface(actionClassNameBase: string) {
+function getStateInteface(actionClassNameBase: string, type: string) {
   let res = `export interface ${actionClassNameBase}State {\n`;
-  // TODO! check if store selection returns typed object
-  res += indent(`data: any;\n`);
+  res += indent(`data: ${type};\n`);
   res += indent(`loading: boolean;\n`);
   res += indent(`error: string;\n`);
   res += `}\n\n`;
@@ -36,17 +37,20 @@ function getStateInteface(actionClassNameBase: string) {
 
 function getInitialState(actionClassNameBase: string) {
   let res = `export const initial${actionClassNameBase}State: ${actionClassNameBase}State = {\n`;
-  res += indent(`data: {},\n`);
+  res += indent(`data: null,\n`);
   res += indent(`loading: false,\n`);
-  res += indent(`error: '',\n`);
+  res += indent(`error: null,\n`);
   res += `};\n\n`;
 
   return res;
 }
 
 function getFeatureSelector(actionClassNameBase: string) {
-  return `export const get${actionClassNameBase}StateSelector = ` +
-         `createFeatureSelector<${actionClassNameBase}State>('${actionClassNameBase}');\n\n`;
+  let res = `export const selectorName = '${actionClassNameBase}';\n`;
+  res += `export const get${actionClassNameBase}StateSelector = ` +
+         `createFeatureSelector<${actionClassNameBase}State>(selectorName);\n\n`;
+
+  return res;
 }
 
 function getReducerDefinition(actionClassNameBase: string) {

@@ -2,27 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const utils_1 = require("../../utils");
-function GenerateHttpReducers(config, actionClassNameBase, formSubDirName) {
+function generateHttpReducers(config, actionClassNameBase, formSubDirName, responseType) {
     // TODO implement initial state logic
     let content = '';
     content += getReducerImports();
-    content += getStateInteface(actionClassNameBase);
+    content += getStateInteface(actionClassNameBase, responseType);
     content += getInitialState(actionClassNameBase);
     content += getFeatureSelector(actionClassNameBase);
     content += getReducerDefinition(actionClassNameBase);
     const reducersFileName = path.join(formSubDirName, `states`, `reducers.ts`);
     utils_1.writeFile(reducersFileName, content, config.header);
 }
-exports.GenerateHttpReducers = GenerateHttpReducers;
+exports.generateHttpReducers = generateHttpReducers;
 function getReducerImports() {
-    let res = `import {createFeatureSelector} from '@ngrx/store';\n`;
+    let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
+    res += `import * as model from '../../../../model';\n`;
     res += `import * as actions from './actions';\n\n`;
     return res;
 }
-function getStateInteface(actionClassNameBase) {
+function getStateInteface(actionClassNameBase, type) {
     let res = `export interface ${actionClassNameBase}State {\n`;
-    // TODO! check if store selection returns typed object
-    res += utils_1.indent(`data: any;\n`);
+    res += utils_1.indent(`data: ${type};\n`);
     res += utils_1.indent(`loading: boolean;\n`);
     res += utils_1.indent(`error: string;\n`);
     res += `}\n\n`;
@@ -30,15 +30,17 @@ function getStateInteface(actionClassNameBase) {
 }
 function getInitialState(actionClassNameBase) {
     let res = `export const initial${actionClassNameBase}State: ${actionClassNameBase}State = {\n`;
-    res += utils_1.indent(`data: {},\n`);
+    res += utils_1.indent(`data: null,\n`);
     res += utils_1.indent(`loading: false,\n`);
-    res += utils_1.indent(`error: '',\n`);
+    res += utils_1.indent(`error: null,\n`);
     res += `};\n\n`;
     return res;
 }
 function getFeatureSelector(actionClassNameBase) {
-    return `export const get${actionClassNameBase}StateSelector = ` +
-        `createFeatureSelector<${actionClassNameBase}State>('${actionClassNameBase}');\n\n`;
+    let res = `export const selectorName = '${actionClassNameBase}';\n`;
+    res += `export const get${actionClassNameBase}StateSelector = ` +
+        `createFeatureSelector<${actionClassNameBase}State>(selectorName);\n\n`;
+    return res;
 }
 function getReducerDefinition(actionClassNameBase) {
     let res = `export function ${actionClassNameBase}Reducer(\n`;
