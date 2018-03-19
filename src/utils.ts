@@ -75,7 +75,7 @@ export function writeFile(file: string, content: string, header: string, fileTyp
     content = `${disable}\n${header}\n${content}`;
   }
   fs.writeFileSync(file, content);
-  out(`${file} generated`, 'green');
+  out(`${file} generated`, TermColors.green);
 }
 
 /**
@@ -116,22 +116,20 @@ export function processHeader(schemaDef: any): string {
   return makeComment(res);
 }
 
-export type Color = 'green' | 'red';
-export type TermColors = {[key in Color]: string};
-
-export const termColors: TermColors = {
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-};
+export enum TermColors {
+  green = '\x1b[32m',
+  red = '\x1b[31m',
+  default = '\x1b[0m',
+}
 
 /**
  * Outputs text in optional color
  * @param text
  * @param color
  */
-export function out(text: string | string[], color?: Color) {
+export function out(text: string | string[], color?: TermColors) {
   if (Array.isArray(text)) text = text.join('\n');
-  if (color) text = `${termColors[color]}${text}`;
+  if (color) text = `${color}${text}${TermColors.default}`;
 
   process.stdout.write(`${text}\n`);
 }

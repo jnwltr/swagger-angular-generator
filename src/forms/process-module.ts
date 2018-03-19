@@ -10,12 +10,13 @@ export function createModule(config: Config, name: string, actionClassNameBase: 
   content += '\n';
   content += `import {${name}Service} from '../../../controllers/${name}';\n`;
   content += `import {FormsSharedModule} from '../../forms-shared.module';\n`;
-  if (!isGetMethod) {
-    content += `import {${className}Component} from './${simpleName}.component';\n`;
-  }
   content += `import {${actionClassNameBase}Effects} from './states/effects';\n`;
   content += `import {${actionClassNameBase}Reducer} from './states/reducers';\n`;
   content += '\n';
+  if (!isGetMethod) {
+    content += `import {${className}Component} from './${simpleName}.component';\n`;
+    content += '\n';
+  }
   content += '@NgModule({\n';
   content += indent('imports: [\n');
   content += indent('FormsSharedModule,\n', 2);

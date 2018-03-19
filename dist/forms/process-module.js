@@ -9,12 +9,13 @@ function createModule(config, name, actionClassNameBase, formSubDirName, simpleN
     content += '\n';
     content += `import {${name}Service} from '../../../controllers/${name}';\n`;
     content += `import {FormsSharedModule} from '../../forms-shared.module';\n`;
-    if (!isGetMethod) {
-        content += `import {${className}Component} from './${simpleName}.component';\n`;
-    }
     content += `import {${actionClassNameBase}Effects} from './states/effects';\n`;
     content += `import {${actionClassNameBase}Reducer} from './states/reducers';\n`;
     content += '\n';
+    if (!isGetMethod) {
+        content += `import {${className}Component} from './${simpleName}.component';\n`;
+        content += '\n';
+    }
     content += '@NgModule({\n';
     content += utils_1.indent('imports: [\n');
     content += utils_1.indent('FormsSharedModule,\n', 2);

@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import * as conf from './conf';
 import {NativeNames, Schema} from './types';
-import {indent, makeComment} from './utils';
+import {indent, makeComment, out} from './utils';
 
 export interface PropertyOutput {
   property: string;

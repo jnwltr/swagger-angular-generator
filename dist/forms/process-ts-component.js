@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const path = require("path");
-const common_1 = require("../common");
-const conf_1 = require("../conf");
 const utils_1 = require("../utils");
 function createComponentTs(config, name, params, definitions, simpleName, formSubDirName, className) {
     let content = '';
@@ -11,7 +9,8 @@ function createComponentTs(config, name, params, definitions, simpleName, formSu
     content += getComponent(simpleName);
     content += `export class ${className}Component implements OnInit {\n`;
     content += utils_1.indent(`${name}Form: FormGroup;\n`);
-    const fieldDefinition = getFieldDefinition(params, definitions);
+    const definitionsKeys = definitions.map(s => s.name);
+    const fieldDefinition = getFieldDefinition(params, definitionsKeys, definitions);
     // TODO! test
     const definitionsMap = _.groupBy(definitions, 'originalName');
     walkParamOrProp(params, definitionsMap);
@@ -73,27 +72,24 @@ function makeField(type, ref, definitions) {
         return definitions[refType][0];
     }
 }
-function getFieldDefinition(params, definitions) {
+function getFieldDefinition(paramGroups, definitionKeys, definitions) {
     const paramsList = [];
     let content = '';
     // checkbox, select or input
-    for (const param of params) {
-        const ref = _.get(param, 'schema.$ref');
-        if (ref) {
-            const objectDef = definitions.find(d => {
-                return `${conf_1.modelFile}.${d.name}` === common_1.translateType(ref).type;
-            });
-            const properties = objectDef.def.properties;
-            Object.entries(properties).forEach(([propertyName, property]) => {
-                const validators = getValidators(property);
-                if (objectDef.def.required && objectDef.def.required.includes(propertyName)) {
+    for (const param of paramGroups) {
+        if (definitionKeys.includes(param.name.toLowerCase())) {
+            const objDef = definitions.find(obj => obj.name.toLowerCase() === param.name.toLowerCase());
+            const properties = objDef.def.properties;
+            Object.entries(properties).forEach(([key, value]) => {
+                const validators = getValidators(value);
+                if (objDef.def.required && objDef.def.required.includes(key)) {
                     validators.push('Validators.required');
                 }
-                content += utils_1.indent(`${propertyName} = new FormControl('', [${validators.join(', ')}]);\n`);
-                paramsList.push(propertyName);
+                content += utils_1.indent(`${key} = new FormControl('', [${validators.join(', ')}]);\n`);
+                paramsList.push(key);
             });
         }
-        else if (param.type) {
+        else {
             const validators = getValidators(param);
             if (param.required)
                 validators.push('Validators.required');

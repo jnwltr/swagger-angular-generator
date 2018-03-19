@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
-import * as path from 'path';
-import {translateType} from '../common';
-import {modelFile} from '../conf';
+import * as nodePath from 'path';
+import {processProperty, translateType} from '../common';
+import {nativeTypes} from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
-import {Parameter, Schema} from '../types';
-import {indent, writeFile} from '../utils';
+import {NativeNames, Parameter, Schema} from '../types';
+import {indent, out, TermColors, writeFile} from '../utils';
 
-export interface FieldDefinitionObj {
+export interface FieldDefinition {
   content: string;
   params: string[];
 }
@@ -20,11 +20,13 @@ export function createComponentTs(config: Config, name: string, params: Paramete
   content += getComponent(simpleName);
   content += `export class ${className}Component implements OnInit {\n`;
   content += indent(`${name}Form: FormGroup;\n`);
-  const fieldDefinition: FieldDefinitionObj = getFieldDefinition(params, definitions);
+
+  const definitionsKeys: string[] = definitions.map(s => s.name);
+  const fieldDefinition: FieldDefinition = getFieldDefinition(params, definitionsKeys, definitions);
 
   // TODO! test
   const definitionsMap = _.groupBy(definitions, 'originalName');
-  walkParamOrProp(params, definitionsMap);
+  walkParamOrProp(params, undefined, definitionsMap);
 
   content += fieldDefinition.content + '\n';
   content += getConstructor(name);
@@ -32,7 +34,7 @@ export function createComponentTs(config: Config, name: string, params: Paramete
   content += getFormSubmitFunction(name, simpleName, params);
   content += '}\n';
 
-  const componentHTMLFileName = path.join(formSubDirName, `${simpleName}.component.ts`);
+  const componentHTMLFileName = nodePath.join(formSubDirName, `${simpleName}.component.ts`);
   writeFile(componentHTMLFileName, content, config.header);
 }
 
@@ -55,63 +57,81 @@ function getComponent(simpleName: string) {
   return res;
 }
 
-function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
+function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: string[] = [],
                          definitions: _.Dictionary<ProcessedDefinition[]>): void {
   // parameters
   if (Array.isArray(definition)) {
     definition.forEach(param => {
-      const type = param.type;
+      const name = param.name;
+      const newPath = [...path, name];
       const ref = _.get(param, 'schema.$ref');
-      const child = makeField(type, ref, definitions);
-      if (child) walkParamOrProp(child, definitions);
+      const child = makeField(param, ref, name, newPath, param.required, definitions);
+      if (child.definition) walkParamOrProp(child.definition, newPath, definitions);
     });
   // object definition
   } else {
     Object.entries(definition.def.properties).forEach(([paramName, param]) => {
-      const type = param.type;
+      const name = paramName;
+      const newPath = [...path, name];
       const ref = param.$ref;
-      const child = makeField(type, ref, definitions);
-      if (child) walkParamOrProp(child, definitions);
+      const required = definition.def.required && definition.def.required.includes(name);
+      const child = makeField(param, ref, name, newPath, required, definitions);
+      if (child.definition) walkParamOrProp(child.definition, newPath, definitions);
     });
   }
 }
 
-function makeField(type: string, ref: string,
+function makeField(param: Parameter | Schema, ref: string,
+                   name: string, path: string[], required: boolean,
                    definitions: _.Dictionary<ProcessedDefinition[]>,
-                  ): ProcessedDefinition | void {
-  console.log(`type: ${type}, $ref: ${ref}`);
+                  ): {definition: ProcessedDefinition, validators: string[]} {
+
+  let definition: ProcessedDefinition;
+  const type = param.type;
+
+  out(`\nname: ${name}, path: ${path.join('.')}, type: ${type}, $ref: ${ref}`);
+  out(JSON.stringify(translateType(type || ref)), TermColors.red);
+
   if (type) {
-    console.log(`primitive: ${type}`);
-    return;
+    out(`inline: ${type}`);
+    // if (type in nativeTypes) {
+    //   const typedType = type as NativeNames;
+    //   const nativeType = nativeTypes[typedType];
+    // }
   } else {
     const refType = ref.replace(/^#\/definitions\//, '');
-    console.log(`composite: ${definitions[refType][0].name}`);
-    return definitions[refType][0];
+    out(`referenced: ${definitions[refType][0].name}`);
+    definition = definitions[refType][0];
   }
+
+  const validators = getValidators(param);
+  if (required) validators.push('Validators.required');
+
+  return {definition, validators};
 }
 
-function getFieldDefinition(params: Parameter[], definitions: ProcessedDefinition[]): FieldDefinitionObj {
+function getFieldDefinition(paramGroups: Parameter[], definitionKeys: string[],
+                            definitions: ProcessedDefinition[]): FieldDefinition {
   const paramsList: string[] = [];
   let content = '';
 
   // checkbox, select or input
-  for (const param of params) {
-    const ref = _.get(param, 'schema.$ref');
-    if (ref) {
-      const objectDef = definitions.find(d => {
-        return `${modelFile}.${d.name}` === translateType(ref).type;
-      });
-      const properties = objectDef.def.properties;
+  for (const param of paramGroups) {
+    if (definitionKeys.includes(param.name.toLowerCase())) {
 
-      Object.entries(properties).forEach(([propertyName, property]) => {
-        const validators = getValidators(property);
-        if (objectDef.def.required && objectDef.def.required.includes(propertyName)) {
+      const objDef: ProcessedDefinition = definitions.find(
+          obj => obj.name.toLowerCase() === param.name.toLowerCase());
+      const properties = objDef.def.properties;
+
+      Object.entries(properties).forEach(([key, value]) => {
+        const validators = getValidators(value);
+        if (objDef.def.required && objDef.def.required.includes(key)) {
           validators.push('Validators.required');
         }
-        content += indent(`${propertyName} = new FormControl('', [${validators.join(', ')}]);\n`);
-        paramsList.push(propertyName);
+        content += indent(`${key} = new FormControl('', [${validators.join(', ')}]);\n`);
+        paramsList.push(key);
       });
-    } else if (param.type) {
+    } else {
       const validators = getValidators(param);
       if (param.required) validators.push('Validators.required');
       content += indent(`${param.name} = new FormControl('', [${validators.join(', ')}]);\n`);
