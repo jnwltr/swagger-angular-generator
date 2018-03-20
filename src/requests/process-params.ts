@@ -5,7 +5,7 @@
 import * as _ from 'lodash';
 
 import {processProperty} from '../common';
-import {Parameter} from '../types';
+import {Parameter, Schema} from '../types';
 import {indent} from '../utils';
 
 export interface ProcessParamsOutput {
@@ -23,29 +23,8 @@ export function processParams(def: Parameter[], paramsType: string): ProcessPara
   let paramDef = '';
   paramDef += `export interface ${paramsType} {\n`;
 
-  const params = _.map(def, p => processProperty({
-      // TODO(janwalter) might be unnecessary for v3.0+ of OpenAPI spec
-      // https://swagger.io/specification/#parameterObject
-      ...{
-        allowEmptyValue: p.allowEmptyValue,
-        default: p.default,
-        description: p.description,
-        enum: p.enum,
-        format: p.format,
-        items: p.items,
-        maximum: p.maximum,
-        maxLength: p.maxLength,
-        minimum: p.minimum,
-        minLength: p.minLength,
-        pattern: p.pattern,
-        type: p.type,
-        uniqueItems: p.uniqueItems,
-      },
-      ...p.schema, // move level up so inside $ref is present if defined
-    },
-    p.name, paramsType, p.required),
-  );
-
+  const params = _.map(def, p => processProperty(
+    parameterToSchema(p), p.name, paramsType, p.required));
   const isInterfaceEmpty = !params.length;
   const usesGlobalType = params.some(p => !p.native);
 
@@ -61,4 +40,28 @@ export function processParams(def: Parameter[], paramsType: string): ProcessPara
   }
 
   return {paramDef, usesGlobalType, isInterfaceEmpty};
+}
+
+// TODO! use required array to set the variable
+// TODO might be unnecessary for v3.0+ of OpenAPI spec
+// https://swagger.io/specification/#parameterObject
+export function parameterToSchema(param: Parameter): Schema {
+  return {
+    ...{
+      allowEmptyValue: param.allowEmptyValue,
+      default: param.default,
+      description: param.description,
+      enum: param.enum,
+      format: param.format,
+      items: param.items,
+      maximum: param.maximum,
+      maxLength: param.maxLength,
+      minimum: param.minimum,
+      minLength: param.minLength,
+      pattern: param.pattern,
+      type: param.type,
+      uniqueItems: param.uniqueItems,
+    },
+    ...param.schema, // move level up
+  };
 }

@@ -4,8 +4,9 @@ const _ = require("lodash");
 const path = require("path");
 const conf = require("../conf");
 const utils_1 = require("../utils");
+// TODO! rename
+const generate_form_service_1 = require("./generate-form-service");
 const process_module_1 = require("./process-module");
-const process_ts_component_1 = require("./process-ts-component");
 const shared_module_1 = require("./shared-module");
 const generate_http_actions_1 = require("./states/generate-http-actions");
 const generate_http_effects_1 = require("./states/generate-http-effects");
@@ -19,8 +20,6 @@ function createForms(config, name, processedMethods, definitions) {
         const paramGroups = processedMethod.paramGroups;
         const responseDef = processedMethod.responseDef;
         const simpleName = processedMethod.simpleName;
-        const methodName = processedMethod.methodName;
-        let isGetMethod = true;
         const formSubDirName = path.join(formBaseDir, `${kebabName}`, simpleName);
         utils_1.createDir(formSubDirName);
         let formParams = [];
@@ -29,13 +28,13 @@ function createForms(config, name, processedMethods, definitions) {
         });
         const actionClassNameBase = generate_http_actions_1.getActionClassNameBase(simpleName);
         const className = generate_http_actions_1.getClassName(simpleName);
-        if (['put', 'patch', 'post'].indexOf(methodName) > -1) {
-            isGetMethod = false;
+        const generateForms = formParams.length >= 1;
+        if (generateForms) {
             // component.ts
-            process_ts_component_1.createComponentTs(config, name, formParams, definitions, simpleName, formSubDirName, className);
+            generate_form_service_1.generateFormService(config, name, formParams, definitions, simpleName, formSubDirName, className);
         }
         // states
-        const statesDirName = path.join(formSubDirName, 'states');
+        const statesDirName = path.join(formSubDirName, conf.stateDir);
         utils_1.createDir(statesDirName);
         // actions.ts
         generate_http_actions_1.generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
@@ -46,7 +45,7 @@ function createForms(config, name, processedMethods, definitions) {
         // form-shared-module.ts
         shared_module_1.createSharedModule(config);
         // module.ts
-        process_module_1.createModule(config, name, actionClassNameBase, formSubDirName, simpleName, className, isGetMethod);
+        process_module_1.createModule(config, name, actionClassNameBase, formSubDirName, simpleName, className, generateForms);
     }
 }
 exports.createForms = createForms;

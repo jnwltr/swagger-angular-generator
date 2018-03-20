@@ -1,25 +1,25 @@
 import * as path from 'path';
 
+import {stateDir} from '../../conf';
 import {Config} from '../../generate';
 import {indent, writeFile} from '../../utils';
 
 export function generateHttpReducers(config: Config, actionClassNameBase: string,
                                      formSubDirName: string, responseType: string) {
-  // TODO implement initial state logic
   let content = '';
-  content += getReducerImports();
+  content += getReducerImports(responseType.startsWith('model.'));
   content += getStateInteface(actionClassNameBase, responseType);
   content += getInitialState(actionClassNameBase);
   content += getFeatureSelector(actionClassNameBase);
   content += getReducerDefinition(actionClassNameBase);
 
-  const reducersFileName = path.join(formSubDirName, `states`, `reducers.ts`);
+  const reducersFileName = path.join(formSubDirName, stateDir, `reducers.ts`);
   writeFile(reducersFileName, content, config.header);
 }
 
-function getReducerImports() {
+function getReducerImports(usesModels: boolean) {
   let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
-  res += `import * as model from '../../../../model';\n`;
+  if (usesModels) res += `import * as model from '../../../../model';\n`;
   res += `import * as actions from './actions';\n\n`;
 
   return res;

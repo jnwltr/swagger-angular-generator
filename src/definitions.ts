@@ -21,7 +21,6 @@ export interface Definition {
 
 export interface ProcessedDefinition {
   name: string;
-  originalName: string;
   def: Definition;
 }
 
@@ -65,7 +64,6 @@ export function processDefinitions(defs: {[key: string]: Definition}, config: Co
 function processDefinition(def: Definition, name: string, config: Config): ProcessedDefinition {
   if (!isWritable(name)) return;
 
-  const originalName = name;
   name = normalizeDef(name);
 
   let output = '';
@@ -87,7 +85,7 @@ function processDefinition(def: Definition, name: string, config: Config): Proce
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
   writeFile(filename, output, config.header);
 
-  return {name, def, originalName};
+  return {name, def};
 }
 
 /**

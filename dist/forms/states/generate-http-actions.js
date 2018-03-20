@@ -2,22 +2,24 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const path = require("path");
+const conf_1 = require("../../conf");
 const utils_1 = require("../../utils");
 function generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, paramGroups) {
     let content = '';
-    content += getActionImports(name, simpleName, paramGroups, responseDef.type.startsWith('model.'));
+    const hasParams = paramGroups.length >= 1;
+    content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('model.'));
     content += getActionTypes(simpleName);
-    content += getActionStartDefinition(simpleName);
+    content += getActionStartDefinition(simpleName, hasParams);
     content += getActionSuccessDefinition(responseDef);
     content += getActionErrorDefinition();
     content += getActionOverviewType(actionClassNameBase);
-    const actionsFileName = path.join(formSubDirName, `states`, `actions.ts`);
+    const actionsFileName = path.join(formSubDirName, conf_1.stateDir, `actions.ts`);
     utils_1.writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
 }
 exports.generateHttpActions = generateHttpActions;
-function getActionImports(name, simpleName, paramGroups, importModels) {
+function getActionImports(name, simpleName, hasParams, importModels) {
     let res = `import {Action} from '@ngrx/store';\n`;
-    if (paramGroups.length) {
+    if (hasParams) {
         res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
     }
     if (importModels)
@@ -35,10 +37,11 @@ function getActionTypes(name) {
     res += `\n}\n\n`;
     return res;
 }
-function getActionStartDefinition(name) {
+function getActionStartDefinition(name, hasParams) {
     let res = `export class Start implements Action {\n`;
     res += utils_1.indent(`readonly type = Actions.START;\n`);
-    res += utils_1.indent(`constructor(public payload: ${_.upperFirst(name)}Params) {}\n`);
+    const params = hasParams ? `public payload: ${_.upperFirst(name)}Params` : '';
+    res += utils_1.indent(`constructor(${params}) {}\n`);
     res += `}\n`;
     res += `\n`;
     return res;

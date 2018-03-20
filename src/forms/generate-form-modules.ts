@@ -7,8 +7,9 @@ import {Config} from '../generate';
 import {MethodOutput} from '../requests/requests.models';
 import {Parameter} from '../types';
 import {createDir} from '../utils';
+// TODO! rename
+import {generateFormService} from './generate-form-service';
 import {createModule} from './process-module';
-import {createComponentTs} from './process-ts-component';
 import {createSharedModule} from './shared-module';
 import {generateHttpActions, getActionClassNameBase, getClassName} from './states/generate-http-actions';
 import {generateHttpEffects} from './states/generate-http-effects';
@@ -25,9 +26,6 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     const paramGroups = processedMethod.paramGroups;
     const responseDef = processedMethod.responseDef;
     const simpleName = processedMethod.simpleName;
-    const methodName = processedMethod.methodName;
-    let isGetMethod = true;
-
     const formSubDirName = path.join(formBaseDir, `${kebabName}`, simpleName);
     createDir(formSubDirName);
 
@@ -38,15 +36,15 @@ export function createForms(config: Config, name: string, processedMethods: Meth
 
     const actionClassNameBase = getActionClassNameBase(simpleName);
     const className = getClassName(simpleName);
+    const generateForms = formParams.length >= 1;
 
-    if (['put', 'patch', 'post'].indexOf(methodName) > -1) {
-      isGetMethod = false;
+    if (generateForms) {
       // component.ts
-      createComponentTs(config, name, formParams, definitions, simpleName, formSubDirName, className);
+      generateFormService(config, name, formParams, definitions, simpleName, formSubDirName, className);
     }
 
     // states
-    const statesDirName = path.join(formSubDirName, 'states');
+    const statesDirName = path.join(formSubDirName, conf.stateDir);
     createDir(statesDirName);
 
     // actions.ts
@@ -58,6 +56,6 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     // form-shared-module.ts
     createSharedModule(config);
     // module.ts
-    createModule(config, name, actionClassNameBase, formSubDirName, simpleName, className, isGetMethod);
+    createModule(config, name, actionClassNameBase, formSubDirName, simpleName, className, generateForms);
   }
 }

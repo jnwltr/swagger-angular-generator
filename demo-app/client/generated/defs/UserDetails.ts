@@ -6,11 +6,11 @@
  */
 
 export interface UserDetails {
-  pk?: number;
+  readonly pk?: number;
   /** Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
   username: string;
   /** format: email */
-  email?: string;
+  readonly email?: string;
   first_name?: string;
   last_name?: string;
 }

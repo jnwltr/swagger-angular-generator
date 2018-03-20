@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 import * as path from 'path';
+
+import {stateDir} from '../../conf';
 import {Config} from '../../generate';
 import {ResponseDef} from '../../requests/requests.models';
 import {Parameter} from '../../types';
@@ -9,22 +11,23 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
                                     actionClassNameBase: string, simpleName: string,
                                     formSubDirName: string, paramGroups: Parameter[]) {
   let content = '';
-  content += getActionImports(name, simpleName, paramGroups, responseDef.type.startsWith('model.'));
+  const hasParams = paramGroups.length >= 1;
+  content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('model.'));
   content += getActionTypes(simpleName);
-  content += getActionStartDefinition(simpleName);
+  content += getActionStartDefinition(simpleName, hasParams);
   content += getActionSuccessDefinition(responseDef);
   content += getActionErrorDefinition();
   content += getActionOverviewType(actionClassNameBase);
 
-  const actionsFileName = path.join(formSubDirName, `states`, `actions.ts`);
+  const actionsFileName = path.join(formSubDirName, stateDir, `actions.ts`);
   writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
 }
 
-function getActionImports(name: string, simpleName: string, paramGroups: Parameter[],
+function getActionImports(name: string, simpleName: string, hasParams: boolean,
                           importModels: boolean) {
   let res = `import {Action} from '@ngrx/store';\n`;
 
-  if (paramGroups.length) {
+  if (hasParams) {
     res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
   }
   if (importModels) res += `import * as model from '../../../../model';\n`;
@@ -45,10 +48,11 @@ function getActionTypes(name: string) {
   return res;
 }
 
-function getActionStartDefinition(name: string) {
+function getActionStartDefinition(name: string, hasParams: boolean) {
   let res = `export class Start implements Action {\n`;
   res += indent(`readonly type = Actions.START;\n`);
-  res += indent(`constructor(public payload: ${_.upperFirst(name)}Params) {}\n`);
+  const params = hasParams ? `public payload: ${ _.upperFirst(name) }Params` : '';
+  res += indent(`constructor(${params}) {}\n`);
   res += `}\n`;
   res += `\n`;
 

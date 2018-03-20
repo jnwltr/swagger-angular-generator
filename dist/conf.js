@@ -5,6 +5,7 @@ exports.outDir = 'src/api';
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.storeDir = 'store';
+exports.stateDir = 'states';
 exports.apiFile = 'conf/api/api-docs.json';
 exports.modelFile = 'model';
 exports.indentation = 2;

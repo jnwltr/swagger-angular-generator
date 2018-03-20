@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import * as conf from './conf';
 import {NativeNames, Schema} from './types';
-import {indent, makeComment, out} from './utils';
+import {indent, makeComment} from './utils';
 
 export interface PropertyOutput {
   property: string;
@@ -82,6 +82,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
   if (prop.description) comments.push(prop.description);
   if (prop.example) comments.push(`example: ${prop.example}`);
   if (prop.format) comments.push(`format: ${prop.format}`);
+  if (prop.default) comments.push(`default: ${prop.default}`);
 
   const comment = makeComment(comments);
   let property;

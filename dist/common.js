@@ -74,6 +74,8 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         comments.push(`example: ${prop.example}`);
     if (prop.format)
         comments.push(`format: ${prop.format}`);
+    if (prop.default)
+        comments.push(`default: ${prop.default}`);
     const comment = utils_1.makeComment(comments);
     let property;
     // pure type is returned if no name is specified

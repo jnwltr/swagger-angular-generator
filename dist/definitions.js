@@ -46,7 +46,6 @@ exports.processDefinitions = processDefinitions;
 function processDefinition(def, name, config) {
     if (!isWritable(name))
         return;
-    const originalName = name;
     name = common_1.normalizeDef(name);
     let output = '';
     const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
@@ -65,7 +64,7 @@ function processDefinition(def, name, config) {
         output += `\n${enumLines}\n`;
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
-    return { name, def, originalName };
+    return { name, def };
 }
 /**
  * Creates single export line for `def` name

@@ -6,7 +6,7 @@ function generateHttpEffects(config, name, simpleName, actionClassNameBase, form
     let content = '';
     content += getEffectsImports(name);
     content += getEffectsStartDefinition(actionClassNameBase);
-    content += getEffectDefinition(actionClassNameBase, name, simpleName, paramGroups);
+    content += getEffectDefinition(actionClassNameBase, name, simpleName, paramGroups.length >= 1);
     content += getConstructorDefinition(name);
     content += `}\n`;
     const effectsFileName = path.join(formSubDirName, `states`, `effects.ts`);
@@ -19,6 +19,7 @@ function getEffectsImports(name) {
     res += `import {Actions, Effect} from '@ngrx/effects';\n`;
     res += '\n';
     res += `import {of} from 'rxjs/observable/of';\n`;
+    res += '\n';
     res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
     res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
     res += `import * as actions from './actions';\n`;
@@ -37,20 +38,24 @@ function getConstructorDefinition(name) {
     res += `) {}\n\n`;
     return utils_1.indent(res);
 }
-function getEffectDefinition(actionClassNameBase, name, simpleName, paramGroups) {
-    const startActionPayloadDefinition = getStartActionPayloadDefinition(paramGroups);
+function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
+    const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
     let res = utils_1.indent(`@Effect()\n`);
     res += utils_1.indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
-    res += utils_1.indent(`switchMap((action: actions.Start) => ` +
-        `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})),\n` +
-        `map(result => new actions.Success(result)),\n` +
-        `catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),\n`, 2);
+    const actionParam = hasParams ? 'action: actions.Start' : '';
+    res += utils_1.indent(`switchMap((${actionParam}) => ` +
+        `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);
+    res += utils_1.indent(`.pipe(\n`, 3);
+    res += utils_1.indent(`map(result => new actions.Success(result)),\n`, 4);
+    res += utils_1.indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),\n`, 4);
+    res += utils_1.indent(`),\n`, 3);
+    res += utils_1.indent(`),\n`, 2);
     res += utils_1.indent(`);\n`);
     res += '\n';
     return res;
 }
-function getStartActionPayloadDefinition(paramGroups) {
-    if (paramGroups.length)
+function getStartActionPayloadDefinition(hasParams) {
+    if (hasParams)
         return 'action.payload';
     return '';
 }

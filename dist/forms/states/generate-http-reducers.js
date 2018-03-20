@@ -1,22 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
+const conf_1 = require("../../conf");
 const utils_1 = require("../../utils");
 function generateHttpReducers(config, actionClassNameBase, formSubDirName, responseType) {
-    // TODO implement initial state logic
     let content = '';
-    content += getReducerImports();
+    content += getReducerImports(responseType.startsWith('model.'));
     content += getStateInteface(actionClassNameBase, responseType);
     content += getInitialState(actionClassNameBase);
     content += getFeatureSelector(actionClassNameBase);
     content += getReducerDefinition(actionClassNameBase);
-    const reducersFileName = path.join(formSubDirName, `states`, `reducers.ts`);
+    const reducersFileName = path.join(formSubDirName, conf_1.stateDir, `reducers.ts`);
     utils_1.writeFile(reducersFileName, content, config.header);
 }
 exports.generateHttpReducers = generateHttpReducers;
-function getReducerImports() {
+function getReducerImports(usesModels) {
     let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
-    res += `import * as model from '../../../../model';\n`;
+    if (usesModels)
+        res += `import * as model from '../../../../model';\n`;
     res += `import * as actions from './actions';\n\n`;
     return res;
 }
