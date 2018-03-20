@@ -4,6 +4,7 @@ import {processProperty, translateType} from '../common';
 import {nativeTypes} from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
+import {parameterToSchema} from '../requests/process-params';
 import {NativeNames, Parameter, Schema} from '../types';
 import {indent, out, TermColors, writeFile} from '../utils';
 
@@ -24,9 +25,11 @@ export function createComponentTs(config: Config, name: string, params: Paramete
   const definitionsKeys: string[] = definitions.map(s => s.name);
   const fieldDefinition: FieldDefinition = getFieldDefinition(params, definitionsKeys, definitions);
 
-  // TODO! test
+  // TODO! check if originalName necessary
   const definitionsMap = _.groupBy(definitions, 'originalName');
-  walkParamOrProp(params, undefined, definitionsMap);
+  const formDefinition = walkParamOrProp(params, undefined, definitionsMap);
+
+  out(formDefinition);
 
   content += fieldDefinition.content + '\n';
   content += getConstructor(name);
@@ -58,56 +61,91 @@ function getComponent(simpleName: string) {
 }
 
 function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: string[] = [],
-                         definitions: _.Dictionary<ProcessedDefinition[]>): void {
-  // parameters
+                         definitions: _.Dictionary<ProcessedDefinition[]>): string {
+  const res: string[] = [];
+  let schema: Record<string, Schema>;
+  let required: string[];
+
+  // create unified inputs for
+  // 1. parameters
   if (Array.isArray(definition)) {
+    schema = {};
+    required = [];
     definition.forEach(param => {
-      const name = param.name;
-      const newPath = [...path, name];
-      const ref = _.get(param, 'schema.$ref');
-      const child = makeField(param, ref, name, newPath, param.required, definitions);
-      if (child.definition) walkParamOrProp(child.definition, newPath, definitions);
+      if (param.required) required.push(param.name);
+      schema[param.name] = parameterToSchema(param);
     });
-  // object definition
+  // 2. object definition
   } else {
-    Object.entries(definition.def.properties).forEach(([paramName, param]) => {
-      const name = paramName;
-      const newPath = [...path, name];
-      const ref = param.$ref;
-      const required = definition.def.required && definition.def.required.includes(name);
-      const child = makeField(param, ref, name, newPath, required, definitions);
-      if (child.definition) walkParamOrProp(child.definition, newPath, definitions);
-    });
+    required = definition.def.required;
+    schema = definition.def.properties;
   }
+
+  // walk the list and build recursive form model
+  Object.entries(schema).forEach(([paramName, param]) => {
+    const name = paramName;
+    const newPath = [...path, name];
+    const ref = param.$ref;
+    const isRequired = required && required.includes(name);
+    const child = makeField(param, ref, name, newPath, isRequired, definitions);
+
+    let initializer: string;
+    if (child.definition) {
+      const fields = walkParamOrProp(child.definition, newPath, definitions);
+      initializer = `{\n${indent(fields)}\n}`;
+    } else initializer = param.default;
+
+    const submodel = `${child.name}: new ${child.control}(${initializer}, [${child.validators.join(', ')}]),`;
+    res.push(submodel);
+  });
+
+  return `new FormGroup({${indent(res)}})`;
 }
 
-function makeField(param: Parameter | Schema, ref: string,
+interface FormField {
+  name: string;
+  type: string;
+  control: string;
+  definition: ProcessedDefinition;
+  validators: string[];
+  debug?: string[];
+}
+function makeField(param: Schema, ref: string,
                    name: string, path: string[], required: boolean,
                    definitions: _.Dictionary<ProcessedDefinition[]>,
-                  ): {definition: ProcessedDefinition, validators: string[]} {
+                  ): FormField {
 
   let definition: ProcessedDefinition;
-  const type = param.type;
-
-  out(`\nname: ${name}, path: ${path.join('.')}, type: ${type}, $ref: ${ref}`);
-  out(JSON.stringify(translateType(type || ref)), TermColors.red);
-
-  if (type) {
-    out(`inline: ${type}`);
-    // if (type in nativeTypes) {
-    //   const typedType = type as NativeNames;
-    //   const nativeType = nativeTypes[typedType];
-    // }
-  } else {
-    const refType = ref.replace(/^#\/definitions\//, '');
-    out(`referenced: ${definitions[refType][0].name}`);
-    definition = definitions[refType][0];
-  }
+  let type = param.type;
+  let control: string;
 
   const validators = getValidators(param);
   if (required) validators.push('Validators.required');
 
-  return {definition, validators};
+  if (type) {
+    if (type in nativeTypes) {
+      const typedType = type as NativeNames;
+      type = nativeTypes[typedType];
+    }
+    if (type === 'array') {
+      control = 'FormArray';
+      return {name, definition, type, validators, control};
+    }
+
+    control = 'FormControl';
+  } else {
+    const refType = ref.replace(/^#\/definitions\//, '');
+    definition = definitions[refType][0];
+    // out(definition.name + ' - ' + definition.originalName, TermColors.green);
+    // type = definition.name;
+
+    control = 'FormGroup';
+  }
+
+  // out(`name: ${name}, path: ${path.join('.')}, type: ${type}, $ref: ${ref}`);
+  // out(JSON.stringify(translateType(type || ref)), TermColors.red);
+
+  return {name, definition, type, validators, control};
 }
 
 function getFieldDefinition(paramGroups: Parameter[], definitionKeys: string[],
@@ -146,8 +184,13 @@ function getValidators(param: Parameter | Schema) {
   const validators: string[] = [];
 
   if (param.format && param.format === 'email') validators.push('Validators.email');
+
+  if (param.maximum) validators.push(`Validators.max(${param.maxLength})`);
+  if (param.minimum) validators.push(`Validators.min(${param.minLength})`);
+
   if (param.maxLength) validators.push(`Validators.maxLength(${param.maxLength})`);
   if (param.minLength) validators.push(`Validators.minLength(${param.minLength})`);
+
   if (param.pattern) validators.push(`Validators.pattern('${param.pattern})`);
 
   return validators;
