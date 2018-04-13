@@ -62,6 +62,6 @@ export class ProductsService {
       }
     });
 
-    return this.http.get<__model.Products>(`/api/products`, {params: queryParams});
+    return this.http.get<__model.Products>(`/api-base-path/products`, {params: queryParams});
   }
 }

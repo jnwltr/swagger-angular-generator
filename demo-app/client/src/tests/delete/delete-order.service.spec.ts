@@ -26,7 +26,7 @@ describe(`Order delete`, () => {
 
           backend.expectOne((req: HttpRequest<any>) => {
             return req.method === 'DELETE'
-              && req.url === '/api/order/123e4567-e89b-12d3-a456-426655440000';
+              && req.url === '/api-base-path/order/123e4567-e89b-12d3-a456-426655440000';
           });
       }),
     ),
@@ -40,7 +40,7 @@ describe(`Order delete`, () => {
 
           backend.expectOne((req: HttpRequest<any>) => {
             return req.method === 'DELETE'
-              && req.url === '/api/order/123e4567-e89b-12d3-a456-426655440000';
+              && req.url === '/api-base-path/order/123e4567-e89b-12d3-a456-426655440000';
           });
       }),
     ),

@@ -45,6 +45,6 @@ export class RegistrationService {
     const pathParams = {
       registrationType: params.registrationType,
     };
-    return this.http.post<object>(`/api/registration/${pathParams.registrationType}`, formDataParams);
+    return this.http.post<object>(`/api-base-path/registration/${pathParams.registrationType}`, formDataParams);
   }
 }

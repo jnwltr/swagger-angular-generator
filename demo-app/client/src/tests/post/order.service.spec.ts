@@ -28,7 +28,7 @@ describe(`OrderService`, () => {
         service.order({orderDto: bodyParam, producer: 'test-producer'}).subscribe();
         backend.expectOne((req: HttpRequest<any>) => {
           expect(req.method).toEqual('POST');
-          expect(req.url).toEqual('/api/order');
+          expect(req.url).toEqual('/api-base-path/order');
           expect(req.params.toString()).toEqual('producer=test-producer');
           expect(req.body).toEqual(bodyParam);
 
@@ -46,7 +46,7 @@ describe(`OrderService`, () => {
         service.order({}).subscribe();
         backend.expectOne((req: HttpRequest<any>) => {
           expect(req.method).toEqual('POST');
-          expect(req.url).toEqual('/api/order');
+          expect(req.url).toEqual('/api-base-path/order');
           expect(req.params.toString()).toEqual('');
           expect(req.body).toEqual({});
 

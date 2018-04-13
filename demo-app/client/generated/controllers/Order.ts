@@ -77,7 +77,7 @@ export class OrderService {
       }
     });
 
-    return this.http.post<object>(`/api/order`, bodyParamsWithoutUndefined, {params: queryParams});
+    return this.http.post<object>(`/api-base-path/order`, bodyParamsWithoutUndefined, {params: queryParams});
   }
 
   /**
@@ -96,7 +96,7 @@ export class OrderService {
     Object.entries(bodyParams || {}).forEach(([key, value]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
-    return this.http.patch<object>(`/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+    return this.http.patch<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
   }
 
   /**
@@ -116,7 +116,7 @@ export class OrderService {
     Object.entries(bodyParams || {}).forEach(([key, value]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
-    return this.http.put<object>(`/api/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
+    return this.http.put<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
   }
 
   /**
@@ -127,7 +127,7 @@ export class OrderService {
     const pathParams = {
       orderId: params.orderId,
     };
-    return this.http.delete<object>(`/api/order/${pathParams.orderId}`);
+    return this.http.delete<object>(`/api-base-path/order/${pathParams.orderId}`);
   }
   deleteORDER_(orderId: string): Observable<object> {
     return this.deleteORDER({orderId});
