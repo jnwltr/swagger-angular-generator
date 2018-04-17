@@ -29,7 +29,7 @@ describe(`OrderService`, () => {
 
         backend.expectOne((req: HttpRequest<any>) => {
           return req.method === 'POST'
-            && req.url === '/api/logout'
+            && req.url === '/api-base-path/logout'
             && JSON.stringify(req.body) === '{}';
         });
       }),

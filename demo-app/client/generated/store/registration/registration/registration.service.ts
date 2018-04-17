@@ -19,6 +19,9 @@ export class RegistrationFormService {
       email: new FormControl(undefined, [Validators.email, Validators.required]),
       password1: new FormControl(undefined, [Validators.required]),
       password2: new FormControl(undefined, [Validators.required]),
+      selfRefParam: new FormGroup({
+        prop1: new FormControl(undefined, []),
+      }, [Validators.required]),
       registrationType: new FormControl(undefined, [Validators.required]),
     });
   }

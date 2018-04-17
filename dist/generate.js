@@ -10,8 +10,11 @@ const utils_1 = require("./utils");
  * Generates API layer for the project based on src to dest
  * @param src source swagger json schema
  * @param dest destination directory
+ * @param generateStore decides if redux workflow should be generated
+ * @param unwrapSingleParamMethods controls if the single param methods should be generated
+ * @param swaggerURLPath the path where the swagger ui definition can be found
  */
-function generate(src = conf.apiFile, dest = conf.outDir) {
+function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, unwrapSingleParamMethods = false, swaggerURLPath = conf.swaggerURLPath) {
     let schema;
     try {
         const content = fs.readFileSync(src);
@@ -26,12 +29,12 @@ function generate(src = conf.apiFile, dest = conf.outDir) {
         utils_1.out(`${e}`);
         return;
     }
-    const header = utils_1.processHeader(schema);
-    const config = { header, dest };
+    const header = utils_1.processHeader(schema, swaggerURLPath);
+    const config = { header, dest, generateStore, unwrapSingleParamMethods };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
     const definitions = definitions_1.processDefinitions(schema.definitions, config);
-    process_paths_1.processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config, definitions);
+    process_paths_1.processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`, config, definitions, schema.basePath);
 }
 exports.generate = generate;
 //# sourceMappingURL=generate.js.map

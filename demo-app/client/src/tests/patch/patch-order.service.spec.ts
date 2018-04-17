@@ -30,7 +30,7 @@ describe(`Order patch`, () => {
 
           backend.expectOne((req: HttpRequest<any>) => {
             return req.method === 'PATCH'
-              && req.url === '/api/order/100'
+              && req.url === '/api-base-path/order/100'
               && req.body.model === 'test-model'
               && JSON.stringify(Object.keys(req.body)) === JSON.stringify(['model']);
           });

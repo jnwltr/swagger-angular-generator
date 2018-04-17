@@ -7,11 +7,11 @@
 
 import {createFeatureSelector} from '@ngrx/store';
 
-import * as model from '../../../../model';
+import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface ProductDetailState {
-  data: model.ProductDetail;
+  data: __model.ProductDetail;
   loading: boolean;
   error: string;
 }

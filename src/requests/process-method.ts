@@ -15,7 +15,7 @@ import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
  * and passed to api service
  * @param controller
  */
-export function processMethod(method: ControllerMethod): MethodOutput {
+export function processMethod(method: ControllerMethod, unwrapSingleParamMethods: boolean): MethodOutput {
   let methodDef = '';
   let interfaceDef = '';
   const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
@@ -27,6 +27,7 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   let usesQueryParams: boolean;
   let paramTypes: string[] = [];
   let paramGroups: Dictionary<Parameter[]> = {};
+  let splitParamsMethod = '';
   const simpleName = method.simpleName;
   const methodName = method.methodName;
 
@@ -44,6 +45,10 @@ export function processMethod(method: ControllerMethod): MethodOutput {
     interfaceDef = getInterfaceDef(processedParams);
 
     params += getRequestParams(paramTypes, method.methodName);
+
+    if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
+        splitParamsMethod = getSplitParamsMethod(method, processedParams);
+    }
   }
 
   methodDef += '\n';
@@ -54,10 +59,13 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   methodDef += indent(paramSeparation);
   if (paramSeparation.length) methodDef += '\n';
 
-  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
+  /* tslint:disable-next-line:max-line-length */
+  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${method.basePath}${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
+
+  methodDef += splitParamsMethod;
 
   if (method.responseDef.enumDeclaration) {
     if (interfaceDef) interfaceDef += '\n';
@@ -67,6 +75,19 @@ export function processMethod(method: ControllerMethod): MethodOutput {
   return {methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName};
 }
 
+function getSplitParamsMethod(method: ControllerMethod, processedParams: ProcessParamsOutput) {
+    let splitParamsMethod = '';
+
+    const splitParamsSignature = getSplitParamsSignature(processedParams);
+    splitParamsMethod += `\n${method.simpleName}_(${splitParamsSignature}): Observable<${method.responseDef.type}> {\n`;
+
+    const propAssignments = getPropertyAssignments(method.paramDef);
+    splitParamsMethod += indent(`return this.${method.simpleName}(${propAssignments});\n`);
+    splitParamsMethod += '}\n';
+
+    return splitParamsMethod;
+}
+
 /**
  * Creates a definition of paramsSignature, which serves as input to http methods
  * @param processedParams
@@ -74,6 +95,14 @@ export function processMethod(method: ControllerMethod): MethodOutput {
  */
 function getParamsSignature(processedParams: ProcessParamsOutput, paramsType: string) {
     return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
+}
+
+function getSplitParamsSignature(paramsOutput: ProcessParamsOutput): string {
+    return paramsOutput.typesOnly;
+}
+
+function getPropertyAssignments(params: Parameter[]): string {
+    return '{' + params.map(p => p.name).join(', ') + '}';
 }
 
 /**

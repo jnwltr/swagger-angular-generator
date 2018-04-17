@@ -12,7 +12,7 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
                                     formSubDirName: string, paramGroups: Parameter[]) {
   let content = '';
   const hasParams = paramGroups.length >= 1;
-  content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('model.'));
+  content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('__model.'));
   content += getActionTypes(simpleName);
   content += getActionStartDefinition(simpleName, hasParams);
   content += getActionSuccessDefinition(responseDef);
@@ -30,7 +30,7 @@ function getActionImports(name: string, simpleName: string, hasParams: boolean,
   if (hasParams) {
     res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
   }
-  if (importModels) res += `import * as model from '../../../../model';\n`;
+  if (importModels) res += `import * as __model from '../../../../model';\n`;
   res += `\n`;
 
   return res;

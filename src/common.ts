@@ -2,12 +2,14 @@ import * as _ from 'lodash';
 
 import * as conf from './conf';
 import {NativeNames, Schema} from './types';
-import {indent, makeComment} from './utils';
+import {indent, makeComment, out} from './utils';
 
 export interface PropertyOutput {
   property: string;
+  propertyAsMethodParameter: string;
   enumDeclaration: string;
   native: boolean;
+  isRequired: boolean;
 }
 
 /**
@@ -43,13 +45,14 @@ export function processProperty(prop: Schema, name = '', namespace = '',
         break;
       case 'array':
         defType = translateType(prop.items.type || prop.items.$ref);
-        type = `${defType.type}[]`;
+        if (defType.arraySimple) type = `${defType.type}[]`;
+        else type = `Array<${defType.type}>`;
         break;
       default:
         if (prop.additionalProperties) {
           const ap = prop.additionalProperties;
           let additionalType: string;
-
+          out('name: ' + name);
           if (ap.type === 'array') {
             defType = translateType(ap.items.type || ap.items.$ref);
             additionalType = `${defType.type}[]`;
@@ -86,14 +89,19 @@ export function processProperty(prop: Schema, name = '', namespace = '',
 
   const comment = makeComment(comments);
   let property;
+  let propertyAsMethodParameter;
 
   // pure type is returned if no name is specified
   if (name) {
     if (name.match(/-/)) name = `'${name}'`;
     property = `${comment}${readOnly}${name}${optional}: ${type};`;
-  } else property = `${type}`;
+    propertyAsMethodParameter = `${name}${optional}: ${type}`;
+  } else {
+      property = `${type}`;
+      propertyAsMethodParameter = property;
+  }
 
-  return {property, enumDeclaration, native};
+  return {property, propertyAsMethodParameter, enumDeclaration, native, isRequired: optional !== '?'};
 }
 
 /**
@@ -130,6 +138,7 @@ export function normalizeDef(type: string): string {
 interface DefType {
   type: string;
   native: boolean;
+  arraySimple: boolean;
 }
 
 /**
@@ -142,25 +151,28 @@ export function translateType(type: string): DefType {
     return {
       type: conf.nativeTypes[typeType],
       native: true,
+        arraySimple: true,
     };
   }
-
   const subtype = type.match(/^#\/definitions\/(.*)/);
   if (subtype) {
     const generic = subtype[1].match(/([^«]+)«(.+)»/);
-
     // collection translates to array
     if (generic && generic[1] === 'Collection') {
       const resolvedType = resolveDefType(generic[2]);
       resolvedType.type += '[]';
 
       return resolvedType;
+    } else if (generic && generic[1] === 'Map') {
+      const map = generic[2].split(',');
+      const record = `Record<${map[0]}, ${map[1]}>`;
+      return {type: record, native: true, arraySimple: false};
     }
 
     return resolveDefType(subtype[1]);
   }
 
-  return {type, native: true};
+  return {type, native: true, arraySimple: true};
 }
 
 /**
@@ -176,12 +188,14 @@ function resolveDefType(type: string): DefType {
     return {
       type: conf.nativeTypes[typedType],
       native: true,
+        arraySimple: true,
     };
   }
 
   type = normalizeDef(type);
   return {
-    type: `${conf.modelFile}.${type}`,
+    type: `__${conf.modelFile}.${type}`,
     native: false,
+    arraySimple: true,
   };
 }

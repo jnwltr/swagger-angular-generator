@@ -7,7 +7,7 @@ const utils_1 = require("../../utils");
 function generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, paramGroups) {
     let content = '';
     const hasParams = paramGroups.length >= 1;
-    content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('model.'));
+    content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('__model.'));
     content += getActionTypes(simpleName);
     content += getActionStartDefinition(simpleName, hasParams);
     content += getActionSuccessDefinition(responseDef);
@@ -23,7 +23,7 @@ function getActionImports(name, simpleName, hasParams, importModels) {
         res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
     }
     if (importModels)
-        res += `import * as model from '../../../../model';\n`;
+        res += `import * as __model from '../../../../model';\n`;
     res += `\n`;
     return res;
 }

@@ -34,12 +34,16 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                 break;
             case 'array':
                 defType = translateType(prop.items.type || prop.items.$ref);
-                type = `${defType.type}[]`;
+                if (defType.arraySimple)
+                    type = `${defType.type}[]`;
+                else
+                    type = `Array<${defType.type}>`;
                 break;
             default:
                 if (prop.additionalProperties) {
                     const ap = prop.additionalProperties;
                     let additionalType;
+                    utils_1.out('name: ' + name);
                     if (ap.type === 'array') {
                         defType = translateType(ap.items.type || ap.items.$ref);
                         additionalType = `${defType.type}[]`;
@@ -78,15 +82,19 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         comments.push(`default: ${prop.default}`);
     const comment = utils_1.makeComment(comments);
     let property;
+    let propertyAsMethodParameter;
     // pure type is returned if no name is specified
     if (name) {
         if (name.match(/-/))
             name = `'${name}'`;
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
+        propertyAsMethodParameter = `${name}${optional}: ${type}`;
     }
-    else
+    else {
         property = `${type}`;
-    return { property, enumDeclaration, native };
+        propertyAsMethodParameter = property;
+    }
+    return { property, propertyAsMethodParameter, enumDeclaration, native, isRequired: optional !== '?' };
 }
 exports.processProperty = processProperty;
 /**
@@ -127,6 +135,7 @@ function translateType(type) {
         return {
             type: conf.nativeTypes[typeType],
             native: true,
+            arraySimple: true,
         };
     }
     const subtype = type.match(/^#\/definitions\/(.*)/);
@@ -138,9 +147,14 @@ function translateType(type) {
             resolvedType.type += '[]';
             return resolvedType;
         }
+        else if (generic && generic[1] === 'Map') {
+            const map = generic[2].split(',');
+            const record = `Record<${map[0]}, ${map[1]}>`;
+            return { type: record, native: true, arraySimple: false };
+        }
         return resolveDefType(subtype[1]);
     }
-    return { type, native: true };
+    return { type, native: true, arraySimple: true };
 }
 exports.translateType = translateType;
 /**
@@ -156,12 +170,14 @@ function resolveDefType(type) {
         return {
             type: conf.nativeTypes[typedType],
             native: true,
+            arraySimple: true,
         };
     }
     type = normalizeDef(type);
     return {
-        type: `${conf.modelFile}.${type}`,
+        type: `__${conf.modelFile}.${type}`,
         native: false,
+        arraySimple: true,
     };
 }
 //# sourceMappingURL=common.js.map

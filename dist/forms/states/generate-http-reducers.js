@@ -5,7 +5,7 @@ const conf_1 = require("../../conf");
 const utils_1 = require("../../utils");
 function generateHttpReducers(config, actionClassNameBase, formSubDirName, responseType) {
     let content = '';
-    content += getReducerImports(responseType.startsWith('model.'));
+    content += getReducerImports(responseType.startsWith('__model.'));
     content += getStateInteface(actionClassNameBase, responseType);
     content += getInitialState(actionClassNameBase);
     content += getFeatureSelector(actionClassNameBase);
@@ -17,7 +17,7 @@ exports.generateHttpReducers = generateHttpReducers;
 function getReducerImports(usesModels) {
     let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
     if (usesModels)
-        res += `import * as model from '../../../../model';\n`;
+        res += `import * as __model from '../../../../model';\n`;
     res += `import * as actions from './actions';\n\n`;
     return res;
 }

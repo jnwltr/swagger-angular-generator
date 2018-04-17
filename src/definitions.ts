@@ -37,7 +37,7 @@ export function processDefinitions(defs: {[key: string]: Definition}, config: Co
 
   _.forOwn(defs, (v, source) => {
     const file = processDefinition(v, source, config);
-    if (file.name) {
+    if (file && file.name) {
       const previous = files[file.name];
       if (previous === undefined) files[file.name] = [source];
       else previous.push(source);
@@ -70,7 +70,7 @@ function processDefinition(def: Definition, name: string, config: Config): Proce
   const properties = _.map(def.properties, (v, k) => processProperty(v, k, name, def.required));
   // conditional import of global types
   if (properties.some(p => !p.native)) {
-    output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
   }
   if (def.description) output += `/** ${def.description} */\n`;
 
@@ -114,7 +114,7 @@ function createExportComments(file: string, sources: string[]): string {
  * @param type name
  */
 function isWritable(type: string) {
-  if (type.startsWith('Collection«')) {
+  if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
     return false;
   }
 
