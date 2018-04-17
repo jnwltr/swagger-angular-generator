@@ -9,6 +9,8 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+import * as model from '../model';
+
 export interface RegistrationParams {
   /**
    * E-mail
@@ -19,6 +21,8 @@ export interface RegistrationParams {
   password1: string;
   /** Password 2 */
   password2: string;
+  /** Self ref parameter */
+  selfRefParam: model.SelfRefObject;
   /** Registration type */
   registrationType: string;
 }
@@ -36,6 +40,7 @@ export class RegistrationService {
       email: params.email,
       password1: params.password1,
       password2: params.password2,
+      selfRefParam: params.selfRefParam,
     };
     const pathParams = {
       registrationType: params.registrationType,

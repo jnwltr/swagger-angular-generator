@@ -43,13 +43,14 @@ function getConstructor(name, formName, definitions, params) {
     res += utils_1.indent(`private ${_.lowerFirst(name)}Service: ${name}Service,\n`, 2);
     res += utils_1.indent(') {\n');
     const definitionsMap = _.groupBy(definitions, 'name');
-    const formDefinition = walkParamOrProp(params, undefined, definitionsMap);
+    const parentTypes = [];
+    const formDefinition = walkParamOrProp(params, undefined, definitionsMap, parentTypes);
     res += utils_1.indent(`this.${formName} = new FormGroup({\n${formDefinition}\n});\n`, 2);
     res += utils_1.indent('}\n');
     res += '\n';
     return res;
 }
-function walkParamOrProp(definition, path = [], definitions) {
+function walkParamOrProp(definition, path = [], definitions, parentTypes) {
     const res = [];
     let schema;
     let required;
@@ -71,16 +72,20 @@ function walkParamOrProp(definition, path = [], definitions) {
     }
     // walk the list and build recursive form model
     Object.entries(schema).forEach(([paramName, param]) => {
+        if (parentTypes.indexOf(param.type) > -1) {
+            return;
+        }
         const name = paramName;
         const newPath = [...path, name];
+        const newParentTypes = [...parentTypes, param.type];
         const ref = param.$ref;
         const isRequired = required && required.includes(name);
-        const fieldDefinition = makeField(param, ref, name, newPath, isRequired, definitions);
+        const fieldDefinition = makeField(param, ref, name, newPath, isRequired, definitions, newParentTypes);
         res.push(fieldDefinition);
     });
     return utils_1.indent(res);
 }
-function makeField(param, ref, name, path, required, definitions) {
+function makeField(param, ref, name, path, required, definitions, parentTypes) {
     let definition;
     let type = param.type;
     let control;
@@ -105,7 +110,7 @@ function makeField(param, ref, name, path, required, definitions) {
         const refType = ref.replace(/^#\/definitions\//, '');
         definition = definitions[common_1.normalizeDef(refType)][0];
         control = 'FormGroup';
-        const fields = walkParamOrProp(definition, path, definitions);
+        const fields = walkParamOrProp(definition, path, definitions, parentTypes);
         initializer = `{\n${fields}\n}`;
     }
     const validators = getValidators(param);
