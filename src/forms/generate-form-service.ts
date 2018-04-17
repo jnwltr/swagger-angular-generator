@@ -56,7 +56,8 @@ function getConstructor(name: string, formName: string, definitions: ProcessedDe
   res += indent(') {\n');
 
   const definitionsMap = _.groupBy(definitions, 'name');
-  const formDefinition = walkParamOrProp(params, undefined, definitionsMap);
+  const parentTypes: string[] = [];
+  const formDefinition = walkParamOrProp(params, undefined, definitionsMap, parentTypes);
   res += indent(`this.${formName} = new FormGroup({\n${formDefinition}\n});\n`, 2);
   res += indent('}\n');
   res += '\n';
@@ -65,7 +66,7 @@ function getConstructor(name: string, formName: string, definitions: ProcessedDe
 }
 
 function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: string[] = [],
-                         definitions: _.Dictionary<ProcessedDefinition[]>): string {
+                         definitions: _.Dictionary<ProcessedDefinition[]>, parentTypes: string[]): string {
   const res: string[] = [];
   let schema: Record<string, Schema>;
   let required: string[];
@@ -87,11 +88,16 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: st
 
   // walk the list and build recursive form model
   Object.entries(schema).forEach(([paramName, param]) => {
+    if (parentTypes.indexOf(param.type) > -1) {
+        return;
+    }
+
     const name = paramName;
     const newPath = [...path, name];
+    const newParentTypes = [...parentTypes, param.type];
     const ref = param.$ref;
     const isRequired = required && required.includes(name);
-    const fieldDefinition = makeField(param, ref, name, newPath, isRequired, definitions);
+    const fieldDefinition = makeField(param, ref, name, newPath, isRequired, definitions, newParentTypes);
 
     res.push(fieldDefinition);
   });
@@ -101,7 +107,7 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: st
 
 function makeField(param: Schema, ref: string,
                    name: string, path: string[], required: boolean,
-                   definitions: _.Dictionary<ProcessedDefinition[]>): string {
+                   definitions: _.Dictionary<ProcessedDefinition[]>, parentTypes: string[]): string {
 
   let definition: ProcessedDefinition;
   let type = param.type;
@@ -128,7 +134,7 @@ function makeField(param: Schema, ref: string,
     definition = definitions[normalizeDef(refType)][0];
 
     control = 'FormGroup';
-    const fields = walkParamOrProp(definition, path, definitions);
+    const fields = walkParamOrProp(definition, path, definitions, parentTypes);
     initializer = `{\n${fields}\n}`;
   }
 

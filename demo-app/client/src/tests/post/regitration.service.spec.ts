@@ -28,7 +28,10 @@ describe(`LoginService`, () => {
         service.registration({registrationType: 'admin',
                                     email: 'test@test.com',
                                     password1: 'password1',
-                                    password2: 'password2'}).subscribe();
+                                    password2: 'password2',
+                                    selfRefParam: {
+                                        prop1: 'property1'
+                                    }}).subscribe();
 
         backend.expectOne((req: HttpRequest<any>) => {
           return req.method === 'POST'
