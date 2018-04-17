@@ -363,6 +363,15 @@
             "description": "Password 2",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "selfRefParam",
+            "in": "formData",
+            "description": "Self ref parameter",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/selfRefObject"
+            }
           }
         ],
         "responses": {
@@ -610,6 +619,17 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "selfRefObject": {
+      "type": "object",
+      "properties": {
+        "prop1": {
+          "type": "string"
+        },
+        "parent": {
+          "$ref":"#/definitions/selfRefObject"
         }
       }
     },
