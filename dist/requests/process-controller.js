@@ -59,7 +59,9 @@ function processController(methods, name, config, definitions) {
     /* controllers */
     utils_1.writeFile(filename, content, config.header);
     /* forms */
-    generate_form_modules_1.createForms(config, name, processedMethods, definitions);
+    if (config.generateStore) {
+        generate_form_modules_1.createForms(config, name, processedMethods, definitions);
+    }
 }
 exports.processController = processController;
 //# sourceMappingURL=process-controller.js.map
