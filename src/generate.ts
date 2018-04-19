@@ -9,6 +9,7 @@ import {out, processHeader, TermColors} from './utils';
 export interface Config {
   header: string;
   dest: string;
+  generateStore: boolean;
 }
 
 /**
@@ -16,7 +17,7 @@ export interface Config {
  * @param src source swagger json schema
  * @param dest destination directory
  */
-export function generate(src: string = conf.apiFile, dest: string = conf.outDir) {
+export function generate(src: string = conf.apiFile, dest: string = conf.outDir, generateStore = true) {
   let schema: any;
 
   try {
@@ -32,7 +33,7 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
   }
 
   const header = processHeader(schema);
-  const config: Config = {header, dest};
+  const config: Config = {header, dest, generateStore};
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
 
