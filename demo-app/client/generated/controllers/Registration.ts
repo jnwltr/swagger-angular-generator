@@ -9,7 +9,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
-import * as model from '../model';
+import * as __model from '../model';
 
 export interface RegistrationParams {
   /**
@@ -22,7 +22,7 @@ export interface RegistrationParams {
   /** Password 2 */
   password2: string;
   /** Self ref parameter */
-  selfRefParam: model.SelfRefObject;
+  selfRefParam: __model.SelfRefObject;
   /** Registration type */
   registrationType: string;
 }

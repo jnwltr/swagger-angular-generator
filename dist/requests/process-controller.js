@@ -29,7 +29,7 @@ function processController(methods, name, config, definitions) {
         controller.responseDef = process_responses_1.processResponses(controller.responses, controller.simpleName);
         usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
     });
-    const processedMethods = methods.map(process_method_1.processMethod);
+    const processedMethods = methods.map(m => process_method_1.processMethod(m, config.unwrapSingleParamMethods));
     usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
     let content = '';
     const angularCommonHttp = ['HttpClient'];
@@ -40,7 +40,7 @@ function processController(methods, name, config, definitions) {
     content += 'import {Injectable} from \'@angular/core\';\n';
     content += 'import {Observable} from \'rxjs/Observable\';\n\n';
     if (usesGlobalType) {
-        content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        content += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');
     if (interfaceDef) {

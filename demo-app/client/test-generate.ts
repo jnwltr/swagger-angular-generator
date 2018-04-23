@@ -2,7 +2,7 @@ import {generate} from '../../src/generate';
 
 class TestInitClass {
   createTestContent() {
-    generate('swagger-files/unit-test-swagger.json', 'generated');
+    generate('swagger-files/unit-test-swagger.json', 'generated', true, true);
   }
 }
 

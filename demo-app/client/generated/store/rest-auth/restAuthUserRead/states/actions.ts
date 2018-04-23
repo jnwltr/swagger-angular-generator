@@ -6,7 +6,6 @@
  */
 
 import {Action} from '@ngrx/store';
-import * as model from '../../../../model';
 
 export enum Actions {
   START = '[restAuthUserRead] Start',
@@ -21,7 +20,7 @@ export class Start implements Action {
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: model.UserDetails) {}
+  constructor(public payload: __model.UserDetails) {}
 }
 
 export class Error implements Action {

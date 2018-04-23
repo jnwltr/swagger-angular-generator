@@ -7,7 +7,6 @@
 
 import {Action} from '@ngrx/store';
 import {ProductsParams} from '../../../../controllers/Products';
-import * as model from '../../../../model';
 
 export enum Actions {
   START = '[products] Start',
@@ -22,7 +21,7 @@ export class Start implements Action {
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: model.Products) {}
+  constructor(public payload: __model.Products) {}
 }
 
 export class Error implements Action {

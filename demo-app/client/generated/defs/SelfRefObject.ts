@@ -5,9 +5,9 @@
  * example.com/swagger
  */
 
-import * as model from '../model';
+import * as __model from '../model';
 
 export interface SelfRefObject {
   prop1?: string;
-  parent?: model.SelfRefObject;
+  parent?: __model.SelfRefObject;
 }

@@ -9,7 +9,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
-import * as model from '../model';
+import * as __model from '../model';
 
 export interface ProductDetailParams {
   /**
@@ -27,10 +27,14 @@ export class ProductDetailService {
    * Get product detail
    * http://example.com/swagger/swagger-ui.html#!/ProductDetail/ProductDetail
    */
-  productDetail(params: ProductDetailParams): Observable<model.ProductDetail> {
+  productDetail(params: ProductDetailParams): Observable<__model.ProductDetail> {
     const pathParams = {
       productId: params.productId,
     };
-    return this.http.get<model.ProductDetail>(`/api/product-detail/${pathParams.productId}`);
+    return this.http.get<__model.ProductDetail>(`/api/product-detail/${pathParams.productId}`);
   }
+  productDetail_(productId: number): Observable<__model.ProductDetail> {
+    return this.productDetail({productId});
+  }
+
 }

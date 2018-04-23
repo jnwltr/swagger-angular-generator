@@ -9,11 +9,11 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
-import * as model from '../model';
+import * as __model from '../model';
 
 export interface LoginParams {
   /** login */
-  loginDto: model.LoginDto;
+  loginDto: __model.LoginDto;
 }
 
 @Injectable()
@@ -30,4 +30,8 @@ export class LoginService {
     };
     return this.http.post<object>(`/api/login`, formDataParams);
   }
+  login_(loginDto: __model.LoginDto): Observable<object> {
+    return this.login({loginDto});
+  }
+
 }

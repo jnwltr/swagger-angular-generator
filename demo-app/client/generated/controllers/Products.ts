@@ -9,7 +9,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
-import * as model from '../model';
+import * as __model from '../model';
 
 export interface ProductsParams {
   stringField?: string;
@@ -40,7 +40,7 @@ export class ProductsService {
    * Get all products
    * http://example.com/swagger/swagger-ui.html#!/Products/Products
    */
-  products(params: ProductsParams): Observable<model.Products> {
+  products(params: ProductsParams): Observable<__model.Products> {
     const queryParamBase = {
       stringField: params.stringField,
       BooleanField: params.BooleanField,
@@ -62,6 +62,6 @@ export class ProductsService {
       }
     });
 
-    return this.http.get<model.Products>(`/api/products`, {params: queryParams});
+    return this.http.get<__model.Products>(`/api/products`, {params: queryParams});
   }
 }

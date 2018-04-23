@@ -78,15 +78,19 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         comments.push(`default: ${prop.default}`);
     const comment = utils_1.makeComment(comments);
     let property;
+    let propertyAsMethodParameter;
     // pure type is returned if no name is specified
     if (name) {
         if (name.match(/-/))
             name = `'${name}'`;
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
+        propertyAsMethodParameter = `${name}${optional}: ${type}`;
     }
-    else
+    else {
         property = `${type}`;
-    return { property, enumDeclaration, native };
+        propertyAsMethodParameter = property;
+    }
+    return { property, propertyAsMethodParameter, enumDeclaration, native, isRequired: optional !== '?' };
 }
 exports.processProperty = processProperty;
 /**
@@ -160,7 +164,7 @@ function resolveDefType(type) {
     }
     type = normalizeDef(type);
     return {
-        type: `${conf.modelFile}.${type}`,
+        type: `__${conf.modelFile}.${type}`,
         native: false,
     };
 }

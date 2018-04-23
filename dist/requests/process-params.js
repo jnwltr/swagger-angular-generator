@@ -14,6 +14,7 @@ const utils_1 = require("../utils");
  */
 function processParams(def, paramsType) {
     let paramDef = '';
+    let typesOnly = '';
     paramDef += `export interface ${paramsType} {\n`;
     const params = _.map(def, p => common_1.processProperty(parameterToSchema(p), p.name, paramsType, p.required));
     const isInterfaceEmpty = !params.length;
@@ -27,7 +28,9 @@ function processParams(def, paramsType) {
         paramDef += enums.join('\n\n');
         paramDef += `\n`;
     }
-    return { paramDef, usesGlobalType, isInterfaceEmpty };
+    params.sort((p1, p2) => (p1.isRequired ? 0 : 1) - (p2.isRequired ? 0 : 1));
+    typesOnly = params.map(p => p.propertyAsMethodParameter).join(', ');
+    return { paramDef, typesOnly, usesGlobalType, isInterfaceEmpty };
 }
 exports.processParams = processParams;
 // TODO! use required array to set the variable

@@ -7,7 +7,6 @@
 
 import {Action} from '@ngrx/store';
 import {RestAuthUserPartialUpdateParams} from '../../../../controllers/RestAuth';
-import * as model from '../../../../model';
 
 export enum Actions {
   START = '[restAuthUserPartialUpdate] Start',
@@ -22,7 +21,7 @@ export class Start implements Action {
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: model.UserDetails) {}
+  constructor(public payload: __model.UserDetails) {}
 }
 
 export class Error implements Action {
