@@ -70,7 +70,7 @@ function processDefinition(def: Definition, name: string, config: Config): Proce
   const properties = _.map(def.properties, (v, k) => processProperty(v, k, name, def.required));
   // conditional import of global types
   if (properties.some(p => !p.native)) {
-    output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
   }
   if (def.description) output += `/** ${def.description} */\n`;
 

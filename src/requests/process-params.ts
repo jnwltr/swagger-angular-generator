@@ -10,6 +10,7 @@ import {indent} from '../utils';
 
 export interface ProcessParamsOutput {
   paramDef: string;
+  typesOnly: string;
   usesGlobalType: boolean;
   isInterfaceEmpty: boolean;
 }
@@ -21,6 +22,8 @@ export interface ProcessParamsOutput {
  */
 export function processParams(def: Parameter[], paramsType: string): ProcessParamsOutput {
   let paramDef = '';
+  let typesOnly = '';
+
   paramDef += `export interface ${paramsType} {\n`;
 
   const params = _.map(def, p => processProperty(
@@ -39,7 +42,10 @@ export function processParams(def: Parameter[], paramsType: string): ProcessPara
     paramDef += `\n`;
   }
 
-  return {paramDef, usesGlobalType, isInterfaceEmpty};
+  params.sort((p1, p2) => (p1.isRequired ? 0 : 1) - (p2.isRequired ? 0 : 1));
+  typesOnly = params.map(p => p.propertyAsMethodParameter).join(', ');
+
+  return {paramDef, typesOnly, usesGlobalType, isInterfaceEmpty};
 }
 
 // TODO! use required array to set the variable

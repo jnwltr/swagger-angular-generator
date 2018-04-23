@@ -10,6 +10,7 @@ export interface Config {
   header: string;
   dest: string;
   generateStore: boolean;
+  unwrapSingleParamMethods: boolean;
 }
 
 /**
@@ -17,7 +18,12 @@ export interface Config {
  * @param src source swagger json schema
  * @param dest destination directory
  */
-export function generate(src: string = conf.apiFile, dest: string = conf.outDir, generateStore = true) {
+export function generate(
+  src: string = conf.apiFile,
+  dest: string = conf.outDir,
+  generateStore = true,
+  unwrapSingleParamMethods = false) {
+
   let schema: any;
 
   try {
@@ -33,7 +39,7 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir,
   }
 
   const header = processHeader(schema);
-  const config: Config = {header, dest, generateStore};
+  const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
 

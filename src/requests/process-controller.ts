@@ -36,7 +36,7 @@ export function processController(methods: ControllerMethod[], name: string, con
     usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
   });
 
-  const processedMethods: MethodOutput[] = methods.map(processMethod);
+  const processedMethods: MethodOutput[] = methods.map(m => processMethod(m, config.unwrapSingleParamMethods));
   usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
 
   let content = '';
@@ -51,7 +51,7 @@ export function processController(methods: ControllerMethod[], name: string, con
   content += 'import {Observable} from \'rxjs/Observable\';\n\n';
 
   if (usesGlobalType) {
-    content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    content += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
   }
 
   const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');

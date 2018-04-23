@@ -31,4 +31,18 @@ describe(`Order delete`, () => {
       }),
     ),
   );
+
+  it(`generate single parameter unwrapped method`,
+    async(
+      inject([OrderService, HttpTestingController],
+        (service: OrderService, backend: HttpTestingController) => {
+          service.deleteORDER_('123e4567-e89b-12d3-a456-426655440000').subscribe();
+
+          backend.expectOne((req: HttpRequest<any>) => {
+            return req.method === 'DELETE'
+              && req.url === '/api/order/123e4567-e89b-12d3-a456-426655440000';
+          });
+      }),
+    ),
+  );
 });
