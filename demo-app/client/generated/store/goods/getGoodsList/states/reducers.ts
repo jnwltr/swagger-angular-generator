@@ -6,25 +6,28 @@
  */
 
 import {createFeatureSelector} from '@ngrx/store';
+
+import * as __model from '../../../../model';
 import * as actions from './actions';
 
-export interface RestAuthLogoutListState {
-  data: any;
+export interface GetGoodsListState {
+  data: __model.GetGoodsListGeneratedInlineModel;
   loading: boolean;
   error: string;
 }
 
-export const initialRestAuthLogoutListState: RestAuthLogoutListState = {
-  data: {},
+export const initialGetGoodsListState: GetGoodsListState = {
+  data: null,
   loading: false,
-  error: '',
+  error: null,
 };
 
-export const getRestAuthLogoutListStateSelector = createFeatureSelector<RestAuthLogoutListState>('RestAuthLogoutList');
+export const selectorName = 'GetGoodsList';
+export const getGetGoodsListStateSelector = createFeatureSelector<GetGoodsListState>(selectorName);
 
-export function RestAuthLogoutListReducer(
-  state: RestAuthLogoutListState = initialRestAuthLogoutListState,
-  action: actions.RestAuthLogoutListAction): RestAuthLogoutListState {
+export function GetGoodsListReducer(
+  state: GetGoodsListState = initialGetGoodsListState,
+  action: actions.GetGoodsListAction): GetGoodsListState {
   switch (action.type) {
     case actions.Actions.START: return {...state, loading: true, error: null};
     case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};

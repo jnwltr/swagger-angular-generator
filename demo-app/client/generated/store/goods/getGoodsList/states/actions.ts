@@ -6,21 +6,23 @@
  */
 
 import {Action} from '@ngrx/store';
+import {GetGoodsListParams} from '../../../../controllers/Goods';
+import * as __model from '../../../../model';
 
 export enum Actions {
-  START = '[restAuthLogoutCreate] Start',
-  SUCCESS = '[restAuthLogoutCreate] Success',
-  ERROR = '[restAuthLogoutCreate] Error',
+  START = '[getGoodsList] Start',
+  SUCCESS = '[getGoodsList] Success',
+  ERROR = '[getGoodsList] Error',
 }
 
 export class Start implements Action {
   readonly type = Actions.START;
-  constructor(public payload: RestAuthLogoutCreateParams) {}
+  constructor(public payload: GetGoodsListParams) {}
 }
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: void) {}
+  constructor(public payload: __model.GetGoodsListGeneratedInlineModel) {}
 }
 
 export class Error implements Action {
@@ -28,4 +30,4 @@ export class Error implements Action {
   constructor(public payload: string) {}
 }
 
-export type RestAuthLogoutCreateAction = Start | Success | Error;
+export type GetGoodsListAction = Start | Success | Error;

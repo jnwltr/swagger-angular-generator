@@ -49,6 +49,11 @@ export interface Schema extends ParameterSchemaBase {
   additionalProperties?: Schema;
   example?: any;
   readOnly?: boolean;
+  required?: string[];
+  type?: string;
+  properties?: {
+    [key: string]: Schema;
+  };
 }
 
 export interface Response {
