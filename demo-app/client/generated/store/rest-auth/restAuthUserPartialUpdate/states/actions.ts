@@ -7,6 +7,7 @@
 
 import {Action} from '@ngrx/store';
 import {RestAuthUserPartialUpdateParams} from '../../../../controllers/RestAuth';
+import * as __model from '../../../../model';
 
 export enum Actions {
   START = '[restAuthUserPartialUpdate] Start',

@@ -7,7 +7,7 @@ import {indent, writeFile} from '../../utils';
 export function generateHttpReducers(config: Config, actionClassNameBase: string,
                                      formSubDirName: string, responseType: string) {
   let content = '';
-  content += getReducerImports(responseType.startsWith('model.'));
+  content += getReducerImports(responseType.startsWith('__model.'));
   content += getStateInteface(actionClassNameBase, responseType);
   content += getInitialState(actionClassNameBase);
   content += getFeatureSelector(actionClassNameBase);
@@ -19,7 +19,7 @@ export function generateHttpReducers(config: Config, actionClassNameBase: string
 
 function getReducerImports(usesModels: boolean) {
   let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
-  if (usesModels) res += `import * as model from '../../../../model';\n`;
+  if (usesModels) res += `import * as __model from '../../../../model';\n`;
   res += `import * as actions from './actions';\n\n`;
 
   return res;

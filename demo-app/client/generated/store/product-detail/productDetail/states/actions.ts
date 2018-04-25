@@ -7,6 +7,7 @@
 
 import {Action} from '@ngrx/store';
 import {ProductDetailParams} from '../../../../controllers/ProductDetail';
+import * as __model from '../../../../model';
 
 export enum Actions {
   START = '[productDetail] Start',

@@ -6,6 +6,7 @@
  */
 
 import {Action} from '@ngrx/store';
+import * as __model from '../../../../model';
 
 export enum Actions {
   START = '[restAuthUserRead] Start',

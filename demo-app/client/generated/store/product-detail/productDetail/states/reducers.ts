@@ -7,6 +7,7 @@
 
 import {createFeatureSelector} from '@ngrx/store';
 
+import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface ProductDetailState {
