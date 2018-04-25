@@ -51,7 +51,7 @@ function processDefinition(def, name, config) {
     const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
     // conditional import of global types
     if (properties.some(p => !p.native)) {
-        output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     if (def.description)
         output += `/** ${def.description} */\n`;

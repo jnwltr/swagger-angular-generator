@@ -6,8 +6,10 @@ import {indent, makeComment} from './utils';
 
 export interface PropertyOutput {
   property: string;
+  propertyAsMethodParameter: string;
   enumDeclaration: string;
   native: boolean;
+  isRequired: boolean;
 }
 
 /**
@@ -86,14 +88,19 @@ export function processProperty(prop: Schema, name = '', namespace = '',
 
   const comment = makeComment(comments);
   let property;
+  let propertyAsMethodParameter;
 
   // pure type is returned if no name is specified
   if (name) {
     if (name.match(/-/)) name = `'${name}'`;
     property = `${comment}${readOnly}${name}${optional}: ${type};`;
-  } else property = `${type}`;
+    propertyAsMethodParameter = `${name}${optional}: ${type}`;
+  } else {
+      property = `${type}`;
+      propertyAsMethodParameter = property;
+  }
 
-  return {property, enumDeclaration, native};
+  return {property, propertyAsMethodParameter, enumDeclaration, native, isRequired: optional !== '?'};
 }
 
 /**
@@ -181,7 +188,7 @@ function resolveDefType(type: string): DefType {
 
   type = normalizeDef(type);
   return {
-    type: `${conf.modelFile}.${type}`,
+    type: `__${conf.modelFile}.${type}`,
     native: false,
   };
 }

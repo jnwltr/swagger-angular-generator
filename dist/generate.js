@@ -11,7 +11,7 @@ const utils_1 = require("./utils");
  * @param src source swagger json schema
  * @param dest destination directory
  */
-function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true) {
+function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, unwrapSingleParamMethods = false) {
     let schema;
     try {
         const content = fs.readFileSync(src);
@@ -27,7 +27,7 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true) 
         return;
     }
     const header = utils_1.processHeader(schema);
-    const config = { header, dest, generateStore };
+    const config = { header, dest, generateStore, unwrapSingleParamMethods };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
     const definitions = definitions_1.processDefinitions(schema.definitions, config);

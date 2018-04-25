@@ -9,11 +9,11 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
-import * as model from '../model';
+import * as __model from '../model';
 
 export interface OrderParams {
   /** order */
-  orderDto?: model.OrderDto;
+  orderDto?: __model.OrderDto;
   producer?: string;
 }
 
@@ -129,4 +129,8 @@ export class OrderService {
     };
     return this.http.delete<object>(`/api/order/${pathParams.orderId}`);
   }
+  deleteORDER_(orderId: string): Observable<object> {
+    return this.deleteORDER({orderId});
+  }
+
 }
