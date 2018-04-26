@@ -31,7 +31,7 @@ export class ProductDetailService {
     const pathParams = {
       productId: params.productId,
     };
-    return this.http.get<__model.ProductDetail>(`/api/product-detail/${pathParams.productId}`);
+    return this.http.get<__model.ProductDetail>(`/api-base-path/product-detail/${pathParams.productId}`);
   }
   productDetail_(productId: number): Observable<__model.ProductDetail> {
     return this.productDetail({productId});

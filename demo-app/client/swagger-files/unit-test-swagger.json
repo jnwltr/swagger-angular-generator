@@ -5,12 +5,12 @@
     "version": "v1"
   },
   "host": "example.com",
-  "basePath": "/swagger",
+  "basePath": "/api-base-path",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/api/products": {
+    "/products": {
       "get": {
         "tags": [
           "Products"
@@ -101,7 +101,7 @@
         }
       }
     },
-    "/api/product-detail/{productId}": {
+    "/product-detail/{productId}": {
       "get": {
         "tags": [
           "ProductDetail"
@@ -132,7 +132,7 @@
         }
       }
     },
-    "/api/order": {
+    "/order": {
       "post": {
         "tags": [
           "Order"
@@ -170,7 +170,7 @@
         }
       }
     },
-    "/api/order/{orderId}": {
+    "/order/{orderId}": {
       "patch": {
         "tags": [
           "Order"
@@ -298,7 +298,7 @@
         }
       }
     },
-    "/api/login": {
+    "/login": {
       "post": {
         "tags": [
           "Login"
@@ -330,7 +330,7 @@
         }
       }
     },
-    "/api/registration/{registrationType}": {
+    "/registration/{registrationType}": {
       "post": {
         "tags": [
           "Registration"
@@ -393,7 +393,7 @@
         }
       ]
     },
-    "/api/logout": {
+    "/logout": {
       "post": {
         "tags": [
           "Logout"
@@ -415,7 +415,7 @@
         }
       }
     },
-    "/api/career/v{version}/positions/{positionId}": {
+    "/career/v{version}/positions/{positionId}": {
       "get": {
         "tags": [
           "Career"

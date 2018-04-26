@@ -36,6 +36,7 @@ export interface ControllerMethod {
   responses: HttpResponse;
   responseDef: ResponseDef;
   paramDef: Parameter[];
+  basePath: string;
 }
 
 export interface MethodOutput {

@@ -29,7 +29,7 @@ describe(`ProductDetailService`, () => {
 
         backend.expectOne((req: HttpRequest<any>) => {
           return req.method === 'GET'
-            && req.url === '/api/product-detail/1';
+            && req.url === '/api-base-path/product-detail/1';
         });
       }),
     ),

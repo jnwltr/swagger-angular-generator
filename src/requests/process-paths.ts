@@ -16,11 +16,14 @@ import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
 /**
  * Entry point, processes all possible api requests and exports them
  * to files devided ty controllers (same as swagger web app sections)
- * @param paths paths from the schema
+ * @param pathsWithParameters paths from the schema
  * @param swaggerPath swagger base url
+ * @param config global configs
+ * @param definitions
+ * @param basePath base URL path
  */
 export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config,
-                             definitions: ProcessedDefinition[]) {
+                             definitions: ProcessedDefinition[], basePath: string) {
   emptyDir(path.join(config.dest, conf.storeDir));
   emptyDir(path.join(config.dest, conf.apiDir));
 
@@ -38,6 +41,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
       paramDef: method.parameters,
       responses: method.responses,
       responseDef: null,
+      basePath,
     }))
   ));
 

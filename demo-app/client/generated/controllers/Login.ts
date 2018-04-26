@@ -28,7 +28,7 @@ export class LoginService {
     const formDataParams = {
       loginDto: params.loginDto,
     };
-    return this.http.post<object>(`/api/login`, formDataParams);
+    return this.http.post<object>(`/api-base-path/login`, formDataParams);
   }
   login_(loginDto: __model.LoginDto): Observable<object> {
     return this.login({loginDto});
