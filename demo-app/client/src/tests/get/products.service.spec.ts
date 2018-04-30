@@ -38,7 +38,7 @@ describe(`ProductsService`, () => {
 
         backend.expectOne((req: HttpRequest<any>) => {
           return req.method === 'GET'
-            && req.url === '/api/products'
+            && req.url === '/api-base-path/products'
             && req.params.toString() === 'stringField=example-producer' +
                                          '&BooleanField=true' +
                                          '&int32Field=10' +

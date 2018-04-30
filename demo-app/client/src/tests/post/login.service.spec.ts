@@ -29,7 +29,7 @@ describe(`LoginService`, () => {
 
         backend.expectOne((req: HttpRequest<any>) => {
           return req.method === 'POST'
-            && req.url === '/api/login'
+            && req.url === '/api-base-path/login'
             && req.body.loginDto.email === 'test@test.com'
             && req.body.loginDto.password === 'password';
         });

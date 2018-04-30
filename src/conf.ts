@@ -5,9 +5,12 @@ import {MethodName, NativeNames} from './types';
 export const outDir = 'src/api';
 export const defsDir = 'defs';
 export const apiDir = 'controllers';
+export const storeDir = 'store';
+export const stateDir = 'states';
 export const apiFile = 'conf/api/api-docs.json';
 export const modelFile = 'model';
 export const indentation = 2;
+export const swaggerURLPath = '/swagger';
 // part of path in url
 export const swaggerFile = '/swagger-ui.html#!/';
 

@@ -19,21 +19,29 @@ export interface Definition {
   description?: string;
 }
 
+export interface ProcessedDefinition {
+  name: string;
+  def: Definition;
+}
+
 /**
  * Entry point, processes all definitions and exports them
  * to individual files
  * @param defs definitions from the schema
  */
-export function processDefinitions(defs: { [key: string]: Definition }, config: Config) {
+export function processDefinitions(defs: {[key: string]: Definition}, config: Config): ProcessedDefinition[] {
   emptyDir(path.join(config.dest, conf.defsDir));
 
-  const files: { [key: string]: string[] } = {};
+  const definitions: ProcessedDefinition[] = [];
+  const files: {[key: string]: string[]} = {};
+
   _.forOwn(defs, (v, source) => {
     const file = processDefinition(v, source, config);
-    if (file) {
-      const previous = files[file];
-      if (previous === undefined) files[file] = [source];
+    if (file && file.name) {
+      const previous = files[file.name];
+      if (previous === undefined) files[file.name] = [source];
       else previous.push(source);
+      definitions.push(file);
     }
   });
 
@@ -44,6 +52,8 @@ export function processDefinitions(defs: { [key: string]: Definition }, config: 
 
   const filename = path.join(config.dest, `${conf.modelFile}.ts`);
   writeFile(filename, allExports, config.header);
+
+  return definitions;
 }
 
 /**
@@ -51,7 +61,7 @@ export function processDefinitions(defs: { [key: string]: Definition }, config: 
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def: Definition, name: string, config: Config): string {
+function processDefinition(def: Definition, name: string, config: Config): ProcessedDefinition {
   if (!isWritable(name)) return;
 
   name = normalizeDef(name);
@@ -60,7 +70,7 @@ function processDefinition(def: Definition, name: string, config: Config): strin
   const properties = _.map(def.properties, (v, k) => processProperty(v, k, name, def.required));
   // conditional import of global types
   if (properties.some(p => !p.native)) {
-    output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
   }
   if (def.description) output += `/** ${def.description} */\n`;
 
@@ -75,7 +85,7 @@ function processDefinition(def: Definition, name: string, config: Config): strin
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
   writeFile(filename, output, config.header);
 
-  return name;
+  return {name, def};
 }
 
 /**
@@ -104,7 +114,7 @@ function createExportComments(file: string, sources: string[]): string {
  * @param type name
  */
 function isWritable(type: string) {
-  if (type.startsWith('Collection«')) {
+  if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
     return false;
   }
 

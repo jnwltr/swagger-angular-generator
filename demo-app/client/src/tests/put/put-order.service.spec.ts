@@ -31,7 +31,7 @@ describe(`Order put`, () => {
 
           backend.expectOne((req: HttpRequest<any>) => {
             return req.method === 'PUT'
-              && req.url === '/api/order/100'
+              && req.url === '/api-base-path/order/100'
               && req.body.producer === 'test-producer'
               && req.body.model === 'test-model'
               && req.body.customerName === 'Johny Cash';

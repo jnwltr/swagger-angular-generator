@@ -13,7 +13,7 @@ const common_1 = require("../common");
  */
 function processResponses(httpResponse, name) {
     const responses = _.filter(httpResponse, (r, status) => (r.schema && Math.floor(Number(status) / 100) === 2));
-    const properties = _.map(responses, response => (common_1.processProperty(response.schema, undefined, `${name}`)));
+    const properties = _.map(responses, response => (common_1.processProperty(response.schema, undefined, name)));
     const property = _.map(properties, 'property');
     const enumDeclaration = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
     const usesGlobalType = properties.some(p => !p.native);

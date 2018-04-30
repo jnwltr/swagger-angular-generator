@@ -16,15 +16,17 @@ const utils_1 = require("./utils");
  */
 function processDefinitions(defs, config) {
     utils_1.emptyDir(path.join(config.dest, conf.defsDir));
+    const definitions = [];
     const files = {};
     _.forOwn(defs, (v, source) => {
         const file = processDefinition(v, source, config);
-        if (file) {
-            const previous = files[file];
+        if (file && file.name) {
+            const previous = files[file.name];
             if (previous === undefined)
-                files[file] = [source];
+                files[file.name] = [source];
             else
                 previous.push(source);
+            definitions.push(file);
         }
     });
     let allExports = '';
@@ -33,6 +35,7 @@ function processDefinitions(defs, config) {
     });
     const filename = path.join(config.dest, `${conf.modelFile}.ts`);
     utils_1.writeFile(filename, allExports, config.header);
+    return definitions;
 }
 exports.processDefinitions = processDefinitions;
 /**
@@ -48,7 +51,7 @@ function processDefinition(def, name, config) {
     const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
     // conditional import of global types
     if (properties.some(p => !p.native)) {
-        output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     if (def.description)
         output += `/** ${def.description} */\n`;
@@ -61,7 +64,7 @@ function processDefinition(def, name, config) {
         output += `\n${enumLines}\n`;
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
-    return name;
+    return { name, def };
 }
 /**
  * Creates single export line for `def` name
@@ -86,7 +89,7 @@ function createExportComments(file, sources) {
  * @param type name
  */
 function isWritable(type) {
-    if (type.startsWith('Collection«')) {
+    if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
         return false;
     }
     return true;

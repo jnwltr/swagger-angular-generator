@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const path = require("path");
 const conf = require("../conf");
+const generate_form_modules_1 = require("../forms/generate-form-modules");
 const utils_1 = require("../utils");
 const process_method_1 = require("./process-method");
 const process_responses_1 = require("./process-responses");
@@ -15,7 +16,7 @@ const process_responses_1 = require("./process-responses");
  * @param controllers list of methods of the controller
  * @param name
  */
-function processController(methods, name, config) {
+function processController(methods, name, config, definitions) {
     const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
     let usesGlobalType = false;
     // make simpleNames unique and process responses
@@ -28,7 +29,7 @@ function processController(methods, name, config) {
         controller.responseDef = process_responses_1.processResponses(controller.responses, controller.simpleName);
         usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
     });
-    const processedMethods = methods.map(process_method_1.processMethod);
+    const processedMethods = methods.map(m => process_method_1.processMethod(m, config.unwrapSingleParamMethods));
     usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
     let content = '';
     const angularCommonHttp = ['HttpClient'];
@@ -39,7 +40,7 @@ function processController(methods, name, config) {
     content += 'import {Injectable} from \'@angular/core\';\n';
     content += 'import {Observable} from \'rxjs/Observable\';\n\n';
     if (usesGlobalType) {
-        content += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        content += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     const interfaceDef = _.map(processedMethods, 'interfaceDef').filter(Boolean).join('\n');
     if (interfaceDef) {
@@ -55,7 +56,12 @@ function processController(methods, name, config) {
     if (conf.adHocExceptions.api[name]) {
         content = content.replace(conf.adHocExceptions.api[name][0], conf.adHocExceptions.api[name][1]);
     }
+    /* controllers */
     utils_1.writeFile(filename, content, config.header);
+    /* forms */
+    if (config.generateStore) {
+        generate_form_modules_1.createForms(config, name, processedMethods, definitions);
+    }
 }
 exports.processController = processController;
 //# sourceMappingURL=process-controller.js.map
