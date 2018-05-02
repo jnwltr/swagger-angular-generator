@@ -101,11 +101,12 @@ exports.makeComment = makeComment;
 /**
  * Creates a unified header for all serialized files
  * @param schemaDef input schema header
+ * @param swaggerURLPath the path where the swagger ui definition can be found
  */
-function processHeader(schemaDef) {
+function processHeader(schemaDef, swaggerURLPath) {
     const relevant = {
         info: schemaDef.info,
-        path: schemaDef.host + schemaDef.basePath,
+        path: schemaDef.host + swaggerURLPath,
     };
     let res = JSON.stringify(relevant, null, conf.indentation);
     res = res.replace(/^[{}]$/gm, '');

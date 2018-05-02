@@ -37,7 +37,7 @@ export function processDefinitions(defs: {[key: string]: Definition}, config: Co
 
   _.forOwn(defs, (v, source) => {
     const file = processDefinition(v, source, config);
-    if (file.name) {
+    if (file && file.name) {
       const previous = files[file.name];
       if (previous === undefined) files[file.name] = [source];
       else previous.push(source);
@@ -114,7 +114,7 @@ function createExportComments(file: string, sources: string[]): string {
  * @param type name
  */
 function isWritable(type: string) {
-  if (type.startsWith('Collection«')) {
+  if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
     return false;
   }
 
