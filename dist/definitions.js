@@ -20,7 +20,7 @@ function processDefinitions(defs, config) {
     const files = {};
     _.forOwn(defs, (v, source) => {
         const file = processDefinition(v, source, config);
-        if (file.name) {
+        if (file && file.name) {
             const previous = files[file.name];
             if (previous === undefined)
                 files[file.name] = [source];
@@ -89,7 +89,7 @@ function createExportComments(file, sources) {
  * @param type name
  */
 function isWritable(type) {
-    if (type.startsWith('Collection«')) {
+    if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
         return false;
     }
     return true;

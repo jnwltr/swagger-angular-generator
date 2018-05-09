@@ -12,10 +12,13 @@ const process_controller_1 = require("./process-controller");
 /**
  * Entry point, processes all possible api requests and exports them
  * to files devided ty controllers (same as swagger web app sections)
- * @param paths paths from the schema
+ * @param pathsWithParameters paths from the schema
  * @param swaggerPath swagger base url
+ * @param config global configs
+ * @param definitions
+ * @param basePath base URL path
  */
-function processPaths(pathsWithParameters, swaggerPath, config, definitions) {
+function processPaths(pathsWithParameters, swaggerPath, config, definitions, basePath) {
     utils_1.emptyDir(path.join(config.dest, conf.storeDir));
     utils_1.emptyDir(path.join(config.dest, conf.apiDir));
     const paths = preProcessPaths(pathsWithParameters);
@@ -31,6 +34,7 @@ function processPaths(pathsWithParameters, swaggerPath, config, definitions) {
         paramDef: method.parameters,
         responses: method.responses,
         responseDef: null,
+        basePath,
     }))));
     const controllerFiles = _.groupBy(controllers, 'name');
     conf.controllerIgnores.forEach(key => delete controllerFiles[key]);

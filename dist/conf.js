@@ -9,6 +9,7 @@ exports.stateDir = 'states';
 exports.apiFile = 'conf/api/api-docs.json';
 exports.modelFile = 'model';
 exports.indentation = 2;
+exports.swaggerURLPath = '/swagger';
 // part of path in url
 exports.swaggerFile = '/swagger-ui.html#!/';
 // mapping from swagger native types to javascript types

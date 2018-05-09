@@ -12,7 +12,8 @@ const process_params_1 = require("./process-params");
  * Transforms method definition to typescript method
  * with single typed param object that is separated into several objects
  * and passed to api service
- * @param controller
+ * @param method data needed for method processing
+ * @param unwrapSingleParamMethods boolean
  */
 function processMethod(method, unwrapSingleParamMethods) {
     let methodDef = '';
@@ -21,7 +22,7 @@ function processMethod(method, unwrapSingleParamMethods) {
     const allowed = conf.allowedParams[method.methodName];
     let paramSeparation = [];
     let paramsSignature = '';
-    let params = '';
+    let params;
     let usesGlobalType = false;
     let usesQueryParams;
     let paramTypes = [];
@@ -40,11 +41,11 @@ function processMethod(method, unwrapSingleParamMethods) {
         usesGlobalType = processedParams.usesGlobalType;
         usesQueryParams = 'query' in paramGroups;
         interfaceDef = getInterfaceDef(processedParams);
-        params += getRequestParams(paramTypes, method.methodName);
         if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
             splitParamsMethod = getSplitParamsMethod(method, processedParams);
         }
     }
+    params = getRequestParams(paramTypes, method.methodName);
     methodDef += '\n';
     methodDef += utils_1.makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
     methodDef += `${method.simpleName}(${paramsSignature}): Observable<${method.responseDef.type}> {\n`;
@@ -52,7 +53,8 @@ function processMethod(method, unwrapSingleParamMethods) {
     methodDef += utils_1.indent(paramSeparation);
     if (paramSeparation.length)
         methodDef += '\n';
-    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
+    /* tslint:disable-next-line:max-line-length */
+    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${method.basePath}${url}\`${params});`;
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;

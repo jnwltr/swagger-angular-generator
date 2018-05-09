@@ -13,7 +13,8 @@ import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
  * Transforms method definition to typescript method
  * with single typed param object that is separated into several objects
  * and passed to api service
- * @param controller
+ * @param method data needed for method processing
+ * @param unwrapSingleParamMethods boolean
  */
 export function processMethod(method: ControllerMethod, unwrapSingleParamMethods: boolean): MethodOutput {
   let methodDef = '';
@@ -22,7 +23,7 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
   const allowed: string[] = conf.allowedParams[method.methodName];
   let paramSeparation: string[] = [];
   let paramsSignature = '';
-  let params = '';
+  let params: string;
   let usesGlobalType = false;
   let usesQueryParams: boolean;
   let paramTypes: string[] = [];
@@ -44,12 +45,12 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
     usesQueryParams = 'query' in paramGroups;
     interfaceDef = getInterfaceDef(processedParams);
 
-    params += getRequestParams(paramTypes, method.methodName);
-
     if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
-        splitParamsMethod = getSplitParamsMethod(method, processedParams);
+      splitParamsMethod = getSplitParamsMethod(method, processedParams);
     }
   }
+
+  params = getRequestParams(paramTypes, method.methodName);
 
   methodDef += '\n';
   methodDef += makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
@@ -76,16 +77,16 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
 }
 
 function getSplitParamsMethod(method: ControllerMethod, processedParams: ProcessParamsOutput) {
-    let splitParamsMethod = '';
+  let splitParamsMethod = '';
 
-    const splitParamsSignature = getSplitParamsSignature(processedParams);
-    splitParamsMethod += `\n${method.simpleName}_(${splitParamsSignature}): Observable<${method.responseDef.type}> {\n`;
+  const splitParamsSignature = getSplitParamsSignature(processedParams);
+  splitParamsMethod += `\n${method.simpleName}_(${splitParamsSignature}): Observable<${method.responseDef.type}> {\n`;
 
-    const propAssignments = getPropertyAssignments(method.paramDef);
-    splitParamsMethod += indent(`return this.${method.simpleName}(${propAssignments});\n`);
-    splitParamsMethod += '}\n';
+  const propAssignments = getPropertyAssignments(method.paramDef);
+  splitParamsMethod += indent(`return this.${method.simpleName}(${propAssignments});\n`);
+  splitParamsMethod += '}\n';
 
-    return splitParamsMethod;
+  return splitParamsMethod;
 }
 
 /**
@@ -94,15 +95,15 @@ function getSplitParamsMethod(method: ControllerMethod, processedParams: Process
  * @param paramsType
  */
 function getParamsSignature(processedParams: ProcessParamsOutput, paramsType: string) {
-    return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
+  return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
 }
 
 function getSplitParamsSignature(paramsOutput: ProcessParamsOutput): string {
-    return paramsOutput.typesOnly;
+  return paramsOutput.typesOnly;
 }
 
 function getPropertyAssignments(params: Parameter[]): string {
-    return '{' + params.map(p => p.name).join(', ') + '}';
+  return '{' + params.map(p => p.name).join(', ') + '}';
 }
 
 /**
@@ -110,7 +111,7 @@ function getPropertyAssignments(params: Parameter[]): string {
  * @param processedParams
  */
 function getInterfaceDef(processedParams: ProcessParamsOutput) {
-    return !processedParams.isInterfaceEmpty ? processedParams.paramDef : '';
+  return !processedParams.isInterfaceEmpty ? processedParams.paramDef : '';
 }
 
 /**
