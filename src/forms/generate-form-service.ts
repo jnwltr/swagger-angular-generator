@@ -88,15 +88,18 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: st
 
   // walk the list and build recursive form model
   Object.entries(schema).forEach(([paramName, param]) => {
-    if (parentTypes.indexOf(param.type) > -1) {
-        return;
-    }
+    const ref = param.$ref;
+
+    // break type definition chain with cycle
+    if (parentTypes.indexOf(ref) >= 0) return;
 
     const name = paramName;
     const newPath = [...path, name];
-    const newParentTypes = [...parentTypes, param.type];
-    const ref = param.$ref;
     const isRequired = required && required.includes(name);
+
+    let newParentTypes: string[] = [];
+    if (ref) newParentTypes = [...parentTypes, ref];
+
     const fieldDefinition = makeField(param, ref, name, newPath, isRequired, definitions, newParentTypes);
 
     res.push(fieldDefinition);
