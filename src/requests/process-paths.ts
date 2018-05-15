@@ -3,13 +3,10 @@
  * in the schema
  */
 import * as _ from 'lodash';
-import * as path from 'path';
-
 import * as conf from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
 import {Method, MethodName} from '../types';
-import {emptyDir} from '../utils';
 import {processController} from './process-controller';
 import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
 
@@ -24,8 +21,6 @@ import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
  */
 export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config,
                              definitions: ProcessedDefinition[], basePath: string) {
-  emptyDir(path.join(config.dest, conf.storeDir));
-  emptyDir(path.join(config.dest, conf.apiDir));
 
   const paths = preProcessPaths(pathsWithParameters);
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url: string) => (

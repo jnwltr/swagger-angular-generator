@@ -5,9 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * in the schema
  */
 const _ = require("lodash");
-const path = require("path");
 const conf = require("../conf");
-const utils_1 = require("../utils");
 const process_controller_1 = require("./process-controller");
 /**
  * Entry point, processes all possible api requests and exports them
@@ -19,8 +17,6 @@ const process_controller_1 = require("./process-controller");
  * @param basePath base URL path
  */
 function processPaths(pathsWithParameters, swaggerPath, config, definitions, basePath) {
-    utils_1.emptyDir(path.join(config.dest, conf.storeDir));
-    utils_1.emptyDir(path.join(config.dest, conf.apiDir));
     const paths = preProcessPaths(pathsWithParameters);
     const controllers = _.flatMap(paths, (methods, url) => (_.map(methods, (method, methodName) => ({
         url,
