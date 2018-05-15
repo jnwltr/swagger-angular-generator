@@ -43,7 +43,6 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                 if (prop.additionalProperties) {
                     const ap = prop.additionalProperties;
                     let additionalType;
-                    utils_1.out('name: ' + name);
                     if (ap.type === 'array') {
                         defType = translateType(ap.items.type || ap.items.$ref);
                         additionalType = `${defType.type}[]`;
