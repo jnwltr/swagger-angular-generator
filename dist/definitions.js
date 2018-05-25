@@ -13,6 +13,7 @@ const utils_1 = require("./utils");
  * Entry point, processes all definitions and exports them
  * to individual files
  * @param defs definitions from the schema
+ * @param config global configuration
  */
 function processDefinitions(defs, config) {
     utils_1.emptyDir(path.join(config.dest, conf.defsDir));
@@ -33,11 +34,15 @@ function processDefinitions(defs, config) {
     _.forOwn(files, (sources, def) => {
         allExports += createExport(def) + createExportComments(def, sources) + '\n';
     });
-    const filename = path.join(config.dest, `${conf.modelFile}.ts`);
-    utils_1.writeFile(filename, allExports, config.header);
+    writeToBaseModelFile(config, allExports);
     return definitions;
 }
 exports.processDefinitions = processDefinitions;
+function writeToBaseModelFile(config, allExports) {
+    const filename = path.join(config.dest, `${conf.modelFile}.ts`);
+    utils_1.writeFile(filename, allExports, config.header);
+}
+exports.writeToBaseModelFile = writeToBaseModelFile;
 /**
  * Creates the file of the type definition
  * @param def type definition
@@ -66,6 +71,7 @@ function processDefinition(def, name, config) {
     utils_1.writeFile(filename, output, config.header);
     return { name, def };
 }
+exports.processDefinition = processDefinition;
 /**
  * Creates single export line for `def` name
  * @param def name of the definition file w/o extension
@@ -73,6 +79,7 @@ function processDefinition(def, name, config) {
 function createExport(def) {
     return `export * from './${conf.defsDir}/${def}';`;
 }
+exports.createExport = createExport;
 /**
  * Creates comment naming source definitions for the export
  * @param def name of the definition file w/o extension
