@@ -26,7 +26,7 @@ function processController(methods, name, config, definitions) {
             const preserveCapitals = controller.operationId.replace(/([A-Z])/g, '-$1');
             controller.simpleName = _.lowerFirst(_.camelCase(preserveCapitals));
         }
-        controller.responseDef = process_responses_1.processResponses(controller.responses, controller.simpleName);
+        controller.responseDef = process_responses_1.processResponses(controller.responses, controller.simpleName, config);
         usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
     });
     const processedMethods = methods.map(m => process_method_1.processMethod(m, config.unwrapSingleParamMethods));

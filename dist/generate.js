@@ -30,7 +30,7 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
         utils_1.out(`${e}`);
         return;
     }
-    recreateDirectories(dest);
+    recreateDirectories(dest, generateStore);
     const header = utils_1.processHeader(schema, swaggerURLPath);
     const config = { header, dest, generateStore, unwrapSingleParamMethods };
     if (!fs.existsSync(dest))
@@ -39,12 +39,13 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
     process_paths_1.processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`, config, definitions, schema.basePath);
 }
 exports.generate = generate;
-function recreateDirectories(dest) {
-    utils_1.emptyDir(path.join(dest, conf.storeDir), true);
+function recreateDirectories(dest, generateStore) {
     utils_1.emptyDir(path.join(dest, conf.defsDir), true);
     utils_1.emptyDir(path.join(dest, conf.apiDir), true);
-    utils_1.createDir(path.join(dest, conf.storeDir));
+    utils_1.emptyDir(path.join(dest, conf.storeDir), true);
     utils_1.createDir(path.join(dest, conf.defsDir));
     utils_1.createDir(path.join(dest, conf.apiDir));
+    if (generateStore)
+        utils_1.createDir(path.join(dest, conf.storeDir));
 }
 //# sourceMappingURL=generate.js.map
