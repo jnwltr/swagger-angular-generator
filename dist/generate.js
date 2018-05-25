@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** Generator of API models (interfaces) from BE API json */
 const fs = require("fs");
 const conf = require("./conf");
+const path = require("path");
 const definitions_1 = require("./definitions");
 const process_paths_1 = require("./requests/process-paths");
 const utils_1 = require("./utils");
@@ -29,6 +30,7 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
         utils_1.out(`${e}`);
         return;
     }
+    recreateDirectories(dest);
     const header = utils_1.processHeader(schema, swaggerURLPath);
     const config = { header, dest, generateStore, unwrapSingleParamMethods };
     if (!fs.existsSync(dest))
@@ -37,4 +39,12 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
     process_paths_1.processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`, config, definitions, schema.basePath);
 }
 exports.generate = generate;
+function recreateDirectories(dest) {
+    utils_1.emptyDir(path.join(dest, conf.storeDir), true);
+    utils_1.emptyDir(path.join(dest, conf.defsDir), true);
+    utils_1.emptyDir(path.join(dest, conf.apiDir), true);
+    utils_1.createDir(path.join(dest, conf.storeDir));
+    utils_1.createDir(path.join(dest, conf.defsDir));
+    utils_1.createDir(path.join(dest, conf.apiDir));
+}
 //# sourceMappingURL=generate.js.map

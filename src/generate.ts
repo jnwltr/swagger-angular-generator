@@ -2,9 +2,10 @@
 import * as fs from 'fs';
 import * as conf from './conf';
 
+import * as path from 'path';
 import {processDefinitions} from './definitions';
 import {processPaths} from './requests/process-paths';
-import {out, processHeader, TermColors} from './utils';
+import {createDir, emptyDir, out, processHeader, TermColors} from './utils';
 
 export interface Config {
   header: string;
@@ -42,6 +43,8 @@ export function generate(
     return;
   }
 
+  recreateDirectories(dest, generateStore);
+
   const header = processHeader(schema, swaggerURLPath);
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
@@ -49,4 +52,14 @@ export function generate(
   const definitions = processDefinitions(schema.definitions, config);
   processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`,
                config, definitions, schema.basePath);
+}
+
+function recreateDirectories(dest: string, generateStore: boolean) {
+  emptyDir(path.join(dest, conf.defsDir), true);
+  emptyDir(path.join(dest, conf.apiDir), true);
+  emptyDir(path.join(dest, conf.storeDir), true);
+
+  createDir(path.join(dest, conf.defsDir));
+  createDir(path.join(dest, conf.apiDir));
+  if (generateStore) createDir(path.join(dest, conf.storeDir));
 }
