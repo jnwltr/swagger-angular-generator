@@ -28,6 +28,7 @@ export interface ProcessedDefinition {
  * Entry point, processes all definitions and exports them
  * to individual files
  * @param defs definitions from the schema
+ * @param config global configuration
  */
 export function processDefinitions(defs: {[key: string]: Definition}, config: Config): ProcessedDefinition[] {
   emptyDir(path.join(config.dest, conf.defsDir));
@@ -50,10 +51,14 @@ export function processDefinitions(defs: {[key: string]: Definition}, config: Co
     allExports += createExport(def) + createExportComments(def, sources) + '\n';
   });
 
-  const filename = path.join(config.dest, `${conf.modelFile}.ts`);
-  writeFile(filename, allExports, config.header);
+  writeToBaseModelFile(config, allExports);
 
   return definitions;
+}
+
+export function writeToBaseModelFile(config: Config, allExports: string) {
+  const filename = path.join(config.dest, `${conf.modelFile}.ts`);
+  writeFile(filename, allExports, config.header);
 }
 
 /**
@@ -61,7 +66,7 @@ export function processDefinitions(defs: {[key: string]: Definition}, config: Co
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-function processDefinition(def: Definition, name: string, config: Config): ProcessedDefinition {
+export function processDefinition(def: Definition, name: string, config: Config): ProcessedDefinition {
   if (!isWritable(name)) return;
 
   name = normalizeDef(name);
@@ -92,7 +97,7 @@ function processDefinition(def: Definition, name: string, config: Config): Proce
  * Creates single export line for `def` name
  * @param def name of the definition file w/o extension
  */
-function createExport(def: string): string {
+export function createExport(def: string): string {
   return `export * from './${conf.defsDir}/${def}';`;
 }
 

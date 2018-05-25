@@ -567,6 +567,63 @@
           "rest-auth"
         ]
       }
+    },
+    "/goods/get-goods-list/": {
+      "get": {
+        "operationId": "goods_get-goods-list_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The initial index from which to return the results.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Goods"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "goods"
+        ]
+      },
+      "parameters": []
     }
   },
   "definitions": {
@@ -683,6 +740,48 @@
           "title": "Last name",
           "type": "string",
           "maxLength": 150
+        }
+      }
+    },
+    "Goods": {
+      "required": [
+        "price",
+        "currency"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 250
+        },
+        "photo_url": {
+          "title": "Photo",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 250
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "maxLength": 250
+        },
+        "price": {
+          "title": "Price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "currency": {
+          "title": "Currency",
+          "type": "string",
+          "enum": [
+            "CZK"
+          ]
         }
       }
     }

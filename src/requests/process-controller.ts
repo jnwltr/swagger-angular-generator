@@ -32,7 +32,7 @@ export function processController(methods: ControllerMethod[], name: string, con
       controller.simpleName = _.lowerFirst(_.camelCase(preserveCapitals));
     }
 
-    controller.responseDef = processResponses(controller.responses, controller.simpleName);
+    controller.responseDef = processResponses(controller.responses, controller.simpleName, config);
     usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
   });
 

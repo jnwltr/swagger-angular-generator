@@ -46,7 +46,6 @@ export function generate(
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
-
   const definitions = processDefinitions(schema.definitions, config);
   processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`,
                config, definitions, schema.basePath);
