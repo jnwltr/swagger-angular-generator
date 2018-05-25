@@ -5,14 +5,14 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as actions from './actions';
 
 export interface PutOrderState {
-  data: object;
+  data: object | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialPutOrderState: PutOrderState = {
@@ -22,7 +22,7 @@ export const initialPutOrderState: PutOrderState = {
 };
 
 export const selectorName = 'PutOrder';
-export const getPutOrderStateSelector = createFeatureSelector<PutOrderState>(selectorName);
+export const getPutOrderStateSelector: MemoizedSelector<object, PutOrderState> = createFeatureSelector<PutOrderState>(selectorName);
 
 export function PutOrderReducer(
   state: PutOrderState = initialPutOrderState,
