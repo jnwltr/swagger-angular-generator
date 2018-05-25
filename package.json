@@ -5,8 +5,11 @@
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
   "bin": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "postinstall": "cd demo-app/client && npm i",
+    "demo:install": "cd demo-app/client && npm i",
     "start": "ts-node src/index.ts",
     "start:debug": "node -r ts-node/register --inspect-brk src/index.ts",
     "prebuild": "rm -rf dist",
