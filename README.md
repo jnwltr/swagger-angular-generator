@@ -7,23 +7,21 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 ## What is generated
 
 ### Services for back-end / API communication
- - connect to your API in no-time
+- connect to your API in no-time
 
 ### Interfaces
- - request and response interfaces are created
- 
+- request and response interfaces are created
+
 ### Forms services for the PUT and POST methods
- - forms can be created by merely importing a service and using it in HTML templates (see below)
+- forms can be created by merely importing a service and using it in HTML templates (see below)
 
 ### NGRX modules for endpoints (optional)
- - so that the server responses can be reached in the redux store
- - requests can be triggered by dispatching an action
- 
+- so that the server responses can be reached in the redux store
+- requests can be triggered by dispatching an action
+
 ##### Have a look at the [demo-app generated files](demo-app/client/generated) to get better understanding what is being generated.
 
-
 ## Install
-
 `npm i swagger-angular-generator --save-dev`
 
 ## Options
@@ -69,7 +67,6 @@ The resulting API layer contains the following structure in the destination dire
 1. `store` directory has modules, which contain associated form service and NGRX actions, reducers and effects
 1. `model.ts` file reexports all of them together for a simple access
 
-
 When updating your code for new backend version, we recommend you to follow these steps:
 
 1. `git diff` the changes
@@ -82,6 +79,7 @@ When updating your code for new backend version, we recommend you to follow thes
 In order to consume generated model, follow the steps **1-9** in the following example to use generated API model.
 
 #### API service usage in component
+
 ```typescript
 // 1. import used response interfaces
 import {ItemDto, PageDto} from '[relative-path-to-destination-directory]/model';
@@ -125,53 +123,40 @@ export class MyComponent implements OnInit {
 #### Usage of Forms services
 - the `exampleFormService` service is generated and holds the `FormGroup` definition that corresponds
  with the request data structure
+- use it in the template the following way
 
 ```html
 <form [formGroup]="exampleFormService.form" (ngSubmit)="sendForm()" class="full-width">
-
     <input type="text" name="email" placeholder="email"
-           [formControl]="exampleFormService.form.get('email')" />
-
+           formControlName="email" />
     <button type="submit"
             [disabled]="exampleFormService.form.invalid">Save</button>
 </form>
 ```
 
-- the corresponding component:
+- this is the corresponding component
 ```typescript
 @Component({
   selector: 'example-component',
   templateUrl: 'example-component.html',
 })
 export class ExampleComponent implements OnDestroy {
-
-  constructor(
-    public exampleFormService: ExampleFormService,
-  ) { }
-
-  sendForm() {
-    ...
-  }
+  constructor(public exampleFormService: ExampleFormService) {}
+  sendForm() {...}
 }
 ```
 
-- the generated service looks like this:
+- the generated service looks like this
 ```typescript
 export class ExampleFormService {
   form: FormGroup;
-  constructor(
-    private exampleService: ExampleService,
-  ) {
+  constructor(private exampleService: ExampleService) {
     this.form = new FormGroup({
       email: new FormControl(undefined, [Validators.email, Validators.required]),
-      });
+    });
   }
 }
 ```
-
-##### Current form service limitations
-- we are skipping array-like structures, so only empty FormArray is created in generated forms
-
 
 #### NGRX workflow with generated modules, actions, effects, reducers and form services
 
@@ -187,7 +172,7 @@ export class ExampleFormService {
 export class YourModule {}
 ```
 
-- The generated module looks like this:
+- the generated module looks like this
 ```typescript
 @NgModule({
   imports: [
@@ -204,7 +189,9 @@ export class ExampleModule {}
 ```
 
 ##### Component (created by you)
-- In the component, send the above created form via `sendForm()` method. Notice the way a generated anction is dispatched.
+
+In the component, send the above created form via `sendForm()` method. Notice the way a generated anction is dispatched.
+
 ```typescript
 import {Component, OnDestroy} from '@angular/core';
 import {Store} from '@ngrx/store';
@@ -220,12 +207,10 @@ import {AppState} from '../states/exmaple.models';
 })
 export class ExampleComponent implements OnDestroy {
 
-  ngDestroy = new Subject<void>();
-
   constructor(
     public exampleFormService: ExampleFormService,
     private store: Store<AppState>,
-  ) { }
+  ) {}
 
   sendForm() {
     this.store.dispatch(new ExampleStart(this.exampleFormService.form.value));
@@ -298,7 +283,9 @@ export function ExampleReducer(
 
 ```typescript
 ngOnInit() {
-    this.exampleState = this.store.select(getExampleSelector)
+    this.exampleState = this.store.pipe(
+      takeUntil(this.ngDestroy),
+      select(getExampleSelector));
     // OR
     this.data = this.store.select(s => ExampleState.data)
     this.loading = this.store.select(s => ExampleState.loading)
@@ -315,16 +302,14 @@ The http methods are grouped to services based on the tags, i.e. if two methods 
 generated inside Order.ts
 1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
-1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method
-can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
-
+1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
+1. we are skipping array-like structures, so only empty FormArray is created in generated forms
 
 #### Usage of NGRX modules
 
-
 ## Development
 
-* at least node 8 is needed
+* at least Node.js 8 is needed
 
 ### Docker image
 
