@@ -35,6 +35,8 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 
 `-u, --swagger-URL-path` - swagger URL path, where the swagger ui documentation can be found; default: `/swagger`, i.e. the resulting address would be `http://example/swagger`
 
+`-o, --omit-version` - disables API version information to be generated in comments for each file
+
 
 ## Use
 
