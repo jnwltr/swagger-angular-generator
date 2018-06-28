@@ -14,8 +14,9 @@ const utils_1 = require("./utils");
  * @param generateStore decides if redux workflow should be generated
  * @param unwrapSingleParamMethods controls if the single param methods should be generated
  * @param swaggerURLPath the path where the swagger ui definition can be found
+ * @param omitVersion shouldn't generate API version info to generated files
  */
-function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, unwrapSingleParamMethods = false, swaggerURLPath = conf.swaggerURLPath) {
+function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, unwrapSingleParamMethods = false, swaggerURLPath = conf.swaggerURLPath, omitVersion = false) {
     let schema;
     try {
         const content = fs.readFileSync(src);
@@ -31,7 +32,7 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
         return;
     }
     recreateDirectories(dest, generateStore);
-    const header = utils_1.processHeader(schema, swaggerURLPath);
+    const header = utils_1.processHeader(schema, swaggerURLPath, omitVersion);
     const config = { header, dest, generateStore, unwrapSingleParamMethods };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
