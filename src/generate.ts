@@ -21,13 +21,15 @@ export interface Config {
  * @param generateStore decides if redux workflow should be generated
  * @param unwrapSingleParamMethods controls if the single param methods should be generated
  * @param swaggerURLPath the path where the swagger ui definition can be found
+ * @param omitVersion shouldn't generate API version info to generated files
  */
 export function generate(
   src: string = conf.apiFile,
   dest: string = conf.outDir,
   generateStore = true,
   unwrapSingleParamMethods = false,
-  swaggerURLPath: string = conf.swaggerURLPath) {
+  swaggerURLPath: string = conf.swaggerURLPath,
+  omitVersion = false) {
 
   let schema: any;
 
@@ -45,7 +47,7 @@ export function generate(
 
   recreateDirectories(dest, generateStore);
 
-  const header = processHeader(schema, swaggerURLPath);
+  const header = processHeader(schema, swaggerURLPath, omitVersion);
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
