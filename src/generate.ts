@@ -2,21 +2,35 @@
 import * as fs from 'fs';
 import * as conf from './conf';
 
+import * as path from 'path';
 import {processDefinitions} from './definitions';
 import {processPaths} from './requests/process-paths';
-import {out, processHeader} from './utils';
+import {createDir, emptyDir, out, processHeader, TermColors} from './utils';
 
 export interface Config {
   header: string;
   dest: string;
+  generateStore: boolean;
+  unwrapSingleParamMethods: boolean;
 }
 
 /**
  * Generates API layer for the project based on src to dest
  * @param src source swagger json schema
  * @param dest destination directory
+ * @param generateStore decides if redux workflow should be generated
+ * @param unwrapSingleParamMethods controls if the single param methods should be generated
+ * @param swaggerURLPath the path where the swagger ui definition can be found
+ * @param omitVersion shouldn't generate API version info to generated files
  */
-export function generate(src: string = conf.apiFile, dest: string = conf.outDir) {
+export function generate(
+  src: string = conf.apiFile,
+  dest: string = conf.outDir,
+  generateStore = true,
+  unwrapSingleParamMethods = false,
+  swaggerURLPath: string = conf.swaggerURLPath,
+  omitVersion = false) {
+
   let schema: any;
 
   try {
@@ -24,18 +38,30 @@ export function generate(src: string = conf.apiFile, dest: string = conf.outDir)
     schema = JSON.parse(content.toString());
   } catch (e) {
     if (e instanceof SyntaxError) {
-      out(`${src} is either not a valid JSON scheme or contains non-printable characters`, 'red');
-    } else out(`JSON scheme file '${src}' does not exist`, 'red');
+      out(`${src} is either not a valid JSON scheme or contains non-printable characters`, TermColors.red);
+    } else out(`JSON scheme file '${src}' does not exist`, TermColors.red);
 
     out(`${e}`);
     return;
   }
 
-  const header = processHeader(schema);
-  const config: Config = {header, dest};
+  recreateDirectories(dest, generateStore);
+
+  const header = processHeader(schema, swaggerURLPath, omitVersion);
+  const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+  const definitions = processDefinitions(schema.definitions, config);
+  processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`,
+               config, definitions, schema.basePath);
+}
 
-  processPaths(schema.paths, `http://${schema.host}${schema.basePath}${conf.swaggerFile}`, config);
-  processDefinitions(schema.definitions, config);
+function recreateDirectories(dest: string, generateStore: boolean) {
+  emptyDir(path.join(dest, conf.defsDir), true);
+  emptyDir(path.join(dest, conf.apiDir), true);
+  emptyDir(path.join(dest, conf.storeDir), true);
+
+  createDir(path.join(dest, conf.defsDir));
+  createDir(path.join(dest, conf.apiDir));
+  if (generateStore) createDir(path.join(dest, conf.storeDir));
 }

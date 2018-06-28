@@ -1,0 +1,33 @@
+/* tslint:disable:max-line-length max-classes-per-file */
+/**
+ * Test Swagger
+ * v1
+ * example.com/swagger
+ */
+
+import {Action} from '@ngrx/store';
+import {GetGoodsListParams} from '../../../../controllers/Goods';
+import * as __model from '../../../../model';
+
+export enum Actions {
+  START = '[getGoodsList] Start',
+  SUCCESS = '[getGoodsList] Success',
+  ERROR = '[getGoodsList] Error',
+}
+
+export class Start implements Action {
+  readonly type = Actions.START;
+  constructor(public payload: GetGoodsListParams) {}
+}
+
+export class Success implements Action {
+  readonly type = Actions.SUCCESS;
+  constructor(public payload: __model.GetGoodsListGeneratedInlineModel) {}
+}
+
+export class Error implements Action {
+  readonly type = Actions.ERROR;
+  constructor(public payload: string) {}
+}
+
+export type GetGoodsListAction = Start | Success | Error;

@@ -4,10 +4,39 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 - Source: [swagger scheme](https://swagger.io/specification/)
 - Destination: [Angular-cli](https://cli.angular.io/) based [Angular](https://angular.io/) app.
 
-## Install
+## What is generated
 
-1. `npm i swagger-angular-generator --save-dev`
-1. check usage via `./node_modules/.bin/swagger-angular-generator -h`
+### Services for back-end / API communication
+- connect to your API in no-time
+
+### Interfaces
+- request and response interfaces are created
+
+### Forms services for the PUT and POST methods
+- forms can be created by merely importing a service and using it in HTML templates (see below)
+
+### NGRX modules for endpoints (optional)
+- so that the server responses can be reached in the redux store
+- requests can be triggered by dispatching an action
+
+##### Have a look at the [demo-app generated files](demo-app/client/generated) to get better understanding what is being generated.
+
+## Install
+`npm i swagger-angular-generator --save-dev`
+
+## Options
+`-h` - show help
+
+`-s`, `--src` - source directory
+
+`-d`, `--dest` - destination directory, default: `src/api`
+
+`--no-store` - do not generate the ngrx modules
+
+`-u, --swagger-URL-path` - swagger URL path, where the swagger ui documentation can be found; default: `/swagger`, i.e. the resulting address would be `http://example/swagger`
+
+`-o, --omit-version` - disables API version information to be generated in comments for each file
+
 
 ## Use
 
@@ -35,9 +64,10 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 
 The resulting API layer contains the following structure in the destination directory:
 
-1. `def` directory stores all response interfaces and enums
-1. `model.ts` file reexports all of them together for a simple access
 1. `controllers` directory stores services containing all API methods devided by controllers
+1. `defs` directory stores all response interfaces and enums
+1. `store` directory has modules, which contain associated form service and NGRX actions, reducers and effects
+1. `model.ts` file reexports all of them together for a simple access
 
 When updating your code for new backend version, we recommend you to follow these steps:
 
@@ -50,31 +80,32 @@ When updating your code for new backend version, we recommend you to follow thes
 
 In order to consume generated model, follow the steps **1-9** in the following example to use generated API model.
 
-#### Usage in the service or component
+#### API service usage in component
+
 ```typescript
-// 1. import used response types
+// 1. import used response interfaces
 import {ItemDto, PageDto} from '[relative-path-to-destination-directory]/model';
-// 2. import used controller service and optionally param types
+// 2. import used API service and optionally param interfaces
 import {DataService, MethodParams} from '[relative-path-to-destination-directory]/api/DataService';
 
 @Component({
   ...
-  // 3. make the service injectable
+  // 3. make the service injectable (can be also imported in the module)
   providers: [DataService],
 })
 export class MyComponent implements OnInit {
-  // 4. link response objects to generated API types
+  // 4. declare response object variables based on the generated API interfaces
   public items: ItemDto[] = [];
   public page: PageDto;
 
-  // 5. link request params to generated API types (all params are passed together in one object)
+  // 5. declare request params based on the generated API interface (all params are passed together in one object)
   private params: MethodParams = {
     page: 0,
     size: 10,
     sort: ['name:asc']
   };
 
-  // 6. inject the service
+  // 6. inject the API service
   constructor(private dataService: DataService) {}
 
   public ngOnInit() {
@@ -83,16 +114,189 @@ export class MyComponent implements OnInit {
       .get(this.params)
       // 8. returned data are fully typed
       .subscribe(data => {
-        // 9. assignments type-checked
-        const {content, page} = data;
-        this.items = content;
-        this.page = page;
+        // 9. assignments are type-checked
+        this.items = data.content;
+        this.page = data.page;
       });
   }
 }
 ```
 
+#### Usage of Forms services
+- the `exampleFormService` service is generated and holds the `FormGroup` definition that corresponds
+ with the request data structure
+- use it in the template the following way
+
+```html
+<form [formGroup]="exampleFormService.form" (ngSubmit)="sendForm()" class="full-width">
+    <input type="text" name="email" placeholder="email"
+           formControlName="email" />
+    <button type="submit"
+            [disabled]="exampleFormService.form.invalid">Save</button>
+</form>
+```
+
+- this is the corresponding component
+```typescript
+@Component({
+  selector: 'example-component',
+  templateUrl: 'example-component.html',
+})
+export class ExampleComponent implements OnDestroy {
+  constructor(public exampleFormService: ExampleFormService) {}
+  sendForm() {...}
+}
+```
+
+- the generated service looks like this
+```typescript
+export class ExampleFormService {
+  form: FormGroup;
+  constructor(private exampleService: ExampleService) {
+    this.form = new FormGroup({
+      email: new FormControl(undefined, [Validators.email, Validators.required]),
+    });
+  }
+}
+```
+
+#### NGRX workflow with generated modules, actions, effects, reducers and form services
+
+##### Import the generated module
+```typescript
+@NgModule({
+  imports: [
+    ...,
+    ExampleModule,
+    ...,
+  ],
+})
+export class YourModule {}
+```
+
+- the generated module looks like this
+```typescript
+@NgModule({
+  imports: [
+    FormsSharedModule,
+    NgrxStoreModule.forFeature(selectorName, ExampleReducer),
+    NgrxEffectsModule.forFeature([ExampleEffects]),
+  ],
+  providers: [
+    ExampleService,
+    ExampleFormService,
+  ],
+})
+export class ExampleModule {}
+```
+
+##### Component (created by you)
+
+In the component, send the above created form via `sendForm()` method. Notice the way a generated anction is dispatched.
+
+```typescript
+import {Component, OnDestroy} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs/Subject';
+import {ExampleFormService} from '../../generated/store/example/exampleModule/example.service';
+import {Start as ExampleStart} from '../../generated/store/example/exampleModule/states/actions';
+import {AppState} from '../states/exmaple.models';
+
+@Component({
+  selector: 'example-component',
+  templateUrl: 'example-component.html',
+})
+export class ExampleComponent implements OnDestroy {
+
+  constructor(
+    public exampleFormService: ExampleFormService,
+    private store: Store<AppState>,
+  ) {}
+
+  sendForm() {
+    this.store.dispatch(new ExampleStart(this.exampleFormService.form.value));
+  }
+
+  ngOnDestroy() {
+    this.ngDestroy.next();
+    this.ngDestroy.complete();
+  }
+}
+```
+
+##### Effect (generated)
+- the dispatched method is intercepted by an effect which calls the API via the generated API service
+- upon success, a `Success` action is dispatched (payload is the server response data)
+- upon error, an `Error` action is dispatched (payload is the error message sent from the server)
+
+```typescript
+@Injectable()
+export class ExampleEffects {
+  @Effect()
+  CreateProductCategory = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.exampleService.exampleEndpointMethod(action.payload)
+      .pipe(
+        map(result => new actions.Success(result)),
+        catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),
+      ),
+    ),
+  );
+
+  constructor(
+    private storeActions: Actions,
+    private adminproductService: AdminProductService,
+  ) {}
+}
+```
+
+##### Reducer (generated)
+- the reducer catches the `Success` / `Error` actions dispatched by the generated effect and stores the payloads to the store
+```typescript
+export interface ExampleState {
+  data: __model.ExampleServerResponseInterface;
+  loading: boolean;
+  error: string;
+}
+
+export const initialExampleState: ExampleState = {
+  data: null,
+  loading: false,
+  error: null,
+};
+
+export const selectorName = 'Example';
+export const getExampleSelector = createFeatureSelector<ExampleState>(selectorName);
+
+export function ExampleReducer(
+  state: ExampleState = initialExampleState,
+  action: actions.ExampleAction): ExampleState {
+  switch (action.type) {
+    case actions.Actions.START: return {...state, loading: true, error: null};
+    case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};
+    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
+    default: return state;
+  }
+}
+```
+
+##### Component (again)
+- the data can be retrieved by subscribing to the store
+
+```typescript
+ngOnInit() {
+    this.exampleState = this.store.pipe(
+      takeUntil(this.ngDestroy),
+      select(getExampleSelector));
+    // OR
+    this.data = this.store.select(s => ExampleState.data)
+    this.loading = this.store.select(s => ExampleState.loading)
+    this.error = this.store.select(s => ExampleState.error)
+}
+```
+
 ## Assumptions / limitations
+
 
 1. swagger file is in [version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) format, it must be json
 1. each endpoint must have a `tags` attribute defined. In addition, there must be exactly one tag defined.
@@ -100,12 +304,14 @@ The http methods are grouped to services based on the tags, i.e. if two methods 
 generated inside Order.ts
 1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
-1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method
-can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
+1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
+1. we are skipping array-like structures, so only empty FormArray is created in generated forms
+
+#### Usage of NGRX modules
 
 ## Development
 
-* at least node 8 is needed
+* at least Node.js 8 is needed
 
 ### Docker image
 

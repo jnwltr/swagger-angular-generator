@@ -13,28 +13,36 @@ const utils_1 = require("./utils");
  * Entry point, processes all definitions and exports them
  * to individual files
  * @param defs definitions from the schema
+ * @param config global configuration
  */
 function processDefinitions(defs, config) {
     utils_1.emptyDir(path.join(config.dest, conf.defsDir));
+    const definitions = [];
     const files = {};
     _.forOwn(defs, (v, source) => {
         const file = processDefinition(v, source, config);
-        if (file) {
-            const previous = files[file];
+        if (file && file.name) {
+            const previous = files[file.name];
             if (previous === undefined)
-                files[file] = [source];
+                files[file.name] = [source];
             else
                 previous.push(source);
+            definitions.push(file);
         }
     });
     let allExports = '';
     _.forOwn(files, (sources, def) => {
         allExports += createExport(def) + createExportComments(def, sources) + '\n';
     });
+    writeToBaseModelFile(config, allExports);
+    return definitions;
+}
+exports.processDefinitions = processDefinitions;
+function writeToBaseModelFile(config, allExports) {
     const filename = path.join(config.dest, `${conf.modelFile}.ts`);
     utils_1.writeFile(filename, allExports, config.header);
 }
-exports.processDefinitions = processDefinitions;
+exports.writeToBaseModelFile = writeToBaseModelFile;
 /**
  * Creates the file of the type definition
  * @param def type definition
@@ -48,7 +56,7 @@ function processDefinition(def, name, config) {
     const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
     // conditional import of global types
     if (properties.some(p => !p.native)) {
-        output += `import * as ${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     if (def.description)
         output += `/** ${def.description} */\n`;
@@ -61,8 +69,9 @@ function processDefinition(def, name, config) {
         output += `\n${enumLines}\n`;
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
-    return name;
+    return { name, def };
 }
+exports.processDefinition = processDefinition;
 /**
  * Creates single export line for `def` name
  * @param def name of the definition file w/o extension
@@ -70,6 +79,7 @@ function processDefinition(def, name, config) {
 function createExport(def) {
     return `export * from './${conf.defsDir}/${def}';`;
 }
+exports.createExport = createExport;
 /**
  * Creates comment naming source definitions for the export
  * @param def name of the definition file w/o extension
@@ -86,7 +96,7 @@ function createExportComments(file, sources) {
  * @param type name
  */
 function isWritable(type) {
-    if (type.startsWith('Collection«')) {
+    if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
         return false;
     }
     return true;

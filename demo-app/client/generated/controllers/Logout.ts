@@ -18,6 +18,6 @@ export class LogoutService {
    * http://example.com/swagger/swagger-ui.html#!/Logout/Logout
    */
   logout(): Observable<object> {
-    return this.http.post<object>(`/api/logout`, {});
+    return this.http.post<object>(`/api-base-path/logout`, {});
   }
 }

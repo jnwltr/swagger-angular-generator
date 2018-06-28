@@ -5,18 +5,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * in the schema
  */
 const _ = require("lodash");
-const path = require("path");
 const conf = require("../conf");
-const utils_1 = require("../utils");
 const process_controller_1 = require("./process-controller");
 /**
  * Entry point, processes all possible api requests and exports them
  * to files devided ty controllers (same as swagger web app sections)
- * @param paths paths from the schema
+ * @param pathsWithParameters paths from the schema
  * @param swaggerPath swagger base url
+ * @param config global configs
+ * @param definitions
+ * @param basePath base URL path
  */
-function processPaths(pathsWithParameters, swaggerPath, config) {
-    utils_1.emptyDir(path.join(config.dest, conf.apiDir));
+function processPaths(pathsWithParameters, swaggerPath, config, definitions, basePath) {
     const paths = preProcessPaths(pathsWithParameters);
     const controllers = _.flatMap(paths, (methods, url) => (_.map(methods, (method, methodName) => ({
         url,
@@ -30,10 +30,11 @@ function processPaths(pathsWithParameters, swaggerPath, config) {
         paramDef: method.parameters,
         responses: method.responses,
         responseDef: null,
+        basePath,
     }))));
     const controllerFiles = _.groupBy(controllers, 'name');
     conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-    _.forEach(controllerFiles, (methods, name) => process_controller_1.processController(methods, name, config));
+    _.forEach(controllerFiles, (methods, name) => process_controller_1.processController(methods, name, config, definitions));
 }
 exports.processPaths = processPaths;
 /**

@@ -12,22 +12,27 @@ const process_params_1 = require("./process-params");
  * Transforms method definition to typescript method
  * with single typed param object that is separated into several objects
  * and passed to api service
- * @param controller
+ * @param method data needed for method processing
+ * @param unwrapSingleParamMethods boolean
  */
-function processMethod(method) {
+function processMethod(method, unwrapSingleParamMethods) {
     let methodDef = '';
     let interfaceDef = '';
     const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
     const allowed = conf.allowedParams[method.methodName];
     let paramSeparation = [];
     let paramsSignature = '';
-    let params = '';
+    let params;
     let usesGlobalType = false;
     let usesQueryParams;
     let paramTypes = [];
+    let paramGroups = {};
+    let splitParamsMethod = '';
+    const simpleName = method.simpleName;
+    const methodName = method.methodName;
     if (method.paramDef) {
         const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
-        const paramGroups = _.groupBy(paramDef, 'in');
+        paramGroups = _.groupBy(paramDef, 'in');
         const paramsType = _.upperFirst(`${method.simpleName}Params`);
         const processedParams = process_params_1.processParams(paramDef, paramsType);
         paramTypes = Object.keys(paramGroups);
@@ -36,8 +41,11 @@ function processMethod(method) {
         usesGlobalType = processedParams.usesGlobalType;
         usesQueryParams = 'query' in paramGroups;
         interfaceDef = getInterfaceDef(processedParams);
-        params += getRequestParams(paramTypes, method.methodName);
+        if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
+            splitParamsMethod = getSplitParamsMethod(method, processedParams);
+        }
     }
+    params = getRequestParams(paramTypes, method.methodName);
     methodDef += '\n';
     methodDef += utils_1.makeComment([method.summary, method.description, method.swaggerUrl].filter(Boolean));
     methodDef += `${method.simpleName}(${paramsSignature}): Observable<${method.responseDef.type}> {\n`;
@@ -45,18 +53,30 @@ function processMethod(method) {
     methodDef += utils_1.indent(paramSeparation);
     if (paramSeparation.length)
         methodDef += '\n';
-    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${url}\`${params});`;
+    /* tslint:disable-next-line:max-line-length */
+    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${method.basePath}${url}\`${params});`;
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;
+    methodDef += splitParamsMethod;
     if (method.responseDef.enumDeclaration) {
         if (interfaceDef)
             interfaceDef += '\n';
         interfaceDef += `${method.responseDef.enumDeclaration}\n`;
     }
-    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams };
+    const responseDef = method.responseDef;
+    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName };
 }
 exports.processMethod = processMethod;
+function getSplitParamsMethod(method, processedParams) {
+    let splitParamsMethod = '';
+    const splitParamsSignature = getSplitParamsSignature(processedParams);
+    splitParamsMethod += `\n${method.simpleName}_(${splitParamsSignature}): Observable<${method.responseDef.type}> {\n`;
+    const propAssignments = getPropertyAssignments(method.paramDef);
+    splitParamsMethod += utils_1.indent(`return this.${method.simpleName}(${propAssignments});\n`);
+    splitParamsMethod += '}\n';
+    return splitParamsMethod;
+}
 /**
  * Creates a definition of paramsSignature, which serves as input to http methods
  * @param processedParams
@@ -64,6 +84,12 @@ exports.processMethod = processMethod;
  */
 function getParamsSignature(processedParams, paramsType) {
     return !processedParams.isInterfaceEmpty ? `params: ${paramsType}` : '';
+}
+function getSplitParamsSignature(paramsOutput) {
+    return paramsOutput.typesOnly;
+}
+function getPropertyAssignments(params) {
+    return '{' + params.map(p => p.name).join(', ') + '}';
 }
 /**
  * Creates a definition of interfaceDef, which defines interface for the http method input
