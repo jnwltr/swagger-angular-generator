@@ -5,14 +5,14 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as actions from './actions';
 
 export interface DeleteORDERState {
-  data: object;
+  data: object | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialDeleteORDERState: DeleteORDERState = {
@@ -22,7 +22,7 @@ export const initialDeleteORDERState: DeleteORDERState = {
 };
 
 export const selectorName = 'DeleteORDER';
-export const getDeleteORDERStateSelector = createFeatureSelector<DeleteORDERState>(selectorName);
+export const getDeleteORDERStateSelector: MemoizedSelector<object, DeleteORDERState> = createFeatureSelector<DeleteORDERState>(selectorName);
 
 export function DeleteORDERReducer(
   state: DeleteORDERState = initialDeleteORDERState,

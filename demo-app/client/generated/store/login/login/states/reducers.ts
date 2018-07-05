@@ -5,14 +5,14 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as actions from './actions';
 
 export interface LoginState {
-  data: object;
+  data: object | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialLoginState: LoginState = {
@@ -22,7 +22,7 @@ export const initialLoginState: LoginState = {
 };
 
 export const selectorName = 'Login';
-export const getLoginStateSelector = createFeatureSelector<LoginState>(selectorName);
+export const getLoginStateSelector: MemoizedSelector<object, LoginState> = createFeatureSelector<LoginState>(selectorName);
 
 export function LoginReducer(
   state: LoginState = initialLoginState,

@@ -18,9 +18,10 @@ function getEffectsImports(name) {
     res += `import {Injectable} from '@angular/core';\n`;
     res += `import {Actions, Effect} from '@ngrx/effects';\n`;
     res += '\n';
+    res += `import {Observable} from 'rxjs/Observable';\n`;
     res += `import {of} from 'rxjs/observable/of';\n`;
-    res += '\n';
     res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
+    res += '\n';
     res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
     res += `import * as actions from './actions';\n`;
     res += `\n`;
@@ -41,7 +42,8 @@ function getConstructorDefinition(name) {
 function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
     const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
     let res = utils_1.indent(`@Effect()\n`);
-    res += utils_1.indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
+    res += utils_1.indent(`${actionClassNameBase}: Observable<actions.${actionClassNameBase}Action> = ` +
+        `this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
     const actionParam = hasParams ? 'action: actions.Start' : '';
     res += utils_1.indent(`switchMap((${actionParam}) => ` +
         `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);

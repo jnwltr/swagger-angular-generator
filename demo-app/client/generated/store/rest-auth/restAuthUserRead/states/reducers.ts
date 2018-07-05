@@ -5,15 +5,15 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface RestAuthUserReadState {
-  data: __model.UserDetails;
+  data: __model.UserDetails | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialRestAuthUserReadState: RestAuthUserReadState = {
@@ -23,7 +23,7 @@ export const initialRestAuthUserReadState: RestAuthUserReadState = {
 };
 
 export const selectorName = 'RestAuthUserRead';
-export const getRestAuthUserReadStateSelector = createFeatureSelector<RestAuthUserReadState>(selectorName);
+export const getRestAuthUserReadStateSelector: MemoizedSelector<object, RestAuthUserReadState> = createFeatureSelector<RestAuthUserReadState>(selectorName);
 
 export function RestAuthUserReadReducer(
   state: RestAuthUserReadState = initialRestAuthUserReadState,

@@ -5,14 +5,14 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as actions from './actions';
 
 export interface OrderState {
-  data: object;
+  data: object | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialOrderState: OrderState = {
@@ -22,7 +22,7 @@ export const initialOrderState: OrderState = {
 };
 
 export const selectorName = 'Order';
-export const getOrderStateSelector = createFeatureSelector<OrderState>(selectorName);
+export const getOrderStateSelector: MemoizedSelector<object, OrderState> = createFeatureSelector<OrderState>(selectorName);
 
 export function OrderReducer(
   state: OrderState = initialOrderState,

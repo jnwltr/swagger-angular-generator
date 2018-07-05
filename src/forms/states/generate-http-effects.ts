@@ -21,9 +21,10 @@ function getEffectsImports(name: string) {
   res += `import {Injectable} from '@angular/core';\n`;
   res += `import {Actions, Effect} from '@ngrx/effects';\n`;
   res += '\n';
+  res += `import {Observable} from 'rxjs/Observable';\n`;
   res += `import {of} from 'rxjs/observable/of';\n`;
-  res += '\n';
   res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
+  res += '\n';
   res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
   res += `import * as actions from './actions';\n`;
   res += `\n`;
@@ -51,7 +52,9 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
   const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
 
   let res = indent(`@Effect()\n`);
-  res += indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
+  res += indent(
+    `${actionClassNameBase}: Observable<actions.${actionClassNameBase}Action> = ` +
+    `this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
   const actionParam = hasParams ? 'action: actions.Start' : '';
   res += indent(
     `switchMap((${actionParam}) => ` +

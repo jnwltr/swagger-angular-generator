@@ -5,14 +5,14 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as actions from './actions';
 
 export interface RegistrationState {
-  data: object;
+  data: object | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialRegistrationState: RegistrationState = {
@@ -22,7 +22,7 @@ export const initialRegistrationState: RegistrationState = {
 };
 
 export const selectorName = 'Registration';
-export const getRegistrationStateSelector = createFeatureSelector<RegistrationState>(selectorName);
+export const getRegistrationStateSelector: MemoizedSelector<object, RegistrationState> = createFeatureSelector<RegistrationState>(selectorName);
 
 export function RegistrationReducer(
   state: RegistrationState = initialRegistrationState,

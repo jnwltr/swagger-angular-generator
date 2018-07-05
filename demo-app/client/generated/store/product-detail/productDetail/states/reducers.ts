@@ -5,15 +5,15 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface ProductDetailState {
-  data: __model.ProductDetail;
+  data: __model.ProductDetail | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialProductDetailState: ProductDetailState = {
@@ -23,7 +23,7 @@ export const initialProductDetailState: ProductDetailState = {
 };
 
 export const selectorName = 'ProductDetail';
-export const getProductDetailStateSelector = createFeatureSelector<ProductDetailState>(selectorName);
+export const getProductDetailStateSelector: MemoizedSelector<object, ProductDetailState> = createFeatureSelector<ProductDetailState>(selectorName);
 
 export function ProductDetailReducer(
   state: ProductDetailState = initialProductDetailState,

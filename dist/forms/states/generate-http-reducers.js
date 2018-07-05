@@ -15,7 +15,7 @@ function generateHttpReducers(config, actionClassNameBase, formSubDirName, respo
 }
 exports.generateHttpReducers = generateHttpReducers;
 function getReducerImports(usesModels) {
-    let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
+    let res = `import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';\n\n`;
     if (usesModels)
         res += `import * as __model from '../../../../model';\n`;
     res += `import * as actions from './actions';\n\n`;
@@ -23,9 +23,9 @@ function getReducerImports(usesModels) {
 }
 function getStateInteface(actionClassNameBase, type) {
     let res = `export interface ${actionClassNameBase}State {\n`;
-    res += utils_1.indent(`data: ${type};\n`);
+    res += utils_1.indent(`data: ${type} | null;\n`);
     res += utils_1.indent(`loading: boolean;\n`);
-    res += utils_1.indent(`error: string;\n`);
+    res += utils_1.indent(`error: string | null;\n`);
     res += `}\n\n`;
     return res;
 }
@@ -39,7 +39,8 @@ function getInitialState(actionClassNameBase) {
 }
 function getFeatureSelector(actionClassNameBase) {
     let res = `export const selectorName = '${actionClassNameBase}';\n`;
-    res += `export const get${actionClassNameBase}StateSelector = ` +
+    res += `export const get${actionClassNameBase}StateSelector: ` +
+        `MemoizedSelector<object, ${actionClassNameBase}State> = ` +
         `createFeatureSelector<${actionClassNameBase}State>(selectorName);\n\n`;
     return res;
 }

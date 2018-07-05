@@ -8,6 +8,7 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "strictNullChecks": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "target": "es5",

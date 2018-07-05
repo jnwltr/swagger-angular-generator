@@ -5,14 +5,14 @@
  * example.com/swagger
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 
 import * as actions from './actions';
 
 export interface RestAuthLogoutListState {
-  data: void;
+  data: void | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialRestAuthLogoutListState: RestAuthLogoutListState = {
@@ -22,7 +22,7 @@ export const initialRestAuthLogoutListState: RestAuthLogoutListState = {
 };
 
 export const selectorName = 'RestAuthLogoutList';
-export const getRestAuthLogoutListStateSelector = createFeatureSelector<RestAuthLogoutListState>(selectorName);
+export const getRestAuthLogoutListStateSelector: MemoizedSelector<object, RestAuthLogoutListState> = createFeatureSelector<RestAuthLogoutListState>(selectorName);
 
 export function RestAuthLogoutListReducer(
   state: RestAuthLogoutListState = initialRestAuthLogoutListState,
