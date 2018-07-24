@@ -100,13 +100,13 @@ export function makeComment(input: string | string[]): string {
 /**
  * Creates a unified header for all serialized files
  * @param schemaDef input schema header
- * @param swaggerURLPath the path where the swagger ui definition can be found
+ * @param swaggerUrlPath the path where the swagger ui definition can be found
  * @param version should API version info be included in generated files
  */
-export function processHeader(schemaDef: any, swaggerURLPath: string, omitVersion = false): string {
+export function processHeader(schemaDef: any, omitVersion = false): string {
   const relevant = {
     info: schemaDef.info,
-    path: schemaDef.host + swaggerURLPath,
+    path: schemaDef.host + (schemaDef.basePath || ''),
   };
 
   if (omitVersion) delete relevant.info.version;

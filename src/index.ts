@@ -11,7 +11,7 @@ commander
   .option('-w, --unwrap-single-param-methods',
     'Controller methods with a single parameter get a method_() where the parameter object is unwrapped')
   /* tslint:disable-next-line:max-line-length */
-  .option('-u, --swagger-URL-path', `swagger URL path, where the swagger ui documentation can be found; default: ${conf.swaggerURLPath}, i.e. the resulting address would be http://example/${conf.swaggerURLPath}`)
+  .option('-u, --swagger-url-path <path>', `swagger URL path, where the swagger ui documentation can be found; default: ${conf.swaggerUrlPath}, i.e. the resulting address would be http://example${conf.swaggerUrlPath}`)
   .option('-o, --omit-version', `Write version info, default: ${conf.omitVersion}`)
   .parse(process.argv);
 
@@ -19,5 +19,5 @@ generate(commander.src,
   commander.dest,
   commander.store,
   commander.unwrapSingleParamMethods,
-  commander.swaggerURLPath,
+  commander.swaggerUrlPath,
   commander.omitVersion);

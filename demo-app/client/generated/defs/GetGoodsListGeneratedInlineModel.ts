@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com/api-base-path
  */
 
 import * as __model from '../model';

@@ -13,10 +13,10 @@ const utils_1 = require("./utils");
  * @param dest destination directory
  * @param generateStore decides if redux workflow should be generated
  * @param unwrapSingleParamMethods controls if the single param methods should be generated
- * @param swaggerURLPath the path where the swagger ui definition can be found
+ * @param swaggerUrlPath the path where the swagger ui definition can be found
  * @param omitVersion shouldn't generate API version info to generated files
  */
-function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, unwrapSingleParamMethods = false, swaggerURLPath = conf.swaggerURLPath, omitVersion = false) {
+function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, unwrapSingleParamMethods = false, swaggerUrlPath = conf.swaggerUrlPath, omitVersion = false) {
     let schema;
     try {
         const content = fs.readFileSync(src);
@@ -32,12 +32,12 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
         return;
     }
     recreateDirectories(dest, generateStore);
-    const header = utils_1.processHeader(schema, swaggerURLPath, omitVersion);
+    const header = utils_1.processHeader(schema, omitVersion);
     const config = { header, dest, generateStore, unwrapSingleParamMethods };
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
     const definitions = definitions_1.processDefinitions(schema.definitions, config);
-    process_paths_1.processPaths(schema.paths, `http://${schema.host}${swaggerURLPath}${conf.swaggerFile}`, config, definitions, schema.basePath);
+    process_paths_1.processPaths(schema.paths, `http://${schema.host}${swaggerUrlPath}${conf.swaggerFile}`, config, definitions, schema.basePath);
 }
 exports.generate = generate;
 function recreateDirectories(dest, generateStore) {

@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com/api-base-path
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
