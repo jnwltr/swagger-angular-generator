@@ -45,6 +45,12 @@ export function generate(
     return;
   }
 
+  // normalize basePath, strip trailing '/'s
+  const basePath = schema.basePath;
+  if (typeof basePath === 'string') {
+    schema.basePath = basePath.replace(/\/+$/, '');
+  } else schema.basePath = '';
+
   recreateDirectories(dest, generateStore);
 
   const header = processHeader(schema, omitVersion);
