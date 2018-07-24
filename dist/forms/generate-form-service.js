@@ -68,7 +68,7 @@ function walkParamOrProp(definition, path = [], definitions, parentTypes) {
     }
     else {
         required = definition.def.required;
-        schema = definition.def.properties;
+        schema = definition.def.properties || {};
     }
     // walk the list and build recursive form model
     Object.entries(schema).forEach(([paramName, param]) => {

@@ -83,7 +83,7 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: st
   // 2. object definition
   } else {
     required = definition.def.required;
-    schema = definition.def.properties;
+    schema = definition.def.properties || {};
   }
 
   // walk the list and build recursive form model
