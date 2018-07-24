@@ -9,7 +9,7 @@ exports.stateDir = 'states';
 exports.apiFile = 'conf/api/api-docs.json';
 exports.modelFile = 'model';
 exports.indentation = 2;
-exports.swaggerURLPath = '/swagger';
+exports.swaggerUrlPath = '/swagger';
 exports.omitVersion = false;
 // part of path in url
 exports.swaggerFile = '/swagger-ui.html#!/';

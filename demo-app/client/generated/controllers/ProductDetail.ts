@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/swagger
+ * example.com/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
