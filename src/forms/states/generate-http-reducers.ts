@@ -27,9 +27,9 @@ function getReducerImports(usesModels: boolean) {
 
 function getStateInteface(actionClassNameBase: string, type: string) {
   let res = `export interface ${actionClassNameBase}State {\n`;
-  res += indent(`data: ${type};\n`);
+  res += indent(`data: ${type} | null;\n`);
   res += indent(`loading: boolean;\n`);
-  res += indent(`error: string;\n`);
+  res += indent(`error: string | null;\n`);
   res += `}\n\n`;
 
   return res;

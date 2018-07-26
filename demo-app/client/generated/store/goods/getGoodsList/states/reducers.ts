@@ -11,9 +11,9 @@ import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface GetGoodsListState {
-  data: __model.GetGoodsListGeneratedInlineModel;
+  data: __model.GetGoodsListGeneratedInlineModel | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialGetGoodsListState: GetGoodsListState = {

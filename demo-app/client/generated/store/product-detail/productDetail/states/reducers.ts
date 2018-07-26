@@ -11,9 +11,9 @@ import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface ProductDetailState {
-  data: __model.ProductDetail;
+  data: __model.ProductDetail | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialProductDetailState: ProductDetailState = {
