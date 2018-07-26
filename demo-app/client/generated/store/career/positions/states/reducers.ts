@@ -10,9 +10,9 @@ import {createFeatureSelector} from '@ngrx/store';
 import * as actions from './actions';
 
 export interface PositionsState {
-  data: object;
+  data: object | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialPositionsState: PositionsState = {

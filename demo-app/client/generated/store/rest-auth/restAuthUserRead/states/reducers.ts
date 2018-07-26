@@ -11,9 +11,9 @@ import * as __model from '../../../../model';
 import * as actions from './actions';
 
 export interface RestAuthUserReadState {
-  data: __model.UserDetails;
+  data: __model.UserDetails | null;
   loading: boolean;
-  error: string;
+  error: string | null;
 }
 
 export const initialRestAuthUserReadState: RestAuthUserReadState = {
