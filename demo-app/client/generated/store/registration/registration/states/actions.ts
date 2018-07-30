@@ -9,9 +9,9 @@ import {Action} from '@ngrx/store';
 import {RegistrationParams} from '../../../../controllers/Registration';
 
 export enum Actions {
-  START = '[registration] Start',
-  SUCCESS = '[registration] Success',
-  ERROR = '[registration] Error',
+  START = '[Registration registration] Start',
+  SUCCESS = '[Registration registration] Success',
+  ERROR = '[Registration registration] Error',
 }
 
 export class Start implements Action {

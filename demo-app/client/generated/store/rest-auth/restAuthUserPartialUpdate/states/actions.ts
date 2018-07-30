@@ -10,9 +10,9 @@ import {RestAuthUserPartialUpdateParams} from '../../../../controllers/RestAuth'
 import * as __model from '../../../../model';
 
 export enum Actions {
-  START = '[restAuthUserPartialUpdate] Start',
-  SUCCESS = '[restAuthUserPartialUpdate] Success',
-  ERROR = '[restAuthUserPartialUpdate] Error',
+  START = '[RestAuth restAuthUserPartialUpdate] Start',
+  SUCCESS = '[RestAuth restAuthUserPartialUpdate] Success',
+  ERROR = '[RestAuth restAuthUserPartialUpdate] Error',
 }
 
 export class Start implements Action {

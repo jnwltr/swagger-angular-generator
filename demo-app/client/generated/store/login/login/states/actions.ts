@@ -9,9 +9,9 @@ import {Action} from '@ngrx/store';
 import {LoginParams} from '../../../../controllers/Login';
 
 export enum Actions {
-  START = '[login] Start',
-  SUCCESS = '[login] Success',
-  ERROR = '[login] Error',
+  START = '[Login login] Start',
+  SUCCESS = '[Login login] Success',
+  ERROR = '[Login login] Error',
 }
 
 export class Start implements Action {

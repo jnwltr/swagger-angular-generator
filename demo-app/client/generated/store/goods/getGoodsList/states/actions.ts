@@ -10,9 +10,9 @@ import {GetGoodsListParams} from '../../../../controllers/Goods';
 import * as __model from '../../../../model';
 
 export enum Actions {
-  START = '[getGoodsList] Start',
-  SUCCESS = '[getGoodsList] Success',
-  ERROR = '[getGoodsList] Error',
+  START = '[Goods getGoodsList] Start',
+  SUCCESS = '[Goods getGoodsList] Success',
+  ERROR = '[Goods getGoodsList] Error',
 }
 
 export class Start implements Action {
