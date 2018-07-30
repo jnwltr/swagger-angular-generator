@@ -9,9 +9,9 @@ import {Action} from '@ngrx/store';
 import * as __model from '../../../../model';
 
 export enum Actions {
-  START = '[restAuthUserRead] Start',
-  SUCCESS = '[restAuthUserRead] Success',
-  ERROR = '[restAuthUserRead] Error',
+  START = '[RestAuth restAuthUserRead] Start',
+  SUCCESS = '[RestAuth restAuthUserRead] Success',
+  ERROR = '[RestAuth restAuthUserRead] Error',
 }
 
 export class Start implements Action {

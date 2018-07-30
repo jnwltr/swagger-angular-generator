@@ -10,9 +10,9 @@ import {ProductsParams} from '../../../../controllers/Products';
 import * as __model from '../../../../model';
 
 export enum Actions {
-  START = '[products] Start',
-  SUCCESS = '[products] Success',
-  ERROR = '[products] Error',
+  START = '[Products products] Start',
+  SUCCESS = '[Products products] Success',
+  ERROR = '[Products products] Error',
 }
 
 export class Start implements Action {

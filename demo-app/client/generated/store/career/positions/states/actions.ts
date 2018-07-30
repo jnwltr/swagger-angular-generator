@@ -9,9 +9,9 @@ import {Action} from '@ngrx/store';
 import {PositionsParams} from '../../../../controllers/Career';
 
 export enum Actions {
-  START = '[positions] Start',
-  SUCCESS = '[positions] Success',
-  ERROR = '[positions] Error',
+  START = '[Career positions] Start',
+  SUCCESS = '[Career positions] Success',
+  ERROR = '[Career positions] Error',
 }
 
 export class Start implements Action {
