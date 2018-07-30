@@ -13,7 +13,7 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
   let content = '';
   const hasParams = paramGroups.length >= 1;
   content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('__model.'));
-  content += getActionTypes(simpleName);
+  content += getActionTypes(name, simpleName);
   content += getActionStartDefinition(simpleName, hasParams);
   content += getActionSuccessDefinition(responseDef);
   content += getActionErrorDefinition();
@@ -36,12 +36,12 @@ function getActionImports(name: string, simpleName: string, hasParams: boolean,
   return res;
 }
 
-function getActionTypes(name: string) {
+function getActionTypes(controllerName: string, methodName: string) {
   let res = `export enum Actions {\n`;
   res += indent([
-    `START = '[${name}] Start',`,
-    `SUCCESS = '[${name}] Success',`,
-    `ERROR = '[${name}] Error',`,
+    `START = '[${controllerName} ${methodName}] Start',`,
+    `SUCCESS = '[${controllerName} ${methodName}] Success',`,
+    `ERROR = '[${controllerName} ${methodName}] Error',`,
   ]);
   res += `\n}\n\n`;
 
