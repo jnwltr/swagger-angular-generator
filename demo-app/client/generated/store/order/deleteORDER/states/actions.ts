@@ -9,9 +9,9 @@ import {Action} from '@ngrx/store';
 import {DeleteORDERParams} from '../../../../controllers/Order';
 
 export enum Actions {
-  START = '[deleteORDER] Start',
-  SUCCESS = '[deleteORDER] Success',
-  ERROR = '[deleteORDER] Error',
+  START = '[Order deleteORDER] Start',
+  SUCCESS = '[Order deleteORDER] Success',
+  ERROR = '[Order deleteORDER] Error',
 }
 
 export class Start implements Action {

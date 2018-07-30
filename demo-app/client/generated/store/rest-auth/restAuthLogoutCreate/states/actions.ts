@@ -8,9 +8,9 @@
 import {Action} from '@ngrx/store';
 
 export enum Actions {
-  START = '[restAuthLogoutCreate] Start',
-  SUCCESS = '[restAuthLogoutCreate] Success',
-  ERROR = '[restAuthLogoutCreate] Error',
+  START = '[RestAuth restAuthLogoutCreate] Start',
+  SUCCESS = '[RestAuth restAuthLogoutCreate] Success',
+  ERROR = '[RestAuth restAuthLogoutCreate] Error',
 }
 
 export class Start implements Action {

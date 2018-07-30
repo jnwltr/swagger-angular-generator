@@ -9,9 +9,9 @@ import {Action} from '@ngrx/store';
 import {PutOrderParams} from '../../../../controllers/Order';
 
 export enum Actions {
-  START = '[putOrder] Start',
-  SUCCESS = '[putOrder] Success',
-  ERROR = '[putOrder] Error',
+  START = '[Order putOrder] Start',
+  SUCCESS = '[Order putOrder] Success',
+  ERROR = '[Order putOrder] Error',
 }
 
 export class Start implements Action {
