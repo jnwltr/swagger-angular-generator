@@ -56,9 +56,9 @@ function processController(methods, name, config, definitions) {
     if (conf.adHocExceptions.api[name]) {
         content = content.replace(conf.adHocExceptions.api[name][0], conf.adHocExceptions.api[name][1]);
     }
-    /* controllers */
+    // controllers
     utils_1.writeFile(filename, content, config.header);
-    /* forms */
+    // forms
     if (config.generateStore) {
         generate_form_modules_1.createForms(config, name, processedMethods, definitions);
     }

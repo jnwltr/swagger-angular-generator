@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /** Generator of API models (interfaces) from BE API json */
 const fs = require("fs");
-const conf = require("./conf");
 const path = require("path");
+const conf = require("./conf");
+const form_extensions_1 = require("./common/form-extensions");
 const definitions_1 = require("./definitions");
 const process_paths_1 = require("./requests/process-paths");
 const utils_1 = require("./utils");
@@ -41,6 +42,7 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
     recreateDirectories(dest, generateStore);
     const header = utils_1.processHeader(schema, omitVersion);
     const config = { header, dest, generateStore, unwrapSingleParamMethods };
+    generateCommon(path.join(dest, conf.commonDir), generateStore, config);
     if (!fs.existsSync(dest))
         fs.mkdirSync(dest);
     const definitions = definitions_1.processDefinitions(schema.definitions, config);
@@ -48,12 +50,19 @@ function generate(src = conf.apiFile, dest = conf.outDir, generateStore = true, 
 }
 exports.generate = generate;
 function recreateDirectories(dest, generateStore) {
+    utils_1.emptyDir(path.join(dest, conf.commonDir), true);
     utils_1.emptyDir(path.join(dest, conf.defsDir), true);
     utils_1.emptyDir(path.join(dest, conf.apiDir), true);
     utils_1.emptyDir(path.join(dest, conf.storeDir), true);
+    utils_1.createDir(path.join(dest, conf.commonDir));
     utils_1.createDir(path.join(dest, conf.defsDir));
     utils_1.createDir(path.join(dest, conf.apiDir));
     if (generateStore)
         utils_1.createDir(path.join(dest, conf.storeDir));
+}
+/** Generates common classes, methods, utils */
+function generateCommon(dest, generateStore, config) {
+    if (generateStore)
+        form_extensions_1.createFormArrayExtended(dest, config);
 }
 //# sourceMappingURL=generate.js.map

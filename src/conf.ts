@@ -3,6 +3,7 @@ import {MethodName, NativeNames} from './types';
 
 // relative to project root
 export const outDir = 'src/api';
+export const commonDir = 'common';
 export const defsDir = 'defs';
 export const apiDir = 'controllers';
 export const storeDir = 'store';

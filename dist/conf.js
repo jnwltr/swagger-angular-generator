@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // relative to project root
 exports.outDir = 'src/api';
+exports.commonDir = 'common';
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.storeDir = 'store';

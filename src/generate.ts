@@ -1,8 +1,10 @@
 /** Generator of API models (interfaces) from BE API json */
 import * as fs from 'fs';
+import * as path from 'path';
+
 import * as conf from './conf';
 
-import * as path from 'path';
+import {createFormArrayExtended} from './common/form-extensions';
 import {processDefinitions} from './definitions';
 import {processPaths} from './requests/process-paths';
 import {createDir, emptyDir, out, processHeader, TermColors} from './utils';
@@ -56,6 +58,8 @@ export function generate(
   const header = processHeader(schema, omitVersion);
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
+  generateCommon(path.join(dest, conf.commonDir), generateStore, config);
+
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
   const definitions = processDefinitions(schema.definitions, config);
   processPaths(schema.paths, `http://${schema.host}${swaggerUrlPath}${conf.swaggerFile}`,
@@ -63,11 +67,18 @@ export function generate(
 }
 
 function recreateDirectories(dest: string, generateStore: boolean) {
+  emptyDir(path.join(dest, conf.commonDir), true);
   emptyDir(path.join(dest, conf.defsDir), true);
   emptyDir(path.join(dest, conf.apiDir), true);
   emptyDir(path.join(dest, conf.storeDir), true);
 
+  createDir(path.join(dest, conf.commonDir));
   createDir(path.join(dest, conf.defsDir));
   createDir(path.join(dest, conf.apiDir));
   if (generateStore) createDir(path.join(dest, conf.storeDir));
+}
+
+/** Generates common classes, methods, utils */
+function generateCommon(dest: string, generateStore: boolean, config: Config) {
+  if (generateStore) createFormArrayExtended(dest, config);
 }

@@ -37,13 +37,17 @@ export function generateFormService(config: Config, name: string, params: Parame
 function getImports(name: string, constructor: string) {
   const imports: string[] = [];
 
-  if (constructor.match(/new FormArray\(/)) imports.push('FormArray');
   if (constructor.match(/new FormControl\(/)) imports.push('FormControl');
   if (constructor.match(/new FormGroup\(/)) imports.push('FormGroup');
   if (constructor.match(/\[Validators\./)) imports.push('Validators');
 
   let res = 'import {Injectable} from \'@angular/core\';\n';
   if (imports.length) res += `import {${imports.join(', ')}} from '@angular/forms';\n`;
+
+  if (constructor.match(/new FormArrayExtended\(/)) {
+    res += `import {FormArrayExtended} from '../../../common/formArrayExtended';\n`;
+  }
+
   res += `import {${name}Service} from '../../../controllers/${name}';\n`;
   res += '\n';
 
@@ -123,11 +127,17 @@ function makeField(param: Schema, ref: string,
       type = nativeTypes[typedType];
     }
 
-    // TODO implement arrays
-    // use helper method and store type definition to add new array items
     if (type === 'array') {
-      control = 'FormArray';
-      initializer = '[]';
+      control = 'FormArrayExtended';
+      initializer = `() => `;
+      if (param.items.type in nativeTypes) {
+        initializer += `new FormControl()`;
+      } else {
+        const refType = param.items.$ref.replace(/^#\/definitions\//, '');
+        const defType = normalizeDef(refType);
+        const controlInstance = walkParamOrProp(definitions[defType][0], path, definitions, parentTypes);
+        initializer += `new FormGroup({\n${controlInstance}\n})`;
+      }
     } else {
       control = 'FormControl';
       initializer = typeof param.default === 'string' ? `'${param.default}'` : param.default;
