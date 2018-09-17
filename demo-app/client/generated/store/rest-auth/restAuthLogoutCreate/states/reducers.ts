@@ -21,7 +21,7 @@ export const initialRestAuthLogoutCreateState: RestAuthLogoutCreateState = {
   error: null,
 };
 
-export const selectorName = 'RestAuthLogoutCreate';
+export const selectorName = 'RestAuth_RestAuthLogoutCreate';
 export const getRestAuthLogoutCreateStateSelector = createFeatureSelector<RestAuthLogoutCreateState>(selectorName);
 
 export function RestAuthLogoutCreateReducer(

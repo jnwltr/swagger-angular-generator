@@ -22,7 +22,7 @@ export const initialRestAuthUserUpdateState: RestAuthUserUpdateState = {
   error: null,
 };
 
-export const selectorName = 'RestAuthUserUpdate';
+export const selectorName = 'RestAuth_RestAuthUserUpdate';
 export const getRestAuthUserUpdateStateSelector = createFeatureSelector<RestAuthUserUpdateState>(selectorName);
 
 export function RestAuthUserUpdateReducer(

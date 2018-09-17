@@ -21,7 +21,7 @@ export const initialDeleteORDERState: DeleteORDERState = {
   error: null,
 };
 
-export const selectorName = 'DeleteORDER';
+export const selectorName = 'Order_DeleteORDER';
 export const getDeleteORDERStateSelector = createFeatureSelector<DeleteORDERState>(selectorName);
 
 export function DeleteORDERReducer(

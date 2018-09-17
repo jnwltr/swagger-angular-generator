@@ -21,7 +21,7 @@ export const initialPutOrderState: PutOrderState = {
   error: null,
 };
 
-export const selectorName = 'PutOrder';
+export const selectorName = 'Order_PutOrder';
 export const getPutOrderStateSelector = createFeatureSelector<PutOrderState>(selectorName);
 
 export function PutOrderReducer(

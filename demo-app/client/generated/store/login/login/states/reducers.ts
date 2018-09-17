@@ -21,7 +21,7 @@ export const initialLoginState: LoginState = {
   error: null,
 };
 
-export const selectorName = 'Login';
+export const selectorName = 'Login_Login';
 export const getLoginStateSelector = createFeatureSelector<LoginState>(selectorName);
 
 export function LoginReducer(

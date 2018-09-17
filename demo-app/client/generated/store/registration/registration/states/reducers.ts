@@ -21,7 +21,7 @@ export const initialRegistrationState: RegistrationState = {
   error: null,
 };
 
-export const selectorName = 'Registration';
+export const selectorName = 'Registration_Registration';
 export const getRegistrationStateSelector = createFeatureSelector<RegistrationState>(selectorName);
 
 export function RegistrationReducer(

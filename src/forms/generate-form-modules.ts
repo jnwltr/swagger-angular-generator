@@ -50,7 +50,7 @@ export function createForms(config: Config, name: string, processedMethods: Meth
     // actions.ts
     generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
     // reducers.ts
-    generateHttpReducers(config, actionClassNameBase, formSubDirName, responseDef.type);
+    generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseDef.type);
     // effects.ts
     generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
     // form-shared-module.ts

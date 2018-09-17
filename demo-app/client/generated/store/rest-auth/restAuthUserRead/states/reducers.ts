@@ -22,7 +22,7 @@ export const initialRestAuthUserReadState: RestAuthUserReadState = {
   error: null,
 };
 
-export const selectorName = 'RestAuthUserRead';
+export const selectorName = 'RestAuth_RestAuthUserRead';
 export const getRestAuthUserReadStateSelector = createFeatureSelector<RestAuthUserReadState>(selectorName);
 
 export function RestAuthUserReadReducer(

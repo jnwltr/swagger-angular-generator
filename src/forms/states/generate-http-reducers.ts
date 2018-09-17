@@ -4,13 +4,13 @@ import {stateDir} from '../../conf';
 import {Config} from '../../generate';
 import {indent, writeFile} from '../../utils';
 
-export function generateHttpReducers(config: Config, actionClassNameBase: string,
+export function generateHttpReducers(config: Config, name: string, actionClassNameBase: string,
                                      formSubDirName: string, responseType: string) {
   let content = '';
   content += getReducerImports(responseType.startsWith('__model.'));
   content += getStateInteface(actionClassNameBase, responseType);
   content += getInitialState(actionClassNameBase);
-  content += getFeatureSelector(actionClassNameBase);
+  content += getFeatureSelector(name, actionClassNameBase);
   content += getReducerDefinition(actionClassNameBase);
 
   const reducersFileName = path.join(formSubDirName, stateDir, `reducers.ts`);
@@ -45,8 +45,8 @@ function getInitialState(actionClassNameBase: string) {
   return res;
 }
 
-function getFeatureSelector(actionClassNameBase: string) {
-  let res = `export const selectorName = '${actionClassNameBase}';\n`;
+function getFeatureSelector(name: string, actionClassNameBase: string) {
+  let res = `export const selectorName = '${name}_${actionClassNameBase}';\n`;
   res += `export const get${actionClassNameBase}StateSelector = ` +
          `createFeatureSelector<${actionClassNameBase}State>(selectorName);\n\n`;
 
