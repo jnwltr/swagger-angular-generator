@@ -21,7 +21,7 @@ export const initialLogoutState: LogoutState = {
   error: null,
 };
 
-export const selectorName = 'Logout';
+export const selectorName = 'Logout_Logout';
 export const getLogoutStateSelector = createFeatureSelector<LogoutState>(selectorName);
 
 export function LogoutReducer(

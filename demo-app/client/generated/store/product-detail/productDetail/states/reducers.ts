@@ -22,7 +22,7 @@ export const initialProductDetailState: ProductDetailState = {
   error: null,
 };
 
-export const selectorName = 'ProductDetail';
+export const selectorName = 'ProductDetail_ProductDetail';
 export const getProductDetailStateSelector = createFeatureSelector<ProductDetailState>(selectorName);
 
 export function ProductDetailReducer(

@@ -21,7 +21,7 @@ export const initialRestAuthLogoutListState: RestAuthLogoutListState = {
   error: null,
 };
 
-export const selectorName = 'RestAuthLogoutList';
+export const selectorName = 'RestAuth_RestAuthLogoutList';
 export const getRestAuthLogoutListStateSelector = createFeatureSelector<RestAuthLogoutListState>(selectorName);
 
 export function RestAuthLogoutListReducer(

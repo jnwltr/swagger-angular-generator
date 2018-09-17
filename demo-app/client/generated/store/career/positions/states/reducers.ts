@@ -21,7 +21,7 @@ export const initialPositionsState: PositionsState = {
   error: null,
 };
 
-export const selectorName = 'Positions';
+export const selectorName = 'Career_Positions';
 export const getPositionsStateSelector = createFeatureSelector<PositionsState>(selectorName);
 
 export function PositionsReducer(

@@ -22,7 +22,7 @@ export const initialGetGoodsListState: GetGoodsListState = {
   error: null,
 };
 
-export const selectorName = 'GetGoodsList';
+export const selectorName = 'Goods_GetGoodsList';
 export const getGetGoodsListStateSelector = createFeatureSelector<GetGoodsListState>(selectorName);
 
 export function GetGoodsListReducer(

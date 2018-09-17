@@ -22,7 +22,7 @@ export const initialRestAuthUserPartialUpdateState: RestAuthUserPartialUpdateSta
   error: null,
 };
 
-export const selectorName = 'RestAuthUserPartialUpdate';
+export const selectorName = 'RestAuth_RestAuthUserPartialUpdate';
 export const getRestAuthUserPartialUpdateStateSelector = createFeatureSelector<RestAuthUserPartialUpdateState>(selectorName);
 
 export function RestAuthUserPartialUpdateReducer(
