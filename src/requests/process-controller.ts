@@ -71,10 +71,11 @@ export function processController(methods: ControllerMethod[], name: string, con
     content = content.replace(conf.adHocExceptions.api[name][0],
                               conf.adHocExceptions.api[name][1]);
   }
-  /* controllers */
+
+  // controllers
   writeFile(filename, content, config.header);
 
-  /* forms */
+  // forms
   if (config.generateStore) {
     createForms(config, name, processedMethods, definitions);
   }

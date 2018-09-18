@@ -12,4 +12,8 @@ export * from './defs/SelfRefObject'; // sources: selfRefObject
 export * from './defs/LoginDto'; // sources: loginDto
 export * from './defs/UserDetails';
 export * from './defs/Goods';
+export * from './defs/ArrayStructures'; // sources: arrayStructures
+export * from './defs/ArrayOfStrings';
+export * from './defs/ArrayOfObjects';
 export * from './defs/GetGoodsListGeneratedInlineModel';
+export * from './defs/TestStructuresGeneratedInlineModel';

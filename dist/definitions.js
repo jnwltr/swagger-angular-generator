@@ -53,20 +53,31 @@ function processDefinition(def, name, config) {
         return;
     name = common_1.normalizeDef(name);
     let output = '';
-    const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
-    // conditional import of global types
-    if (properties.some(p => !p.native)) {
-        output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    if (def.type === 'array') {
+        const property = common_1.processProperty(def);
+        if (!property.native) {
+            output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        }
+        if (def.description)
+            output += `/** ${def.description} */\n`;
+        output += `export type ${name} = ${property.property};\n`;
     }
-    if (def.description)
-        output += `/** ${def.description} */\n`;
-    output += `export interface ${name} {\n`;
-    output += utils_1.indent(_.map(properties, 'property').join('\n'));
-    output += `\n}\n`;
-    // concat non-empty enum lines
-    const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
-    if (enumLines)
-        output += `\n${enumLines}\n`;
+    else if (def.properties) {
+        const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
+        // conditional import of global types
+        if (properties.some(p => !p.native)) {
+            output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        }
+        if (def.description)
+            output += `/** ${def.description} */\n`;
+        output += `export interface ${name} {\n`;
+        output += utils_1.indent(_.map(properties, 'property').join('\n'));
+        output += `\n}\n`;
+        // concat non-empty enum lines
+        const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
+        if (enumLines)
+            output += `\n${enumLines}\n`;
+    }
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
     return { name, def };

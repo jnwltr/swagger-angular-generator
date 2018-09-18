@@ -124,7 +124,9 @@ export class MyComponent implements OnInit {
 
 #### Usage of Forms services
 - the `exampleFormService` service is generated and holds the `FormGroup` definition that corresponds
- with the request data structure
+  with the request data structure
+- Array-like structures use `FormArrayExtended` that holds the definition of array item (`FormControl` or `FormGroup`)
+  so new items can be created via `.setValue()` or added `.createControl()`.
 - use it in the template the following way
 
 ```html
@@ -297,7 +299,6 @@ ngOnInit() {
 
 ## Assumptions / limitations
 
-
 1. swagger file is in [version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) format, it must be json
 1. each endpoint must have a `tags` attribute defined. In addition, there must be exactly one tag defined.
 The http methods are grouped to services based on the tags, i.e. if two methods have tag "order", both will be
@@ -305,7 +306,7 @@ generated inside Order.ts
 1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
 1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
-1. we are skipping array-like structures, so only empty FormArray is created in generated forms
+1. `definitions` section in swagger file does not contain types with inline definitions, i.e. only named subtypes work
 
 #### Usage of NGRX modules
 

@@ -11,17 +11,9 @@ import {Config} from './generate';
 import {Schema} from './types';
 import {emptyDir, indent, writeFile} from './utils';
 
-export interface Definition {
-  properties: {
-    [key: string]: Schema;
-  };
-  required?: string[];
-  description?: string;
-}
-
 export interface ProcessedDefinition {
   name: string;
-  def: Definition;
+  def: Schema;
 }
 
 /**
@@ -30,7 +22,7 @@ export interface ProcessedDefinition {
  * @param defs definitions from the schema
  * @param config global configuration
  */
-export function processDefinitions(defs: {[key: string]: Definition}, config: Config): ProcessedDefinition[] {
+export function processDefinitions(defs: {[key: string]: Schema}, config: Config): ProcessedDefinition[] {
   emptyDir(path.join(config.dest, conf.defsDir));
 
   const definitions: ProcessedDefinition[] = [];
@@ -66,26 +58,35 @@ export function writeToBaseModelFile(config: Config, allExports: string) {
  * @param def type definition
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
-export function processDefinition(def: Definition, name: string, config: Config): ProcessedDefinition {
+export function processDefinition(def: Schema, name: string, config: Config): ProcessedDefinition {
   if (!isWritable(name)) return;
 
   name = normalizeDef(name);
 
   let output = '';
-  const properties = _.map(def.properties, (v, k) => processProperty(v, k, name, def.required));
-  // conditional import of global types
-  if (properties.some(p => !p.native)) {
-    output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+  if (def.type === 'array') {
+    const property = processProperty(def);
+    if (!property.native) {
+      output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    }
+    if (def.description) output += `/** ${def.description} */\n`;
+    output += `export type ${name} = ${property.property};\n`;
+  } else if (def.properties) {
+    const properties = _.map(def.properties, (v, k) => processProperty(v, k, name, def.required));
+    // conditional import of global types
+    if (properties.some(p => !p.native)) {
+      output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    }
+    if (def.description) output += `/** ${def.description} */\n`;
+
+    output += `export interface ${name} {\n`;
+    output += indent(_.map(properties, 'property').join('\n'));
+    output += `\n}\n`;
+
+    // concat non-empty enum lines
+    const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
+    if (enumLines) output += `\n${enumLines}\n`;
   }
-  if (def.description) output += `/** ${def.description} */\n`;
-
-  output += `export interface ${name} {\n`;
-  output += indent(_.map(properties, 'property').join('\n'));
-  output += `\n}\n`;
-
-  // concat non-empty enum lines
-  const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
-  if (enumLines) output += `\n${enumLines}\n`;
 
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
   writeFile(filename, output, config.header);

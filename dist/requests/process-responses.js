@@ -49,11 +49,7 @@ function processResponses(httpResponse, name, config) {
 }
 exports.processResponses = processResponses;
 function processNestedSchemaDefinition(schema, name, config) {
-    const definition = {
-        properties: schema.properties,
-        required: schema.required,
-    };
-    const processedDef = definitions_1.processDefinition(definition, `${name}GeneratedInlineModel`, config);
+    const processedDef = definitions_1.processDefinition(schema, `${name}GeneratedInlineModel`, config);
     const filename = path.join(config.dest, `${conf.modelFile}.ts`);
     const exportDefiniton = definitions_1.createExport(processedDef.name);
     fs.appendFileSync(filename, `${exportDefiniton}\n`);

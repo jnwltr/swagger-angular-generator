@@ -37,13 +37,17 @@ export function generateFormService(config: Config, name: string, params: Parame
 function getImports(name: string, constructor: string) {
   const imports: string[] = [];
 
-  if (constructor.match(/new FormArray\(/)) imports.push('FormArray');
   if (constructor.match(/new FormControl\(/)) imports.push('FormControl');
   if (constructor.match(/new FormGroup\(/)) imports.push('FormGroup');
   if (constructor.match(/\[Validators\./)) imports.push('Validators');
 
   let res = 'import {Injectable} from \'@angular/core\';\n';
   if (imports.length) res += `import {${imports.join(', ')}} from '@angular/forms';\n`;
+
+  if (constructor.match(/new FormArrayExtended\(/)) {
+    res += `import {FormArrayExtended} from '../../../common/formArrayExtended';\n`;
+  }
+
   res += `import {${name}Service} from '../../../controllers/${name}';\n`;
   res += '\n';
 
@@ -56,8 +60,7 @@ function getConstructor(name: string, formName: string, definitions: ProcessedDe
   res += indent(') {\n');
 
   const definitionsMap = _.groupBy(definitions, 'name');
-  const parentTypes: string[] = [];
-  const formDefinition = walkParamOrProp(params, undefined, definitionsMap, parentTypes);
+  const formDefinition = walkParamOrProp(params, definitionsMap);
   res += indent(`this.${formName} = new FormGroup({\n${formDefinition}\n});\n`, 2);
   res += indent('}\n');
   res += '\n';
@@ -65,8 +68,9 @@ function getConstructor(name: string, formName: string, definitions: ProcessedDe
   return res;
 }
 
-function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: string[] = [],
-                         definitions: _.Dictionary<ProcessedDefinition[]>, parentTypes: string[]): string {
+function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
+                         definitions: _.Dictionary<ProcessedDefinition[]>,
+                         parentTypes: string[] = []): string {
   const res: string[] = [];
   let schema: Record<string, Schema>;
   let required: string[];
@@ -80,71 +84,68 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition, path: st
       if (param.required) required.push(param.name);
       schema[param.name] = parameterToSchema(param);
     });
-  // 2. object definition
-  } else {
+  // 2. properties
+  } else if (definition.def.properties) {
     required = definition.def.required;
     schema = definition.def.properties || {};
   }
 
   // walk the list and build recursive form model
   Object.entries(schema).forEach(([paramName, param]) => {
-    const ref = param.$ref;
-
-    // break type definition chain with cycle
-    if (parentTypes.indexOf(ref) >= 0) return;
-
-    const name = paramName;
-    const newPath = [...path, name];
-    const isRequired = required && required.includes(name);
-
-    let newParentTypes: string[] = [];
-    if (ref) newParentTypes = [...parentTypes, ref];
-
-    const fieldDefinition = makeField(param, ref, name, newPath, isRequired, definitions, newParentTypes);
-
-    res.push(fieldDefinition);
+    const isRequired = required && required.includes(paramName);
+    const fieldDefinition = makeField(param, paramName, isRequired, definitions, parentTypes);
+    if (fieldDefinition) res.push(fieldDefinition);
   });
 
   return indent(res);
 }
 
-function makeField(param: Schema, ref: string,
-                   name: string, path: string[], required: boolean,
+function makeField(param: Schema, name: string, required: boolean,
                    definitions: _.Dictionary<ProcessedDefinition[]>, parentTypes: string[]): string {
 
-  let definition: ProcessedDefinition;
+  let newParentTypes: string[] = [...parentTypes];
+  if (!param.type) {
+    const ref = param.$ref;
+    const refType = ref.replace(/^#\/definitions\//, '');
+    const defType = normalizeDef(refType);
+    param = definitions[defType][0].def;
+
+    // break type definition chain with cycle
+    if (parentTypes.indexOf(ref) >= 0) return;
+    if (ref) newParentTypes = [...newParentTypes, ref];
+  }
+
   let type = param.type;
+  if (type in nativeTypes) type = nativeTypes[type as NativeNames];
+
   let control: string;
   let initializer: string;
 
-  if (type) {
-    if (type in nativeTypes) {
-      const typedType = type as NativeNames;
-      type = nativeTypes[typedType];
-    }
-
-    // TODO implement arrays
-    // use helper method and store type definition to add new array items
-    if (type === 'array') {
-      control = 'FormArray';
-      initializer = '[]';
-    } else {
-      control = 'FormControl';
-      initializer = typeof param.default === 'string' ? `'${param.default}'` : param.default;
-    }
+  if (type === 'array') {
+    control = 'FormArrayExtended';
+    initializer = `() => `;
+    const controlInstance = makeField(param.items, undefined, required, definitions, newParentTypes);
+    initializer += `(\n${indent(controlInstance)})`;
+  } else if (type === 'object') {
+      control = 'FormGroup';
+      const def = {
+        name: '',
+        def: param,
+      };
+      const fields = walkParamOrProp(def, definitions, newParentTypes);
+      initializer = `{\n${fields}\n}`;
   } else {
-    const refType = ref.replace(/^#\/definitions\//, '');
-    definition = definitions[normalizeDef(refType)][0];
-
-    control = 'FormGroup';
-    const fields = walkParamOrProp(definition, path, definitions, parentTypes);
-    initializer = `{\n${fields}\n}`;
+    control = 'FormControl';
+    initializer = typeof param.default === 'string' ? `'${param.default}'` : param.default;
   }
 
   const validators = getValidators(param);
   if (required) validators.push('Validators.required');
 
-  return `${name}: new ${control}(${initializer}, [${validators.join(', ')}]),`;
+  let res = `new ${control}(${initializer}, [${validators.join(', ')}])`;
+  if (name) res = `${name}: ${res},`;
+
+  return res;
 }
 
 function getValidators(param: Parameter | Schema) {
