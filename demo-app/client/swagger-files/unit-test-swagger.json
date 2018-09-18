@@ -455,7 +455,6 @@
         }
       }
     },
-
     "/rest-auth/logout/": {
       "get": {
         "operationId": "rest-auth_logout_list",
@@ -490,7 +489,6 @@
         ]
       }
     },
-
     "/rest-auth/user/": {
       "get": {
         "operationId": "rest-auth_user_read",
@@ -624,6 +622,48 @@
         ]
       },
       "parameters": []
+    },
+    "/arrays/test-structures": {
+      "post": {
+        "tags": [
+          "Arrays"
+        ],
+        "operationId": "arrays_test-structures",
+        "description": "structural test for arrays and arrays of arrays",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "arraySection",
+            "in": "body",
+            "description": "array structures",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/arrayStructures"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -706,7 +746,6 @@
         }
       }
     },
-
     "UserDetails": {
       "required": [
         "username"
@@ -783,6 +822,51 @@
             "CZK"
           ]
         }
+      }
+    },
+    "arrayStructures": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "arrayObjectRef": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orderDto"
+          }
+        },
+        "arrayStringInline": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "arrayArrayStringsRef": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArrayOfStrings"
+          }
+        },
+        "arrayArrayObjectRef": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArrayOfObjects"
+          }
+        }
+      },
+      "description": "Array testing structure"
+    },
+    "ArrayOfStrings": {
+      "type": "array",
+      "description": "Array of strings",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ArrayOfObjects": {
+      "type": "array",
+      "description": "Array of objects",
+      "items": {
+        "$ref": "#/definitions/orderDto"
       }
     }
   }

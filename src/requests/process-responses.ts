@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {processProperty, PropertyOutput} from '../common';
 import * as conf from '../conf';
-import {createExport, Definition, processDefinition, ProcessedDefinition} from '../definitions';
+import {createExport, processDefinition, ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
 import {HttpCode, HttpResponse, Schema} from '../types';
 
@@ -19,10 +19,8 @@ import {HttpCode, HttpResponse, Schema} from '../types';
  * @param config global config
  */
 export function processResponses(httpResponse: HttpResponse, name: string, config: Config) {
-
   const responses = _.filter(httpResponse, (r, status: HttpCode) => (
     r.schema && Math.floor(Number(status) / 100) === 2));
-
   const properties: PropertyOutput[] = [];
 
   for (const response of responses) {
@@ -56,12 +54,7 @@ export function processResponses(httpResponse: HttpResponse, name: string, confi
 }
 
 function processNestedSchemaDefinition(schema: Schema, name: string, config: Config): ProcessedDefinition {
-  const definition: Definition = {
-    properties: schema.properties,
-    required: schema.required,
-  };
-
-  const processedDef = processDefinition(definition, `${name}GeneratedInlineModel`, config);
+  const processedDef = processDefinition(schema, `${name}GeneratedInlineModel`, config);
   const filename = path.join(config.dest, `${conf.modelFile}.ts`);
   const exportDefiniton = createExport(processedDef.name);
   fs.appendFileSync(filename, `${exportDefiniton}\n`);
