@@ -72,7 +72,7 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
                          definitions: _.Dictionary<ProcessedDefinition[]>,
                          parentTypes: string[] = []): string {
   const res: string[] = [];
-  let schema: Record<string, Schema>;
+  let schema: Record<string, Schema> = {};
   let required: string[];
 
   // create unified inputs for
@@ -87,7 +87,7 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
   // 2. properties
   } else if (definition.def.properties) {
     required = definition.def.required;
-    schema = definition.def.properties || {};
+    schema = definition.def.properties;
   }
 
   // walk the list and build recursive form model
