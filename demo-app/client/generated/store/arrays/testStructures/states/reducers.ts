@@ -22,7 +22,7 @@ export const initialTestStructuresState: TestStructuresState = {
   error: null,
 };
 
-export const selectorName = 'TestStructures';
+export const selectorName = 'Arrays_TestStructures';
 export const getTestStructuresStateSelector = createFeatureSelector<TestStructuresState>(selectorName);
 
 export function TestStructuresReducer(
