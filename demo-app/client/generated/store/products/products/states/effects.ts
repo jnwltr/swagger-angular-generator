@@ -7,7 +7,7 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 
 import {of} from 'rxjs';
 
@@ -18,7 +18,8 @@ import * as actions from './actions';
 @Injectable()
 export class ProductsEffects {
   @Effect()
-  Products = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+  Products = this.storeActions.pipe(
+    ofType<actions.Start>(actions.Actions.START),
     switchMap((action: actions.Start) => this.productsService.products(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
