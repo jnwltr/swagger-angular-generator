@@ -116,7 +116,7 @@ function getParamSeparation(paramGroups) {
             baseDef = '{\n' + utils_1.indent(list) + '\n};';
             def = `const queryParamBase = ${baseDef}\n\n`;
             def += 'let queryParams = new HttpParams();\n';
-            def += 'Object.entries(queryParamBase).forEach(([key, value]) => {\n';
+            def += 'Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {\n';
             def += '  if (value !== undefined) {\n';
             def += '    if (typeof value === \'string\') queryParams = queryParams.set(key, value);\n';
             def += '    else queryParams = queryParams.set(key, JSON.stringify(value));\n';
@@ -135,7 +135,7 @@ function getParamSeparation(paramGroups) {
             // bodyParams keys with value === undefined are removed
             let res = `const ${groupName}Params = ${def}\n`;
             res += 'const bodyParamsWithoutUndefined: any = {};\n';
-            res += 'Object.entries(bodyParams || {}).forEach(([key, value]) => {\n';
+            res += 'Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {\n';
             res += '  if (value !== undefined) bodyParamsWithoutUndefined[key] = value;\n';
             res += '});';
             return res;

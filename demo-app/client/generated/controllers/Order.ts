@@ -7,7 +7,7 @@
 
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
@@ -62,7 +62,7 @@ export class OrderService {
   order(params: OrderParams): Observable<object> {
     const bodyParams = params.orderDto;
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     const queryParamBase = {
@@ -70,7 +70,7 @@ export class OrderService {
     };
 
     let queryParams = new HttpParams();
-    Object.entries(queryParamBase).forEach(([key, value]) => {
+    Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) {
         if (typeof value === 'string') queryParams = queryParams.set(key, value);
         else queryParams = queryParams.set(key, JSON.stringify(value));
@@ -93,7 +93,7 @@ export class OrderService {
       model: params.model,
     };
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     return this.http.patch<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
@@ -113,7 +113,7 @@ export class OrderService {
       customerName: params.customerName,
     };
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     return this.http.put<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParamsWithoutUndefined);
