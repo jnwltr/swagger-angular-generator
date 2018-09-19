@@ -52,7 +52,7 @@ function getConstructor(name, formName, definitions, params) {
 }
 function walkParamOrProp(definition, definitions, parentTypes = []) {
     const res = [];
-    let schema;
+    let schema = {};
     let required;
     // create unified inputs for
     // 1. parameters
@@ -68,7 +68,7 @@ function walkParamOrProp(definition, definitions, parentTypes = []) {
     }
     else if (definition.def.properties) {
         required = definition.def.required;
-        schema = definition.def.properties || {};
+        schema = definition.def.properties;
     }
     // walk the list and build recursive form model
     Object.entries(schema).forEach(([paramName, param]) => {
