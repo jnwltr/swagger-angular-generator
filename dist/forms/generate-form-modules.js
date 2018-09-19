@@ -39,7 +39,7 @@ function createForms(config, name, processedMethods, definitions) {
         // actions.ts
         generate_http_actions_1.generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
         // reducers.ts
-        generate_http_reducers_1.generateHttpReducers(config, actionClassNameBase, formSubDirName, responseDef.type);
+        generate_http_reducers_1.generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseDef.type);
         // effects.ts
         generate_http_effects_1.generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
         // form-shared-module.ts

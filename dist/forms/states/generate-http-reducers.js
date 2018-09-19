@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const conf_1 = require("../../conf");
 const utils_1 = require("../../utils");
-function generateHttpReducers(config, actionClassNameBase, formSubDirName, responseType) {
+function generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseType) {
     let content = '';
     content += getReducerImports(responseType.startsWith('__model.'));
     content += getStateInteface(actionClassNameBase, responseType);
     content += getInitialState(actionClassNameBase);
-    content += getFeatureSelector(actionClassNameBase);
+    content += getFeatureSelector(name, actionClassNameBase);
     content += getReducerDefinition(actionClassNameBase);
     const reducersFileName = path.join(formSubDirName, conf_1.stateDir, `reducers.ts`);
     utils_1.writeFile(reducersFileName, content, config.header);
@@ -37,8 +37,8 @@ function getInitialState(actionClassNameBase) {
     res += `};\n\n`;
     return res;
 }
-function getFeatureSelector(actionClassNameBase) {
-    let res = `export const selectorName = '${actionClassNameBase}';\n`;
+function getFeatureSelector(name, actionClassNameBase) {
+    let res = `export const selectorName = '${name}_${actionClassNameBase}';\n`;
     res += `export const get${actionClassNameBase}StateSelector = ` +
         `createFeatureSelector<${actionClassNameBase}State>(selectorName);\n\n`;
     return res;
