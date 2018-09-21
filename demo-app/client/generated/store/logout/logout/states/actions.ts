@@ -6,6 +6,7 @@
  */
 
 import {Action} from '@ngrx/store';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export enum Actions {
   START = '[Logout logout] Start',
@@ -25,7 +26,7 @@ export class Success implements Action {
 
 export class Error implements Action {
   readonly type = Actions.ERROR;
-  constructor(public payload: string) {}
+  constructor(public payload: HttpErrorResponse) {}
 }
 
 export type LogoutAction = Start | Success | Error;

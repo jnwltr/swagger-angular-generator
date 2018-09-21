@@ -22,7 +22,7 @@ export class RestAuthLogoutListEffects {
     switchMap(() => this.restauthService.restAuthLogoutList()
       .pipe(
         map(result => new actions.Success(result)),
-        catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),
+        catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
       ),
     ),
   );
