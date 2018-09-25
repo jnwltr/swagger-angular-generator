@@ -1111,6 +1111,20 @@
     "RefStatus": {
       "format": "int32",
       "type": "integer"
+    },
+    "Alias": {
+      "type": "integer",
+      "description": "Alias",
+      "format": "int32"
+    },
+    "UseAlias": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "alias": {
+          "$ref": "#/definitions/Alias"
+        }
+      }
     }
   }
 }

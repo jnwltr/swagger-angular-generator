@@ -20,5 +20,7 @@ export * from './defs/MapContent'; // sources: mapContent
 export * from './defs/MapObject'; // sources: mapObject
 export * from './defs/TicketDetailOutput';
 export * from './defs/RefStatus';
+export * from './defs/Alias';
+export * from './defs/UseAlias';
 export * from './defs/GetGoodsListGeneratedInlineModel';
 export * from './defs/ArrayGeneratedInlineModel';
