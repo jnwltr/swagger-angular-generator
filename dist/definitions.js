@@ -78,6 +78,13 @@ function processDefinition(def, name, config) {
         if (enumLines)
             output += `\n${enumLines}\n`;
     }
+    else if (def.type !== "object") {
+        const property = common_1.processProperty(def);
+        if (!property.native) {
+            output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        }
+        output += `export type ${name} = ${property.property};\n`;
+    }
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
     return { name, def };
