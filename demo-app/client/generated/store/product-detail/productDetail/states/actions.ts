@@ -6,6 +6,7 @@
  */
 
 import {Action} from '@ngrx/store';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ProductDetailParams} from '../../../../controllers/ProductDetail';
 import * as __model from '../../../../model';
 
@@ -27,7 +28,7 @@ export class Success implements Action {
 
 export class Error implements Action {
   readonly type = Actions.ERROR;
-  constructor(public payload: string) {}
+  constructor(public payload: HttpErrorResponse) {}
 }
 
 export type ProductDetailAction = Start | Success | Error;

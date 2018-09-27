@@ -22,7 +22,7 @@ export class PositionsEffects {
     switchMap((action: actions.Start) => this.careerService.positions(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
-        catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),
+        catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
       ),
     ),
   );

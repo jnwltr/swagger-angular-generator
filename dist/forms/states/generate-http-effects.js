@@ -47,7 +47,7 @@ function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
         `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);
     res += utils_1.indent(`.pipe(\n`, 3);
     res += utils_1.indent(`map(result => new actions.Success(result)),\n`, 4);
-    res += utils_1.indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),\n`, 4);
+    res += utils_1.indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error))),\n`, 4);
     res += utils_1.indent(`),\n`, 3);
     res += utils_1.indent(`),\n`, 2);
     res += utils_1.indent(`);\n`);

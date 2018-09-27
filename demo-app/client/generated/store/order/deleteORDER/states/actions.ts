@@ -6,6 +6,7 @@
  */
 
 import {Action} from '@ngrx/store';
+import {HttpErrorResponse} from '@angular/common/http';
 import {DeleteORDERParams} from '../../../../controllers/Order';
 
 export enum Actions {
@@ -26,7 +27,7 @@ export class Success implements Action {
 
 export class Error implements Action {
   readonly type = Actions.ERROR;
-  constructor(public payload: string) {}
+  constructor(public payload: HttpErrorResponse) {}
 }
 
 export type DeleteORDERAction = Start | Success | Error;

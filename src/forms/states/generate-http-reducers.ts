@@ -19,6 +19,7 @@ export function generateHttpReducers(config: Config, name: string, actionClassNa
 
 function getReducerImports(usesModels: boolean) {
   let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
+  res += `import {HttpErrorResponse} from '@angular/common/http';\n`
   if (usesModels) res += `import * as __model from '../../../../model';\n`;
   res += `import * as actions from './actions';\n\n`;
 
@@ -29,7 +30,7 @@ function getStateInteface(actionClassNameBase: string, type: string) {
   let res = `export interface ${actionClassNameBase}State {\n`;
   res += indent(`data: ${type} | null;\n`);
   res += indent(`loading: boolean;\n`);
-  res += indent(`error: string | null;\n`);
+  res += indent(`error: HttpErrorResponse | null;\n`);
   res += `}\n\n`;
 
   return res;

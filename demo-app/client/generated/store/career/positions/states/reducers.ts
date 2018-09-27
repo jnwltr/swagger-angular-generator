@@ -7,12 +7,13 @@
 
 import {createFeatureSelector} from '@ngrx/store';
 
+import {HttpErrorResponse} from '@angular/common/http';
 import * as actions from './actions';
 
 export interface PositionsState {
   data: object | null;
   loading: boolean;
-  error: string | null;
+  error: HttpErrorResponse | null;
 }
 
 export const initialPositionsState: PositionsState = {

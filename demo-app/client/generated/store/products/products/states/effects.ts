@@ -22,7 +22,7 @@ export class ProductsEffects {
     switchMap((action: actions.Start) => this.productsService.products(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
-        catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),
+        catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
       ),
     ),
   );

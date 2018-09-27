@@ -58,7 +58,7 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
     `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);
   res += indent(`.pipe(\n`, 3);
   res += indent(`map(result => new actions.Success(result)),\n`, 4);
-  res += indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),\n`, 4);
+  res += indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error))),\n`, 4);
   res += indent(`),\n`, 3);
   res += indent(`),\n`, 2);
   res += indent(`);\n`);

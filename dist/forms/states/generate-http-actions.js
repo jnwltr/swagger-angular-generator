@@ -19,6 +19,7 @@ function generateHttpActions(config, name, responseDef, actionClassNameBase, sim
 exports.generateHttpActions = generateHttpActions;
 function getActionImports(name, simpleName, hasParams, importModels) {
     let res = `import {Action} from '@ngrx/store';\n`;
+    res += `import {HttpErrorResponse} from '@angular/common/http';\n`;
     if (hasParams) {
         res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
     }
@@ -57,7 +58,7 @@ function getActionSuccessDefinition(response) {
 function getActionErrorDefinition() {
     let res = `export class Error implements Action {\n`;
     res += utils_1.indent(`readonly type = Actions.ERROR;\n`);
-    res += utils_1.indent(`constructor(public payload: string) {}\n`);
+    res += utils_1.indent(`constructor(public payload: HttpErrorResponse) {}\n`);
     res += `}\n`;
     res += `\n`;
     return res;
