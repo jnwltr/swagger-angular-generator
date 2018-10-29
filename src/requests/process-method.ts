@@ -3,8 +3,10 @@
  * in the schema
  */
 import * as _ from 'lodash';
+import {isValidPropertyName} from 'tsutils';
+
 import * as conf from '../conf';
-import {Parameter} from '../types';
+import {Parameter, ParamLocation} from '../types';
 import {indent, makeComment} from '../utils';
 import {processParams, ProcessParamsOutput} from './process-params';
 import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
@@ -25,9 +27,8 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
   let paramsSignature = '';
   let params: string;
   let usesGlobalType = false;
-  let usesQueryParams: boolean;
-  let paramTypes: string[] = [];
-  let paramGroups: Dictionary<Parameter[]> = {};
+  let paramTypes: ParamLocation[] = [];
+  let paramGroups: Partial<Record<ParamLocation, Parameter[]>> = {};
   let splitParamsMethod = '';
   const simpleName = method.simpleName;
   const methodName = method.methodName;
@@ -38,11 +39,10 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
     const paramsType = _.upperFirst(`${method.simpleName}Params`);
     const processedParams = processParams(paramDef, paramsType);
 
-    paramTypes = Object.keys(paramGroups);
+    paramTypes = Object.keys(paramGroups) as ParamLocation[];
     paramSeparation = getParamSeparation(paramGroups);
     paramsSignature = getParamsSignature(processedParams, paramsType);
     usesGlobalType = processedParams.usesGlobalType;
-    usesQueryParams = 'query' in paramGroups;
     interfaceDef = getInterfaceDef(processedParams);
 
     if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
@@ -60,8 +60,8 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
   methodDef += indent(paramSeparation);
   if (paramSeparation.length) methodDef += '\n';
 
-  /* tslint:disable-next-line:max-line-length */
-  const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${method.basePath}${url}\`${params});`;
+  const body = `return this.http.${method.methodName}<${method.responseDef.type}>` +
+               `(\`${method.basePath}${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;
@@ -73,7 +73,7 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
     interfaceDef += `${method.responseDef.enumDeclaration}\n`;
   }
   const responseDef = method.responseDef;
-  return {methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName};
+  return {methodDef, interfaceDef, usesGlobalType, paramGroups, responseDef, simpleName, methodName};
 }
 
 function getSplitParamsMethod(method: ControllerMethod, processedParams: ProcessParamsOutput) {
@@ -122,9 +122,9 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
   return _.map(paramGroups, (group, groupName) => {
     let baseDef: string;
     let def: string;
+    const list = _.map(group, p => setObjectProps(p.name));
 
     if (groupName === 'query') {
-      const list = _.map(group, p => `${p.name}: params.${p.name},`);
       baseDef = '{\n' + indent(list) + '\n};';
 
       def = `const queryParamBase = ${baseDef}\n\n`;
@@ -144,7 +144,6 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
       if ('schema' in group[0]) {
         def = `params.${group[0].name};`;
       } else {
-        const list = _.map(group, p => `${p.name}: params.${p.name},`);
         def = '{\n' + indent(list) + '\n};';
       }
 
@@ -156,10 +155,13 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
       res += '});';
 
       return res;
-    } else {
-      const list = _.map(group, p => `${p.name}: params.${p.name},`);
-      def = '{\n' + indent(list) + '\n};';
     }
+
+    def = '{\n' + indent(list) + '\n}';
+    if (groupName === 'header') {
+      def = `new HttpHeaders(${def})`;
+    }
+    def += ';';
 
     return `const ${groupName}Params = ${def}`;
   });
@@ -167,25 +169,36 @@ function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
 
 /**
  * Returns a list of additional params for http client call invocation
- * @param paramTypes list of params types (should be from `path`, `body`, `query`, `formData`)
+ * @param paramTypes list of params types
  * @param methodName name of http method to invoke
  */
-function getRequestParams(paramTypes: string[], methodName: string) {
+function getRequestParams(paramTypes: ParamLocation[], methodName: string) {
   let res = '';
 
   if (['post', 'put', 'patch'].includes(methodName)) {
     if (paramTypes.includes('body')) {
-      res += `, bodyParamsWithoutUndefined`;
+      res += ', bodyParamsWithoutUndefined';
     } else if (paramTypes.includes('formData')) {
-      res += `, formDataParams`;
+      res += ', formDataParams';
     } else {
-      res += `, {}`;
+      res += ', {}';
     }
   }
 
+  const optionParams: string[] = [];
   if (paramTypes.includes('query')) {
-    res += `, {params: queryParams}`;
+    optionParams.push('params: queryParams');
+  }
+  if (paramTypes.includes('header')) {
+    optionParams.push('headers: headerParams');
   }
 
+  if (optionParams.length) res += `, {${optionParams.join(', ')}}`;
+
   return res;
+}
+
+function setObjectProps(key: string) {
+  if (isValidPropertyName(key)) return `${key}: params.${key},`;
+  else return `'${key}': params['${key}'],`;
 }

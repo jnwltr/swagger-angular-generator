@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * in the schema
  */
 const _ = require("lodash");
+const tsutils_1 = require("tsutils");
 const conf = require("../conf");
 const utils_1 = require("../utils");
 const process_params_1 = require("./process-params");
@@ -24,7 +25,6 @@ function processMethod(method, unwrapSingleParamMethods) {
     let paramsSignature = '';
     let params;
     let usesGlobalType = false;
-    let usesQueryParams;
     let paramTypes = [];
     let paramGroups = {};
     let splitParamsMethod = '';
@@ -39,7 +39,6 @@ function processMethod(method, unwrapSingleParamMethods) {
         paramSeparation = getParamSeparation(paramGroups);
         paramsSignature = getParamsSignature(processedParams, paramsType);
         usesGlobalType = processedParams.usesGlobalType;
-        usesQueryParams = 'query' in paramGroups;
         interfaceDef = getInterfaceDef(processedParams);
         if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
             splitParamsMethod = getSplitParamsMethod(method, processedParams);
@@ -53,8 +52,8 @@ function processMethod(method, unwrapSingleParamMethods) {
     methodDef += utils_1.indent(paramSeparation);
     if (paramSeparation.length)
         methodDef += '\n';
-    /* tslint:disable-next-line:max-line-length */
-    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${method.basePath}${url}\`${params});`;
+    const body = `return this.http.${method.methodName}<${method.responseDef.type}>` +
+        `(\`${method.basePath}${url}\`${params});`;
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;
@@ -65,7 +64,7 @@ function processMethod(method, unwrapSingleParamMethods) {
         interfaceDef += `${method.responseDef.enumDeclaration}\n`;
     }
     const responseDef = method.responseDef;
-    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName };
+    return { methodDef, interfaceDef, usesGlobalType, paramGroups, responseDef, simpleName, methodName };
 }
 exports.processMethod = processMethod;
 function getSplitParamsMethod(method, processedParams) {
@@ -106,8 +105,8 @@ function getParamSeparation(paramGroups) {
     return _.map(paramGroups, (group, groupName) => {
         let baseDef;
         let def;
+        const list = _.map(group, p => setObjectProps(p.name));
         if (groupName === 'query') {
-            const list = _.map(group, p => `${p.name}: params.${p.name},`);
             baseDef = '{\n' + utils_1.indent(list) + '\n};';
             def = `const queryParamBase = ${baseDef}\n\n`;
             def += 'let queryParams = new HttpParams();\n';
@@ -125,7 +124,6 @@ function getParamSeparation(paramGroups) {
                 def = `params.${group[0].name};`;
             }
             else {
-                const list = _.map(group, p => `${p.name}: params.${p.name},`);
                 def = '{\n' + utils_1.indent(list) + '\n};';
             }
             // bodyParams keys with value === undefined are removed
@@ -136,34 +134,47 @@ function getParamSeparation(paramGroups) {
             res += '});';
             return res;
         }
-        else {
-            const list = _.map(group, p => `${p.name}: params.${p.name},`);
-            def = '{\n' + utils_1.indent(list) + '\n};';
+        def = '{\n' + utils_1.indent(list) + '\n}';
+        if (groupName === 'header') {
+            def = `new HttpHeaders(${def})`;
         }
+        def += ';';
         return `const ${groupName}Params = ${def}`;
     });
 }
 /**
  * Returns a list of additional params for http client call invocation
- * @param paramTypes list of params types (should be from `path`, `body`, `query`, `formData`)
+ * @param paramTypes list of params types
  * @param methodName name of http method to invoke
  */
 function getRequestParams(paramTypes, methodName) {
     let res = '';
     if (['post', 'put', 'patch'].includes(methodName)) {
         if (paramTypes.includes('body')) {
-            res += `, bodyParamsWithoutUndefined`;
+            res += ', bodyParamsWithoutUndefined';
         }
         else if (paramTypes.includes('formData')) {
-            res += `, formDataParams`;
+            res += ', formDataParams';
         }
         else {
-            res += `, {}`;
+            res += ', {}';
         }
     }
+    const optionParams = [];
     if (paramTypes.includes('query')) {
-        res += `, {params: queryParams}`;
+        optionParams.push('params: queryParams');
     }
+    if (paramTypes.includes('header')) {
+        optionParams.push('headers: headerParams');
+    }
+    if (optionParams.length)
+        res += `, {${optionParams.join(', ')}}`;
     return res;
+}
+function setObjectProps(key) {
+    if (tsutils_1.isValidPropertyName(key))
+        return `${key}: params.${key},`;
+    else
+        return `'${key}': params['${key}'],`;
 }
 //# sourceMappingURL=process-method.js.map

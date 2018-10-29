@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
+const tsutils_1 = require("tsutils");
 const conf = require("./conf");
 const utils_1 = require("./utils");
 /**
@@ -84,7 +85,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let propertyAsMethodParameter;
     // pure type is returned if no name is specified
     if (name) {
-        if (name.match(/-/))
+        if (!tsutils_1.isValidPropertyName(name))
             name = `'${name}'`;
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
         propertyAsMethodParameter = `${name}${optional}: ${type}`;

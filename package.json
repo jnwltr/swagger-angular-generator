@@ -43,7 +43,8 @@
   "homepage": "https://github.com/jnwltr/swagger-angular-generator#readme",
   "dependencies": {
     "commander": "^2.15.1",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "tsutils": "^2.12.1"
   },
   "devDependencies": {
     "@angular/common": "^5.2.11",

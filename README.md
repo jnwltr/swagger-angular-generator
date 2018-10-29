@@ -303,7 +303,6 @@ ngOnInit() {
 1. each endpoint must have a `tags` attribute defined. In addition, there must be exactly one tag defined.
 The http methods are grouped to services based on the tags, i.e. if two methods have tag "order", both will be
 generated inside Order.ts
-1. `in: header` definitions are ignored
 1. `get` and `delete` methods do not contain `body`
 1. swagger file should contain values for the keys `host` and `basePath` so that each generated service method can contain a link to the swagger UI method reference, e.g. `http://example.com/swagger/swagger-ui.html#!/Order/Order`
 1. `definitions` section in swagger file does not contain types with inline definitions, i.e. only named subtypes work

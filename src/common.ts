@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 
+import {isValidPropertyName} from 'tsutils';
 import * as conf from './conf';
 import {NativeNames, Schema} from './types';
 import {indent, makeComment} from './utils';
@@ -92,7 +93,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
 
   // pure type is returned if no name is specified
   if (name) {
-    if (name.match(/-/)) name = `'${name}'`;
+    if (!isValidPropertyName(name)) name = `'${name}'`;
     property = `${comment}${readOnly}${name}${optional}: ${type};`;
     propertyAsMethodParameter = `${name}${optional}: ${type}`;
   } else {

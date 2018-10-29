@@ -14,6 +14,7 @@
     "no-empty": false,
     "no-inferrable-types": true,
     "no-multi-spaces": true,
+    "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single"],
     "variable-name": false

@@ -25,8 +25,8 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
 
 function getActionImports(name: string, simpleName: string, hasParams: boolean,
                           importModels: boolean) {
-  let res = `import {Action} from '@ngrx/store';\n`;
-  res += `import {HttpErrorResponse} from '@angular/common/http';\n`
+  let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
+  res += `import {Action} from '@ngrx/store';\n\n`;
 
   if (hasParams) {
     res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;

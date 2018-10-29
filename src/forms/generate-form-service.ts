@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import * as nodePath from 'path';
 
+import {isValidPropertyName} from 'tsutils';
 import {normalizeDef} from '../common';
 import {nativeTypes} from '../conf';
 import {ProcessedDefinition} from '../definitions';
@@ -143,7 +144,10 @@ function makeField(param: Schema, name: string, required: boolean,
   if (required) validators.push('Validators.required');
 
   let res = `new ${control}(${initializer}, [${validators.join(', ')}])`;
-  if (name) res = `${name}: ${res},`;
+  if (name) {
+    if (!isValidPropertyName(name)) name = `'${name}'`;
+    res = `${name}: ${res},`;
+  }
 
   return res;
 }

@@ -1,5 +1,5 @@
 /** Configuration constants */
-import {MethodName, NativeNames} from './types';
+import {MethodName, NativeNames, ParamLocation} from './types';
 
 // relative to project root
 export const outDir = 'src/api';
@@ -34,16 +34,16 @@ export const nativeTypes: {[key in NativeNames]: string} = {
   string: 'string',
 };
 
-/* list of parameter types accepted by methods
-* ordered as they are passed to api service methods
-* The 'parameters: []' type is only technical and serves for situations when common parameters are defined
-* on the same level as HTTP methods */
-export const allowedParams: {[key in MethodName]: string[]} = {
-  get: ['path', 'query'],
-  patch: ['path', 'body', 'query', 'formData'],
-  post: ['path', 'body', 'query', 'formData'],
-  put: ['path', 'body', 'query'],
-  delete: ['path'],
+// list of parameter types accepted by methods
+// ordered as they are passed to api service methods
+// The 'parameters: []' type is only technical and serves for situations when common parameters are defined
+// on the same level as HTTP methods
+export const allowedParams: {[key in MethodName]: ParamLocation[]} = {
+  get: ['path', 'query', 'header'],
+  patch: ['path', 'body', 'query', 'formData', 'header'],
+  post: ['path', 'body', 'query', 'formData', 'header'],
+  put: ['path', 'body', 'query', 'header'],
+  delete: ['path', 'header'],
 };
 // list of simplified names of controllers
 // that do not to generate api layer
