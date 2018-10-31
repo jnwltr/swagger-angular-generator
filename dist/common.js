@@ -26,7 +26,14 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
             type += 'Enum';
         const list = prop.enum || prop.items.enum;
         const exp = exportEnums ? 'export ' : '';
-        enumDeclaration = `${exp}type ${type} =\n` + utils_1.indent('\'' + list.join('\' |\n\'')) + '\';';
+        let enumValues;
+        if (typeof list[0] === 'number') {
+            enumValues = utils_1.indent(list.join(' |\n'));
+        }
+        else {
+            enumValues = utils_1.indent('\'' + list.join('\' |\n\'')) + '\'';
+        }
+        enumDeclaration = `${exp}type ${type} =\n${enumValues};`;
         if (prop.type === 'array')
             type += '[]';
     }

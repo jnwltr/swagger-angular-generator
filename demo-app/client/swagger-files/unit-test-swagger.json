@@ -964,6 +964,19 @@
           "enum": [
             "CZK"
           ]
+        },
+        "status": {
+          "title": "Status",
+          "type": "integer",
+          "enum": [
+            1, 2, 3
+          ]
+        },
+        "refStatus": {
+          "$ref": "#/definitions/RefStatus",
+          "enum": [
+            1, 2, 3
+          ]
         }
       }
     },
@@ -1094,6 +1107,10 @@
           "minLength": 1
         }
       }
+    },
+    "RefStatus": {
+      "format": "int32",
+      "type": "integer"
     }
   }
 }

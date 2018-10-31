@@ -24,7 +24,7 @@ interface ParameterSchemaBase {
   allowEmptyValue?: boolean;
   default?: any;
   description?: string;
-  enum?: string[];
+  enum?: string[] | number[];
   format?: string;
   items?: Schema;
   maximum?: number;
