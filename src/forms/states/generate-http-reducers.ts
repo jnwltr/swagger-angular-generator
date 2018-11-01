@@ -19,7 +19,7 @@ export function generateHttpReducers(config: Config, name: string, actionClassNa
 
 function getReducerImports(usesModels: boolean) {
   let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
-  res += `import {HttpErrorResponse} from '@angular/common/http';\n`
+  res += `import {HttpErrorResponse} from '@angular/common/http';\n`;
   if (usesModels) res += `import * as __model from '../../../../model';\n`;
   res += `import * as actions from './actions';\n\n`;
 

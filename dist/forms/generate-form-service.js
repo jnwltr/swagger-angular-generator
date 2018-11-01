@@ -120,8 +120,10 @@ function makeField(param, name, required, definitions, parentTypes) {
     if (required)
         validators.push('Validators.required');
     let res = `new ${control}(${initializer}, [${validators.join(', ')}])`;
-    if (name)
+    if (name) {
+        name = common_1.getAccessor(name);
         res = `${name}: ${res},`;
+    }
     return res;
 }
 function getValidators(param) {

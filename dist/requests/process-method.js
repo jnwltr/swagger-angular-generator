@@ -4,7 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Processing of custom types from `paths` section
  * in the schema
  */
-const _ = require("lodash");
+const lodash_1 = require("lodash");
+const common_1 = require("../common");
 const conf = require("../conf");
 const utils_1 = require("../utils");
 const process_params_1 = require("./process-params");
@@ -18,13 +19,12 @@ const process_params_1 = require("./process-params");
 function processMethod(method, unwrapSingleParamMethods) {
     let methodDef = '';
     let interfaceDef = '';
-    const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
+    const url = method.url.replace(/{([^}]+)}/g, (_, key) => `\${${common_1.getAccessor(key, 'pathParams')}}`);
     const allowed = conf.allowedParams[method.methodName];
     let paramSeparation = [];
     let paramsSignature = '';
     let params;
     let usesGlobalType = false;
-    let usesQueryParams;
     let paramTypes = [];
     let paramGroups = {};
     let splitParamsMethod = '';
@@ -32,14 +32,13 @@ function processMethod(method, unwrapSingleParamMethods) {
     const methodName = method.methodName;
     if (method.paramDef) {
         const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
-        paramGroups = _.groupBy(paramDef, 'in');
-        const paramsType = _.upperFirst(`${method.simpleName}Params`);
+        paramGroups = lodash_1.groupBy(paramDef, 'in');
+        const paramsType = lodash_1.upperFirst(`${method.simpleName}Params`);
         const processedParams = process_params_1.processParams(paramDef, paramsType);
         paramTypes = Object.keys(paramGroups);
         paramSeparation = getParamSeparation(paramGroups);
         paramsSignature = getParamsSignature(processedParams, paramsType);
         usesGlobalType = processedParams.usesGlobalType;
-        usesQueryParams = 'query' in paramGroups;
         interfaceDef = getInterfaceDef(processedParams);
         if (unwrapSingleParamMethods && processedParams.typesOnly.length > 0 && paramDef.length === 1) {
             splitParamsMethod = getSplitParamsMethod(method, processedParams);
@@ -53,8 +52,8 @@ function processMethod(method, unwrapSingleParamMethods) {
     methodDef += utils_1.indent(paramSeparation);
     if (paramSeparation.length)
         methodDef += '\n';
-    /* tslint:disable-next-line:max-line-length */
-    const body = `return this.http.${method.methodName}<${method.responseDef.type}>(\`${method.basePath}${url}\`${params});`;
+    const body = `return this.http.${method.methodName}<${method.responseDef.type}>` +
+        `(\`${method.basePath}${url}\`${params});`;
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;
@@ -65,7 +64,7 @@ function processMethod(method, unwrapSingleParamMethods) {
         interfaceDef += `${method.responseDef.enumDeclaration}\n`;
     }
     const responseDef = method.responseDef;
-    return { methodDef, interfaceDef, usesGlobalType, usesQueryParams, paramGroups, responseDef, simpleName, methodName };
+    return { methodDef, interfaceDef, usesGlobalType, paramGroups, responseDef, simpleName, methodName };
 }
 exports.processMethod = processMethod;
 function getSplitParamsMethod(method, processedParams) {
@@ -103,11 +102,14 @@ function getInterfaceDef(processedParams) {
  * @param paramGroups
  */
 function getParamSeparation(paramGroups) {
-    return _.map(paramGroups, (group, groupName) => {
+    return lodash_1.map(paramGroups, (group, groupName) => {
         let baseDef;
         let def;
+        const list = lodash_1.map(group, p => {
+            // header params values need to be strings
+            return common_1.getObjectPropSetter(p.name, 'params', groupName === 'header' ? '.toString()' : '');
+        });
         if (groupName === 'query') {
-            const list = _.map(group, p => `${p.name}: params.${p.name},`);
             baseDef = '{\n' + utils_1.indent(list) + '\n};';
             def = `const queryParamBase = ${baseDef}\n\n`;
             def += 'let queryParams = new HttpParams();\n';
@@ -125,7 +127,6 @@ function getParamSeparation(paramGroups) {
                 def = `params.${group[0].name};`;
             }
             else {
-                const list = _.map(group, p => `${p.name}: params.${p.name},`);
                 def = '{\n' + utils_1.indent(list) + '\n};';
             }
             // bodyParams keys with value === undefined are removed
@@ -136,34 +137,41 @@ function getParamSeparation(paramGroups) {
             res += '});';
             return res;
         }
-        else {
-            const list = _.map(group, p => `${p.name}: params.${p.name},`);
-            def = '{\n' + utils_1.indent(list) + '\n};';
+        def = '{\n' + utils_1.indent(list) + '\n}';
+        if (groupName === 'header') {
+            def = `new HttpHeaders(${def})`;
         }
+        def += ';';
         return `const ${groupName}Params = ${def}`;
     });
 }
 /**
  * Returns a list of additional params for http client call invocation
- * @param paramTypes list of params types (should be from `path`, `body`, `query`, `formData`)
+ * @param paramTypes list of params types
  * @param methodName name of http method to invoke
  */
 function getRequestParams(paramTypes, methodName) {
     let res = '';
     if (['post', 'put', 'patch'].includes(methodName)) {
         if (paramTypes.includes('body')) {
-            res += `, bodyParamsWithoutUndefined`;
+            res += ', bodyParamsWithoutUndefined';
         }
         else if (paramTypes.includes('formData')) {
-            res += `, formDataParams`;
+            res += ', formDataParams';
         }
         else {
-            res += `, {}`;
+            res += ', {}';
         }
     }
+    const optionParams = [];
     if (paramTypes.includes('query')) {
-        res += `, {params: queryParams}`;
+        optionParams.push('params: queryParams');
     }
+    if (paramTypes.includes('header')) {
+        optionParams.push('headers: headerParams');
+    }
+    if (optionParams.length)
+        res += `, {${optionParams.join(', ')}}`;
     return res;
 }
 //# sourceMappingURL=process-method.js.map

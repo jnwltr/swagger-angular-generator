@@ -5,8 +5,8 @@
  * example.com/api-base-path
  */
 
-import {Action} from '@ngrx/store';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Action} from '@ngrx/store';
 import {GetGoodsListParams} from '../../../../controllers/Goods';
 import * as __model from '../../../../model';
 

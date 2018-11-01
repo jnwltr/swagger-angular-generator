@@ -4,7 +4,6 @@ import {async, inject, TestBed} from '@angular/core/testing';
 import {RegistrationService} from '../../../generated/controllers/Registration';
 
 describe(`LoginService`, () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -21,17 +20,16 @@ describe(`LoginService`, () => {
 
   it(`should check request parameters are correct`,
     async(
-
       inject([RegistrationService, HttpTestingController],
         (service: RegistrationService, backend: HttpTestingController) => {
 
-        service.registration({registrationType: 'admin',
-                                    email: 'test@test.com',
-                                    password1: 'password1',
-                                    password2: 'password2',
-                                    selfRefParam: {
-                                        prop1: 'property1'
-                                    }}).subscribe();
+        service.registration({
+          registrationType: 'admin',
+          email: 'test@test.com',
+          password1: 'password1',
+          password2: 'password2',
+          selfRefParam: {prop1: 'property1'},
+        }).subscribe();
 
         backend.expectOne((req: HttpRequest<any>) => {
           return req.method === 'POST'
@@ -43,5 +41,4 @@ describe(`LoginService`, () => {
       }),
     ),
   );
-
 });

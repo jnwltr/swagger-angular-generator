@@ -33,7 +33,10 @@ function processController(methods, name, config, definitions) {
     usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
     let content = '';
     const angularCommonHttp = ['HttpClient'];
-    if (processedMethods.some(c => c.usesQueryParams)) {
+    if (processedMethods.some(c => 'header' in c.paramGroups)) {
+        angularCommonHttp.push('HttpHeaders');
+    }
+    if (processedMethods.some(c => 'query' in c.paramGroups)) {
         angularCommonHttp.push('HttpParams');
     }
     content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;

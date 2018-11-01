@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as nodePath from 'path';
 
-import {normalizeDef} from '../common';
+import {getAccessor, normalizeDef} from '../common';
 import {nativeTypes} from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
@@ -143,7 +143,10 @@ function makeField(param: Schema, name: string, required: boolean,
   if (required) validators.push('Validators.required');
 
   let res = `new ${control}(${initializer}, [${validators.join(', ')}])`;
-  if (name) res = `${name}: ${res},`;
+  if (name) {
+    name = getAccessor(name);
+    res = `${name}: ${res},`;
+  }
 
   return res;
 }

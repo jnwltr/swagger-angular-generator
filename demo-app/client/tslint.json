@@ -23,6 +23,7 @@
     "no-multi-spaces": true,
     "no-output-rename": true,
     "object-curly-spacing": [true, "never"],
+    "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single"],
     "semicolon": [true, "always", "ignore-bound-class-methods"],

@@ -2,6 +2,7 @@
 /* The 'parameters' MethodName type is only technical and serves for situations when common parameters are defined
 * on the same level as HTTP methods */
 export type MethodName = 'get' | 'patch' | 'post' | 'put' | 'delete';
+export type ParamLocation = 'path' | 'body' | 'query' | 'formData' | 'header';
 export type HttpCode = '200' | '201' | '204' |
   '400' | '401' | '403' | '404' | '409' | '417' |
   '500';
@@ -38,7 +39,7 @@ interface ParameterSchemaBase {
 // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject
 export interface Parameter extends ParameterSchemaBase {
   description: string;
-  in: string;
+  in: ParamLocation;
   name: string;
   required: boolean;
   schema?: Schema;

@@ -5,8 +5,8 @@
  * example.com/api-base-path
  */
 
-import {Action} from '@ngrx/store';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Action} from '@ngrx/store';
 import {RestAuthUserPartialUpdateParams} from '../../../../controllers/RestAuth';
 import * as __model from '../../../../model';
 

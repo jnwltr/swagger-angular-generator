@@ -31,16 +31,16 @@ exports.nativeTypes = {
     password: 'string',
     string: 'string',
 };
-/* list of parameter types accepted by methods
-* ordered as they are passed to api service methods
-* The 'parameters: []' type is only technical and serves for situations when common parameters are defined
-* on the same level as HTTP methods */
+// list of parameter types accepted by methods
+// ordered as they are passed to api service methods
+// The 'parameters: []' type is only technical and serves for situations when common parameters are defined
+// on the same level as HTTP methods
 exports.allowedParams = {
-    get: ['path', 'query'],
-    patch: ['path', 'body', 'query', 'formData'],
-    post: ['path', 'body', 'query', 'formData'],
-    put: ['path', 'body', 'query'],
-    delete: ['path'],
+    get: ['path', 'query', 'header'],
+    patch: ['path', 'body', 'query', 'formData', 'header'],
+    post: ['path', 'body', 'query', 'formData', 'header'],
+    put: ['path', 'body', 'query', 'header'],
+    delete: ['path', 'header'],
 };
 // list of simplified names of controllers
 // that do not to generate api layer

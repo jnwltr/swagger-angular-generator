@@ -7,23 +7,22 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
-import {ProductsParams} from '../../../../controllers/Products';
-import * as __model from '../../../../model';
+import {DashedParams} from '../../../../controllers/Params';
 
 export enum Actions {
-  START = '[Products products] Start',
-  SUCCESS = '[Products products] Success',
-  ERROR = '[Products products] Error',
+  START = '[Params dashed] Start',
+  SUCCESS = '[Params dashed] Success',
+  ERROR = '[Params dashed] Error',
 }
 
 export class Start implements Action {
   readonly type = Actions.START;
-  constructor(public payload: ProductsParams) {}
+  constructor(public payload: DashedParams) {}
 }
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: __model.Products) {}
+  constructor(public payload: void) {}
 }
 
 export class Error implements Action {
@@ -31,4 +30,4 @@ export class Error implements Action {
   constructor(public payload: HttpErrorResponse) {}
 }
 
-export type ProductsAction = Start | Success | Error;
+export type DashedAction = Start | Success | Error;

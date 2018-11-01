@@ -664,6 +664,76 @@
           }
         }
       }
+    },
+    "/params/normal/{pathParam}/dashed/{dashed-path-param}": {
+      "post": {
+        "tags": [
+          "Params"
+        ],
+        "operationId": "params_test",
+        "description": "Test of param handling",
+        "parameters": [
+          {
+            "name": "pathParam",
+            "in": "path",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "queryParam",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "headerParam",
+            "in": "header",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "bodyParam",
+            "in": "body",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "dashed-path-param",
+            "in": "path",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "dashed-query-param",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "dashed-header-param",
+            "in": "header",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "dashed-body-param",
+            "in": "body",
+            "description": "testing number",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {}
+        }
+      }
     }
   },
   "definitions": {
@@ -726,7 +796,7 @@
           "type": "string"
         },
         "parent": {
-          "$ref":"#/definitions/selfRefObject"
+          "$ref": "#/definitions/selfRefObject"
         }
       }
     },

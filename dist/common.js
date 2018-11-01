@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
+const tsutils_1 = require("tsutils");
 const conf = require("./conf");
 const utils_1 = require("./utils");
 /**
@@ -84,8 +85,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let propertyAsMethodParameter;
     // pure type is returned if no name is specified
     if (name) {
-        if (name.match(/-/))
-            name = `'${name}'`;
+        name = getAccessor(name);
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
         propertyAsMethodParameter = `${name}${optional}: ${type}`;
     }
@@ -179,4 +179,21 @@ function resolveDefType(type) {
         arraySimple: true,
     };
 }
+function getAccessor(key, propName = '') {
+    let res = key;
+    if (tsutils_1.isValidPropertyName(key)) {
+        if (propName)
+            return `${propName}.${res}`;
+        return res;
+    }
+    res = `'${res}'`;
+    if (propName)
+        return `${propName}[${res}]`;
+    return res;
+}
+exports.getAccessor = getAccessor;
+function getObjectPropSetter(key, propName, suffix = '') {
+    return `${getAccessor(key)}: ${getAccessor(key, propName)}${suffix},`;
+}
+exports.getObjectPropSetter = getObjectPropSetter;
 //# sourceMappingURL=common.js.map

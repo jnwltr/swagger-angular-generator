@@ -5,8 +5,8 @@
  * example.com/api-base-path
  */
 
-import {Action} from '@ngrx/store';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Action} from '@ngrx/store';
 
 export enum Actions {
   START = '[Logout logout] Start',
