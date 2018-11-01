@@ -85,8 +85,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let propertyAsMethodParameter;
     // pure type is returned if no name is specified
     if (name) {
-        if (!tsutils_1.isValidPropertyName(name))
-            name = `'${name}'`;
+        name = getAccessor(name);
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
         propertyAsMethodParameter = `${name}${optional}: ${type}`;
     }
@@ -180,4 +179,21 @@ function resolveDefType(type) {
         arraySimple: true,
     };
 }
+function getAccessor(key, propName = '') {
+    let res = key;
+    if (tsutils_1.isValidPropertyName(key)) {
+        if (propName)
+            return `${propName}.${res}`;
+        return res;
+    }
+    res = `'${res}'`;
+    if (propName)
+        return `${propName}[${res}]`;
+    return res;
+}
+exports.getAccessor = getAccessor;
+function getObjectPropSetter(key, propName, suffix = '') {
+    return `${getAccessor(key)}: ${getAccessor(key, propName)}${suffix},`;
+}
+exports.getObjectPropSetter = getObjectPropSetter;
 //# sourceMappingURL=common.js.map

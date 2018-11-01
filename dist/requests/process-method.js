@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Processing of custom types from `paths` section
  * in the schema
  */
-const _ = require("lodash");
-const tsutils_1 = require("tsutils");
+const lodash_1 = require("lodash");
+const common_1 = require("../common");
 const conf = require("../conf");
 const utils_1 = require("../utils");
 const process_params_1 = require("./process-params");
@@ -19,7 +19,7 @@ const process_params_1 = require("./process-params");
 function processMethod(method, unwrapSingleParamMethods) {
     let methodDef = '';
     let interfaceDef = '';
-    const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
+    const url = method.url.replace(/{([^}]+)}/g, (_, key) => `\${${common_1.getAccessor(key, 'pathParams')}}`);
     const allowed = conf.allowedParams[method.methodName];
     let paramSeparation = [];
     let paramsSignature = '';
@@ -32,8 +32,8 @@ function processMethod(method, unwrapSingleParamMethods) {
     const methodName = method.methodName;
     if (method.paramDef) {
         const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
-        paramGroups = _.groupBy(paramDef, 'in');
-        const paramsType = _.upperFirst(`${method.simpleName}Params`);
+        paramGroups = lodash_1.groupBy(paramDef, 'in');
+        const paramsType = lodash_1.upperFirst(`${method.simpleName}Params`);
         const processedParams = process_params_1.processParams(paramDef, paramsType);
         paramTypes = Object.keys(paramGroups);
         paramSeparation = getParamSeparation(paramGroups);
@@ -102,10 +102,13 @@ function getInterfaceDef(processedParams) {
  * @param paramGroups
  */
 function getParamSeparation(paramGroups) {
-    return _.map(paramGroups, (group, groupName) => {
+    return lodash_1.map(paramGroups, (group, groupName) => {
         let baseDef;
         let def;
-        const list = _.map(group, p => setObjectProps(p.name));
+        const list = lodash_1.map(group, p => {
+            // header params values need to be strings
+            return common_1.getObjectPropSetter(p.name, 'params', groupName === 'header' ? '.toString()' : '');
+        });
         if (groupName === 'query') {
             baseDef = '{\n' + utils_1.indent(list) + '\n};';
             def = `const queryParamBase = ${baseDef}\n\n`;
@@ -170,11 +173,5 @@ function getRequestParams(paramTypes, methodName) {
     if (optionParams.length)
         res += `, {${optionParams.join(', ')}}`;
     return res;
-}
-function setObjectProps(key) {
-    if (tsutils_1.isValidPropertyName(key))
-        return `${key}: params.${key},`;
-    else
-        return `'${key}': params['${key}'],`;
 }
 //# sourceMappingURL=process-method.js.map

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const nodePath = require("path");
-const tsutils_1 = require("tsutils");
 const common_1 = require("../common");
 const conf_1 = require("../conf");
 const process_params_1 = require("../requests/process-params");
@@ -122,8 +121,7 @@ function makeField(param, name, required, definitions, parentTypes) {
         validators.push('Validators.required');
     let res = `new ${control}(${initializer}, [${validators.join(', ')}])`;
     if (name) {
-        if (!tsutils_1.isValidPropertyName(name))
-            name = `'${name}'`;
+        name = common_1.getAccessor(name);
         res = `${name}: ${res},`;
     }
     return res;

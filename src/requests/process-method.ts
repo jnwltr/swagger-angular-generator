@@ -2,14 +2,14 @@
  * Processing of custom types from `paths` section
  * in the schema
  */
-import * as _ from 'lodash';
-import {isValidPropertyName} from 'tsutils';
+import {groupBy, map, upperFirst} from 'lodash';
 
+import {getAccessor, getObjectPropSetter} from '../common';
 import * as conf from '../conf';
 import {Parameter, ParamLocation} from '../types';
 import {indent, makeComment} from '../utils';
 import {processParams, ProcessParamsOutput} from './process-params';
-import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
+import {ControllerMethod, MethodOutput} from './requests.models';
 
 /**
  * Transforms method definition to typescript method
@@ -21,7 +21,7 @@ import {ControllerMethod, Dictionary, MethodOutput} from './requests.models';
 export function processMethod(method: ControllerMethod, unwrapSingleParamMethods: boolean): MethodOutput {
   let methodDef = '';
   let interfaceDef = '';
-  const url = method.url.replace(/{([^}]+})/g, '$${pathParams.$1');
+  const url = method.url.replace(/{([^}]+)}/g, (_, key) => `\${${getAccessor(key, 'pathParams')}}`);
   const allowed: string[] = conf.allowedParams[method.methodName];
   let paramSeparation: string[] = [];
   let paramsSignature = '';
@@ -35,8 +35,8 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
 
   if (method.paramDef) {
     const paramDef = method.paramDef.filter(df => allowed.includes(df.in));
-    paramGroups = _.groupBy(paramDef, 'in');
-    const paramsType = _.upperFirst(`${method.simpleName}Params`);
+    paramGroups = groupBy(paramDef, 'in');
+    const paramsType = upperFirst(`${method.simpleName}Params`);
     const processedParams = processParams(paramDef, paramsType);
 
     paramTypes = Object.keys(paramGroups) as ParamLocation[];
@@ -118,11 +118,14 @@ function getInterfaceDef(processedParams: ProcessParamsOutput) {
  * Creates a definition of pathParams, bodyParams, queryParms or formDataParams
  * @param paramGroups
  */
-function getParamSeparation(paramGroups: Dictionary<Parameter[]>): string[] {
-  return _.map(paramGroups, (group, groupName) => {
+function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter[]>>): string[] {
+  return map(paramGroups, (group, groupName: ParamLocation) => {
     let baseDef: string;
     let def: string;
-    const list = _.map(group, p => setObjectProps(p.name));
+    const list = map(group, p => {
+      // header params values need to be strings
+      return getObjectPropSetter(p.name, 'params', groupName === 'header' ? '.toString()' : '');
+    });
 
     if (groupName === 'query') {
       baseDef = '{\n' + indent(list) + '\n};';
@@ -196,9 +199,4 @@ function getRequestParams(paramTypes: ParamLocation[], methodName: string) {
   if (optionParams.length) res += `, {${optionParams.join(', ')}}`;
 
   return res;
-}
-
-function setObjectProps(key: string) {
-  if (isValidPropertyName(key)) return `${key}: params.${key},`;
-  else return `'${key}': params['${key}'],`;
 }

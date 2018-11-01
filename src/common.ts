@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-
 import {isValidPropertyName} from 'tsutils';
+
 import * as conf from './conf';
 import {NativeNames, Schema} from './types';
 import {indent, makeComment} from './utils';
@@ -93,7 +93,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
 
   // pure type is returned if no name is specified
   if (name) {
-    if (!isValidPropertyName(name)) name = `'${name}'`;
+    name = getAccessor(name);
     property = `${comment}${readOnly}${name}${optional}: ${type};`;
     propertyAsMethodParameter = `${name}${optional}: ${type}`;
   } else {
@@ -198,4 +198,21 @@ function resolveDefType(type: string): DefType {
     native: false,
     arraySimple: true,
   };
+}
+
+export function getAccessor(key: string, propName = '') {
+  let res = key;
+
+  if (isValidPropertyName(key)) {
+    if (propName) return `${propName}.${res}`;
+    return res;
+  }
+
+  res = `'${res}'`;
+  if (propName) return `${propName}[${res}]`;
+  return res;
+}
+
+export function getObjectPropSetter(key: string, propName: string, suffix = '') {
+  return `${getAccessor(key)}: ${getAccessor(key, propName)}${suffix},`;
 }
