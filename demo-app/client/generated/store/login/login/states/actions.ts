@@ -7,7 +7,6 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
-
 import {LoginParams} from '../../../../controllers/Login';
 
 export enum Actions {

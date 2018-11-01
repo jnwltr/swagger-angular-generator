@@ -7,7 +7,6 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
-
 import {PositionsParams} from '../../../../controllers/Career';
 
 export enum Actions {

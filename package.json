@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "demo:install": "cd demo-app/client && npm i",
+    "postinstall": "cd demo-app/client; npm i",
     "start": "ts-node src/index.ts",
     "start:debug": "node -r ts-node/register --inspect-brk src/index.ts",
     "prebuild": "rm -rf dist",
@@ -19,7 +19,7 @@
     "postversion": "git status",
     "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
-    "lint:fix": "tslint -p tsconfig.json --fix",
+    "postlint": "cd demo-app/client; npm run lint",
     "test": "cd demo-app/client && npm run test:ci"
   },
   "repository": {

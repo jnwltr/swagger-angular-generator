@@ -8,7 +8,6 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
 
-
 export enum Actions {
   START = '[RestAuth restAuthLogoutCreate] Start',
   SUCCESS = '[RestAuth restAuthLogoutCreate] Success',

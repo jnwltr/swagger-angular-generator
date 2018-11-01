@@ -19,7 +19,7 @@ function generateHttpActions(config, name, responseDef, actionClassNameBase, sim
 exports.generateHttpActions = generateHttpActions;
 function getActionImports(name, simpleName, hasParams, importModels) {
     let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
-    res += `import {Action} from '@ngrx/store';\n\n`;
+    res += `import {Action} from '@ngrx/store';\n`;
     if (hasParams) {
         res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
     }

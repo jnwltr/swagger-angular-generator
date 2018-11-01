@@ -331,12 +331,17 @@ generated inside Order.ts
 
 #### Running the tests
 
-1. `cd demo-app/client`
-1. `npm run generate`
-1. `npm run test`
+To run client tests in interactive mode:
 
-or instead of step 2 and 3 run: `npm run testci`
+1. `cd demo-app/client`
+1. `npm test`
 
 ---
 
 ### _Pull requests are welcome!_
+
+Please do the following before making a PR:
+
+1. Build the app and regenerate testing files via `npm run build`.
+1. Check test pass via `npm test`.
+1. Check files lint via `npm run lint`.

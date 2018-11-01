@@ -7,7 +7,6 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
-
 import {RestAuthUserUpdateParams} from '../../../../controllers/RestAuth';
 import * as __model from '../../../../model';
 

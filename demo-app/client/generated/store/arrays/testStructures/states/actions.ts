@@ -7,7 +7,6 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
-
 import {TestStructuresParams} from '../../../../controllers/Arrays';
 import * as __model from '../../../../model';
 
