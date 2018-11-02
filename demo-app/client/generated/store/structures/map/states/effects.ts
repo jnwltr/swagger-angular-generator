@@ -12,14 +12,14 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {ArraysService} from '../../../../controllers/Arrays';
+import {StructuresService} from '../../../../controllers/Structures';
 import * as actions from './actions';
 
 @Injectable()
-export class TestStructuresEffects {
+export class MapEffects {
   @Effect()
-  TestStructures = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
-    switchMap((action: actions.Start) => this.arraysService.testStructures(action.payload)
+  Map = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+    switchMap((action: actions.Start) => this.structuresService.map(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
@@ -29,6 +29,6 @@ export class TestStructuresEffects {
 
   constructor(
     private storeActions: Actions,
-    private arraysService: ArraysService,
+    private structuresService: StructuresService,
   ) {}
 }

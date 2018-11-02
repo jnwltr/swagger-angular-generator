@@ -67,12 +67,14 @@ export function indent(input: string | string[], level = 1): string {
  * @param file
  * @param content
  */
-export function writeFile(file: string, content: string, header: string, fileType: FileType = 'ts',
-                          disableFlags: string[] = []): void {
+export function writeFile(file: string, content: string, header = '', fileType: FileType = 'ts',
+                          disableFlags?: string[]): void {
   if (fileType === 'ts') {
-    disableFlags.unshift('max-line-length');
-    const disable = `/* tslint:disable:${disableFlags.join(' ')} */`;
-    content = `${disable}\n${header}\n${content}`;
+    if (!disableFlags) disableFlags = ['max-line-length'];
+    let disable = '';
+    if (disableFlags.length) disable = `/* tslint:disable:${disableFlags.join(' ')} */\n`;
+    if (header) header += '\n';
+    content = `${disable}${header}${content}`;
   }
   fs.writeFileSync(file, content);
   out(`${file} generated`, TermColors.green);

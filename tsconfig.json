@@ -20,6 +20,7 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "src/api/**/*.ts"
+    "src/api/**/*.ts",
+    "src/**/templates/*.ts"
   ]
 }

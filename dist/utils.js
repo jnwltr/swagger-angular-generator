@@ -69,11 +69,16 @@ exports.indent = indent;
  * @param file
  * @param content
  */
-function writeFile(file, content, header, fileType = 'ts', disableFlags = []) {
+function writeFile(file, content, header = '', fileType = 'ts', disableFlags) {
     if (fileType === 'ts') {
-        disableFlags.unshift('max-line-length');
-        const disable = `/* tslint:disable:${disableFlags.join(' ')} */`;
-        content = `${disable}\n${header}\n${content}`;
+        if (!disableFlags)
+            disableFlags = ['max-line-length'];
+        let disable = '';
+        if (disableFlags.length)
+            disable = `/* tslint:disable:${disableFlags.join(' ')} */\n`;
+        if (header)
+            header += '\n';
+        content = `${disable}${header}${content}`;
     }
     fs.writeFileSync(file, content);
     out(`${file} generated`, TermColors.green);

@@ -26,7 +26,10 @@ export class RegistrationFormService {
     });
   }
 
-  submit() {
-    return this.registrationService.registration(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.registrationService.registration(data);
   }
 }

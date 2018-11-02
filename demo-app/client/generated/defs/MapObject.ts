@@ -5,6 +5,6 @@
  * example.com/api-base-path
  */
 
-export interface TestStructuresGeneratedInlineModel {
-  status: number;
+export interface MapObject {
+  [key: string]: number;
 }

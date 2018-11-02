@@ -47,6 +47,9 @@ function getImports(name: string, constructor: string) {
   if (constructor.match(/new FormArrayExtended\(/)) {
     res += `import {FormArrayExtended} from '../../../common/formArrayExtended';\n`;
   }
+  if (constructor.match(/new FormMap\(/)) {
+    res += `import {FormMap} from '../../../common/formMap';\n`;
+  }
 
   res += `import {${name}Service} from '../../../controllers/${name}';\n`;
   res += '\n';
@@ -102,8 +105,8 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
 
 function makeField(param: Schema, name: string, required: boolean,
                    definitions: _.Dictionary<ProcessedDefinition[]>, parentTypes: string[]): string {
-
   let newParentTypes: string[] = [...parentTypes];
+
   if (!param.type) {
     const ref = param.$ref;
     const refType = ref.replace(/^#\/definitions\//, '');
@@ -125,15 +128,22 @@ function makeField(param: Schema, name: string, required: boolean,
     control = 'FormArrayExtended';
     initializer = `() => `;
     const controlInstance = makeField(param.items, undefined, required, definitions, newParentTypes);
-    initializer += `(\n${indent(controlInstance)})`;
+    initializer += `(\n${indent(controlInstance)}), []`;
   } else if (type === 'object') {
-      control = 'FormGroup';
-      const def = {
-        name: '',
-        def: param,
-      };
+    const def = {
+      name: '',
+      def: param,
+    };
+    if (param.additionalProperties) {
+      control = 'FormMap';
+      initializer = `() => `;
+      const controlInstance = makeField(param.additionalProperties, undefined, required, definitions, newParentTypes);
+      initializer += `(\n${indent(controlInstance)}), {}`;
+    } else {
       const fields = walkParamOrProp(def, definitions, newParentTypes);
+      control = 'FormGroup';
       initializer = `{\n${fields}\n}`;
+    }
   } else {
     control = 'FormControl';
     initializer = typeof param.default === 'string' ? `'${param.default}'` : param.default;
@@ -168,15 +178,22 @@ function getValidators(param: Parameter | Schema) {
 }
 
 function getFormSubmitFunction(name: string, formName: string, simpleName: string, paramGroups: Parameter[]) {
-  let res = indent('submit() {\n');
-  res += indent(
-    `return this.${_.lowerFirst(name)}Service.${simpleName}(${getSubmitFnParameters(formName, paramGroups)});\n`, 2);
+  const rawParam = paramGroups.length ? 'raw = false' : '';
+  let res = indent(`submit(${rawParam}) {\n`);
+  if (paramGroups.length) {
+    res += indent([
+      'const data = raw ?',
+      indent([
+        `this.${formName}.getRawValue() :`,
+        `this.${formName}.value;`,
+      ]),
+    ], 2);
+    res += '\n';
+  }
+
+  const params = paramGroups.length ? `data` : '';
+  res += indent(`return this.${_.lowerFirst(name)}Service.${simpleName}(${params});\n`, 2);
   res += indent('}\n');
 
   return res;
-}
-
-function getSubmitFnParameters(name: string, paramGroups: Parameter[]) {
-  if (paramGroups.length) return `this.${name}.value`;
-  return '';
 }

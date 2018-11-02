@@ -7,23 +7,22 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
-import {TestStructuresParams} from '../../../../controllers/Arrays';
-import * as __model from '../../../../model';
+import {MapParams} from '../../../../controllers/Structures';
 
 export enum Actions {
-  START = '[Arrays testStructures] Start',
-  SUCCESS = '[Arrays testStructures] Success',
-  ERROR = '[Arrays testStructures] Error',
+  START = '[Structures map] Start',
+  SUCCESS = '[Structures map] Success',
+  ERROR = '[Structures map] Error',
 }
 
 export class Start implements Action {
   readonly type = Actions.START;
-  constructor(public payload: TestStructuresParams) {}
+  constructor(public payload: MapParams) {}
 }
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: __model.TestStructuresGeneratedInlineModel) {}
+  constructor(public payload: void) {}
 }
 
 export class Error implements Action {
@@ -31,4 +30,4 @@ export class Error implements Action {
   constructor(public payload: HttpErrorResponse) {}
 }
 
-export type TestStructuresAction = Start | Success | Error;
+export type MapAction = Start | Success | Error;

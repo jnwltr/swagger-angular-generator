@@ -20,7 +20,7 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
   content += getActionOverviewType(actionClassNameBase);
 
   const actionsFileName = path.join(formSubDirName, stateDir, `actions.ts`);
-  writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
+  writeFile(actionsFileName, content, config.header, 'ts', ['max-line-length', 'max-classes-per-file']);
 }
 
 function getActionImports(name: string, simpleName: string, hasParams: boolean,

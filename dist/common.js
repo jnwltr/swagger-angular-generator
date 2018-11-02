@@ -14,6 +14,10 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let type;
     let enumDeclaration;
     let native = true;
+    let isMap = false;
+    if (prop.properties) {
+        return _.flatMap(prop.properties, (v, k) => processProperty(v, k, namespace, prop.required));
+    }
     if (prop.enum || (prop.items && prop.items.enum)) {
         type = _.upperFirst(name);
         // file added to make the enum globally unique
@@ -53,7 +57,14 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                             prop.additionalProperties.$ref);
                         additionalType = defType.type;
                     }
-                    type = `{[key: string]: ${additionalType}}`;
+                    if (name) {
+                        type = `{[key: string]: ${additionalType}}`;
+                    }
+                    else {
+                        name = '[key: string]';
+                        type = additionalType;
+                        isMap = true;
+                    }
                 }
                 else {
                     defType = translateType(prop.type);
@@ -63,7 +74,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         native = defType.native;
     }
     let optional = '';
-    if (required === false)
+    if (required === false && !isMap)
         optional = '?';
     else if (Array.isArray(required) && !required.includes(name)) {
         optional = '?';
@@ -85,7 +96,8 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let propertyAsMethodParameter;
     // pure type is returned if no name is specified
     if (name) {
-        name = getAccessor(name);
+        if (!isMap)
+            name = getAccessor(name);
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
         propertyAsMethodParameter = `${name}${optional}: ${type}`;
     }
@@ -93,7 +105,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         property = `${type}`;
         propertyAsMethodParameter = property;
     }
-    return { property, propertyAsMethodParameter, enumDeclaration, native, isRequired: optional !== '?' };
+    return [{ property, propertyAsMethodParameter, enumDeclaration, native, isRequired: optional !== '?' }];
 }
 exports.processProperty = processProperty;
 /**
@@ -138,21 +150,8 @@ function translateType(type) {
         };
     }
     const subtype = type.match(/^#\/definitions\/(.*)/);
-    if (subtype) {
-        const generic = subtype[1].match(/([^«]+)«(.+)»/);
-        // collection translates to array
-        if (generic && generic[1] === 'Collection') {
-            const resolvedType = resolveDefType(generic[2]);
-            resolvedType.type += '[]';
-            return resolvedType;
-        }
-        else if (generic && generic[1] === 'Map') {
-            const map = generic[2].split(',');
-            const record = `Record<${map[0]}, ${map[1]}>`;
-            return { type: record, native: true, arraySimple: false };
-        }
+    if (subtype)
         return resolveDefType(subtype[1]);
-    }
     return { type, native: true, arraySimple: true };
 }
 exports.translateType = translateType;

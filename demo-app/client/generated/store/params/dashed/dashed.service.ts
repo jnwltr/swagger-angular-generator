@@ -27,7 +27,10 @@ export class DashedFormService {
     });
   }
 
-  submit() {
-    return this.paramsService.dashed(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.paramsService.dashed(data);
   }
 }

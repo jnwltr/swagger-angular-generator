@@ -26,7 +26,10 @@ export class RestAuthUserPartialUpdateFormService {
     });
   }
 
-  submit() {
-    return this.restAuthService.restAuthUserPartialUpdate(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.restAuthService.restAuthUserPartialUpdate(data);
   }
 }

@@ -8,13 +8,13 @@
 import {Injectable} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {FormArrayExtended} from '../../../common/formArrayExtended';
-import {ArraysService} from '../../../controllers/Arrays';
+import {StructuresService} from '../../../controllers/Structures';
 
 @Injectable()
-export class TestStructuresFormService {
+export class ArrayFormService {
   form: FormGroup;
   constructor(
-    private arraysService: ArraysService,
+    private structuresService: StructuresService,
   ) {
     this.form = new FormGroup({
       id: new FormControl(undefined, [Validators.required]),
@@ -23,23 +23,26 @@ export class TestStructuresFormService {
           new FormGroup({
             id: new FormControl(undefined, [Validators.required]),
             name: new FormControl(undefined, []),
-          }, [])), []),
+          }, [Validators.required])), [], [Validators.required]),
         arrayStringInline: new FormArrayExtended(() => (
-          new FormControl(undefined, [])), []),
+          new FormControl(undefined, [Validators.required])), [], [Validators.required]),
         arrayArrayStringsRef: new FormArrayExtended(() => (
           new FormArrayExtended(() => (
-            new FormControl(undefined, [])), [])), []),
+            new FormControl(undefined, [Validators.required])), [], [Validators.required])), [], [Validators.required]),
         arrayArrayObjectRef: new FormArrayExtended(() => (
           new FormArrayExtended(() => (
             new FormGroup({
               id: new FormControl(undefined, [Validators.required]),
               name: new FormControl(undefined, []),
-            }, [])), [])), []),
+            }, [Validators.required])), [], [Validators.required])), [], [Validators.required]),
       }, [Validators.required]),
     });
   }
 
-  submit() {
-    return this.arraysService.testStructures(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.structuresService.array(data);
   }
 }

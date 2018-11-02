@@ -107,7 +107,10 @@ function getParamSeparation(paramGroups) {
         let def;
         const list = lodash_1.map(group, p => {
             // header params values need to be strings
-            return common_1.getObjectPropSetter(p.name, 'params', groupName === 'header' ? '.toString()' : '');
+            const suffix = groupName === 'header' && p.type !== 'string' ?
+                '.toString()' :
+                '';
+            return common_1.getObjectPropSetter(p.name, 'params', suffix);
         });
         if (groupName === 'query') {
             baseDef = '{\n' + utils_1.indent(list) + '\n};';

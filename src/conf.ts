@@ -50,7 +50,7 @@ export const allowedParams: {[key in MethodName]: ParamLocation[]} = {
 export const controllerIgnores = ['BackOffice'];
 // implemented only for api
 // once other one is needed, make it file-based
-export const adHocExceptions: { [key: string]: { [key: string]: [RegExp, string] } } = {
+export const adHocExceptions: {[key: string]: {[key: string]: [RegExp, string]}} = {
   api: {
     Help: [/^  itemNumbers\?: ref;$/m, '  itemNumbers?: number[]'],
   },

@@ -18,7 +18,7 @@ const definitions_1 = require("../definitions");
  */
 function processResponses(httpResponse, name, config) {
     const responses = _.filter(httpResponse, (r, status) => (r.schema && Math.floor(Number(status) / 100) === 2));
-    const properties = [];
+    let properties = [];
     for (const response of responses) {
         if (response.schema && response.schema.properties) {
             const processedDefinition = processNestedSchemaDefinition(response.schema, name, config);
@@ -32,7 +32,7 @@ function processResponses(httpResponse, name, config) {
             properties.push(propertyOutput);
         }
         else {
-            properties.push(common_1.processProperty(response.schema, undefined, name));
+            properties = properties.concat(common_1.processProperty(response.schema, undefined, name));
         }
     }
     const property = _.map(properties, 'property');

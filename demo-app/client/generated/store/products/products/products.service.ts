@@ -29,7 +29,10 @@ export class ProductsFormService {
     });
   }
 
-  submit() {
-    return this.productsService.products(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.productsService.products(data);
   }
 }

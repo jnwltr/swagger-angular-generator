@@ -623,12 +623,12 @@
       },
       "parameters": []
     },
-    "/arrays/test-structures": {
+    "/structures/array": {
       "post": {
         "tags": [
-          "Arrays"
+          "Structures"
         ],
-        "operationId": "arrays_test-structures",
+        "operationId": "structures_array",
         "description": "structural test for arrays and arrays of arrays",
         "parameters": [
           {
@@ -644,7 +644,7 @@
             "description": "array structures",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/arrayStructures"
+              "$ref": "#/definitions/arrayStructure"
             }
           }
         ],
@@ -662,6 +662,29 @@
               }
             }
           }
+        }
+      }
+    },
+    "/structures/map": {
+      "post": {
+        "tags": [
+          "Structures"
+        ],
+        "operationId": "structures_map",
+        "description": "structural test for maps",
+        "parameters": [
+          {
+            "name": "mapSection",
+            "in": "body",
+            "description": "map structures",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mapStructure"
+            }
+          }
+        ],
+        "responses": {
+          "200": {}
         }
       }
     },
@@ -894,9 +917,14 @@
         }
       }
     },
-    "arrayStructures": {
+    "arrayStructure": {
       "type": "object",
-      "required": [],
+      "required": [
+        "arrayObjectRef",
+        "arrayStringInline",
+        "arrayArrayStringsRef",
+        "arrayArrayObjectRef"
+      ],
       "properties": {
         "arrayObjectRef": {
           "type": "array",
@@ -937,6 +965,54 @@
       "description": "Array of objects",
       "items": {
         "$ref": "#/definitions/orderDto"
+      }
+    },
+    "mapStructure": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/mapContent"
+      }
+    },
+    "mapContent": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "control": {
+          "type": "number"
+        },
+        "group": {
+          "$ref": "#/definitions/orderDto"
+        },
+        "arrayOfObjects": {
+          "$ref": "#/definitions/ArrayOfObjects"
+        },
+        "mapRef": {
+          "$ref": "#/definitions/mapObject"
+        },
+        "mapInlinePrimitive": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "mapInlineRef": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/orderDto"
+          }
+        },
+        "arrayOfMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mapObject"
+          }
+        }
+      }
+    },
+    "mapObject": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
       }
     }
   }

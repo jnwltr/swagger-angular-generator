@@ -21,7 +21,10 @@ export class GetGoodsListFormService {
     });
   }
 
-  submit() {
-    return this.goodsService.getGoodsList(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.goodsService.getGoodsList(data);
   }
 }

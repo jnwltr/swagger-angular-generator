@@ -23,7 +23,10 @@ export class PutOrderFormService {
     });
   }
 
-  submit() {
-    return this.orderService.putOrder(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.orderService.putOrder(data);
   }
 }
