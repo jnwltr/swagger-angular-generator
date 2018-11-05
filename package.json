@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    
     "install:demo": "cd demo-app/client && npm i",
     "start": "ts-node src/index.ts",
     "start:debug": "node -r ts-node/register --inspect-brk src/index.ts",
