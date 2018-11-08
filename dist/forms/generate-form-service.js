@@ -35,6 +35,9 @@ function getImports(name, constructor) {
     if (constructor.match(/new FormArrayExtended\(/)) {
         res += `import {FormArrayExtended} from '../../../common/formArrayExtended';\n`;
     }
+    if (constructor.match(/new FormMap\(/)) {
+        res += `import {FormMap} from '../../../common/formMap';\n`;
+    }
     res += `import {${name}Service} from '../../../controllers/${name}';\n`;
     res += '\n';
     return res;
@@ -101,16 +104,24 @@ function makeField(param, name, required, definitions, parentTypes) {
         control = 'FormArrayExtended';
         initializer = `() => `;
         const controlInstance = makeField(param.items, undefined, required, definitions, newParentTypes);
-        initializer += `(\n${utils_1.indent(controlInstance)})`;
+        initializer += `(\n${utils_1.indent(controlInstance)}), []`;
     }
     else if (type === 'object') {
-        control = 'FormGroup';
         const def = {
             name: '',
             def: param,
         };
-        const fields = walkParamOrProp(def, definitions, newParentTypes);
-        initializer = `{\n${fields}\n}`;
+        if (param.additionalProperties) {
+            control = 'FormMap';
+            initializer = `() => `;
+            const controlInstance = makeField(param.additionalProperties, undefined, required, definitions, newParentTypes);
+            initializer += `(\n${utils_1.indent(controlInstance)}), {}`;
+        }
+        else {
+            const fields = walkParamOrProp(def, definitions, newParentTypes);
+            control = 'FormGroup';
+            initializer = `{\n${fields}\n}`;
+        }
     }
     else {
         control = 'FormControl';
@@ -143,14 +154,21 @@ function getValidators(param) {
     return validators;
 }
 function getFormSubmitFunction(name, formName, simpleName, paramGroups) {
-    let res = utils_1.indent('submit() {\n');
-    res += utils_1.indent(`return this.${_.lowerFirst(name)}Service.${simpleName}(${getSubmitFnParameters(formName, paramGroups)});\n`, 2);
+    const rawParam = paramGroups.length ? 'raw = false' : '';
+    let res = utils_1.indent(`submit(${rawParam}) {\n`);
+    if (paramGroups.length) {
+        res += utils_1.indent([
+            'const data = raw ?',
+            utils_1.indent([
+                `this.${formName}.getRawValue() :`,
+                `this.${formName}.value;`,
+            ]),
+        ], 2);
+        res += '\n';
+    }
+    const params = paramGroups.length ? `data` : '';
+    res += utils_1.indent(`return this.${_.lowerFirst(name)}Service.${simpleName}(${params});\n`, 2);
     res += utils_1.indent('}\n');
     return res;
-}
-function getSubmitFnParameters(name, paramGroups) {
-    if (paramGroups.length)
-        return `this.${name}.value`;
-    return '';
 }
 //# sourceMappingURL=generate-form-service.js.map

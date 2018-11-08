@@ -14,7 +14,7 @@ function generateHttpActions(config, name, responseDef, actionClassNameBase, sim
     content += getActionErrorDefinition();
     content += getActionOverviewType(actionClassNameBase);
     const actionsFileName = path.join(formSubDirName, conf_1.stateDir, `actions.ts`);
-    utils_1.writeFile(actionsFileName, content, config.header, 'ts', ['max-classes-per-file']);
+    utils_1.writeFile(actionsFileName, content, config.header, 'ts', ['max-line-length', 'max-classes-per-file']);
 }
 exports.generateHttpActions = generateHttpActions;
 function getActionImports(name, simpleName, hasParams, importModels) {

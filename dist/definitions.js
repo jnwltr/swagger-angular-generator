@@ -49,12 +49,10 @@ exports.writeToBaseModelFile = writeToBaseModelFile;
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
 function processDefinition(def, name, config) {
-    if (!isWritable(name))
-        return;
     name = common_1.normalizeDef(name);
     let output = '';
     if (def.type === 'array') {
-        const property = common_1.processProperty(def);
+        const property = common_1.processProperty(def)[0];
         if (!property.native) {
             output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
         }
@@ -62,8 +60,8 @@ function processDefinition(def, name, config) {
             output += `/** ${def.description} */\n`;
         output += `export type ${name} = ${property.property};\n`;
     }
-    else if (def.properties) {
-        const properties = _.map(def.properties, (v, k) => common_1.processProperty(v, k, name, def.required));
+    else if (def.properties || def.additionalProperties) {
+        const properties = common_1.processProperty(def, undefined, name);
         // conditional import of global types
         if (properties.some(p => !p.native)) {
             output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
@@ -101,15 +99,5 @@ function createExportComments(file, sources) {
         return ' // sources: ' + sources.join(', ');
     }
     return '';
-}
-/**
- * Checks whether this type's file shall be serialized
- * @param type name
- */
-function isWritable(type) {
-    if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
-        return false;
-    }
-    return true;
 }
 //# sourceMappingURL=definitions.js.map

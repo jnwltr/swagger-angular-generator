@@ -20,7 +20,10 @@ export class ProductDetailFormService {
     });
   }
 
-  submit() {
-    return this.productDetailService.productDetail(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.productDetailService.productDetail(data);
   }
 }

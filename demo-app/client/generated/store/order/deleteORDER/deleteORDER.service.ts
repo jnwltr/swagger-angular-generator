@@ -20,7 +20,10 @@ export class DeleteORDERFormService {
     });
   }
 
-  submit() {
-    return this.orderService.deleteORDER(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.orderService.deleteORDER(data);
   }
 }

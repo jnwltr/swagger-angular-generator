@@ -125,9 +125,14 @@ export class MyComponent implements OnInit {
 #### Usage of Forms services
 - the `exampleFormService` service is generated and holds the `FormGroup` definition that corresponds
   with the request data structure
-- Array-like structures use `FormArrayExtended` that holds the definition of array item (`FormControl` or `FormGroup`)
-  so new items can be created via `.setValue()` or added `.createControl()`.
+- Array-like structures use `FormArrayExtended` that extends native Angulars' `FormArray` and holds the definition of array item so new items can be created for data via `.setValue()` or empty via `.createControl()`.
+- Map-like structures use `FormMap` that extends native Angulars' `FormGroup` and holds the definition of map value item so new items can be created for data via `.setValue()` or empty via `.createControl()`.
+- there's a helper method `safeSetValue()` that sets the shape and data of all `AbstractControl`'s ancestors and never fails (compatible data form the shape and are set, the rest is ignored).
 - use it in the template the following way
+- check the details in the generated test files, e.g.
+  - [generated form](demo-app/client/generated/store/structures/map/map.service.ts),
+  - [array tests](demo-app/client/src/tests/form/array.spec.ts),
+  - [map tests](demo-app/client/src/tests/form/map.spec.ts).
 
 ```html
 <form [formGroup]="exampleFormService.form" (ngSubmit)="sendForm()" class="full-width">

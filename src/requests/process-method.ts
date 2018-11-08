@@ -124,7 +124,10 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
     let def: string;
     const list = map(group, p => {
       // header params values need to be strings
-      return getObjectPropSetter(p.name, 'params', groupName === 'header' ? '.toString()' : '');
+      const suffix = groupName === 'header' && p.type !== 'string' ?
+        '.toString()' :
+        '';
+      return getObjectPropSetter(p.name, 'params', suffix);
     });
 
     if (groupName === 'query') {

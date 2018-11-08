@@ -22,7 +22,10 @@ export class PatchOrderFormService {
     });
   }
 
-  submit() {
-    return this.orderService.patchOrder(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.orderService.patchOrder(data);
   }
 }

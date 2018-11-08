@@ -8,27 +8,26 @@
 import {createFeatureSelector} from '@ngrx/store';
 
 import {HttpErrorResponse} from '@angular/common/http';
-import * as __model from '../../../../model';
 import * as actions from './actions';
 
-export interface TestStructuresState {
-  data: __model.TestStructuresGeneratedInlineModel | null;
+export interface MapState {
+  data: void | null;
   loading: boolean;
   error: HttpErrorResponse | null;
 }
 
-export const initialTestStructuresState: TestStructuresState = {
+export const initialMapState: MapState = {
   data: null,
   loading: false,
   error: null,
 };
 
-export const selectorName = 'Arrays_TestStructures';
-export const getTestStructuresStateSelector = createFeatureSelector<TestStructuresState>(selectorName);
+export const selectorName = 'Structures_Map';
+export const getMapStateSelector = createFeatureSelector<MapState>(selectorName);
 
-export function TestStructuresReducer(
-  state: TestStructuresState = initialTestStructuresState,
-  action: actions.TestStructuresAction): TestStructuresState {
+export function MapReducer(
+  state: MapState = initialMapState,
+  action: actions.MapAction): MapState {
   switch (action.type) {
     case actions.Actions.START: return {...state, loading: true, error: null};
     case actions.Actions.SUCCESS: return {...state, data: action.payload, loading: false};

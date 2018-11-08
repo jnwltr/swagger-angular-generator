@@ -23,7 +23,10 @@ export class LoginFormService {
     });
   }
 
-  submit() {
-    return this.loginService.login(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.loginService.login(data);
   }
 }

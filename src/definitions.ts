@@ -59,20 +59,18 @@ export function writeToBaseModelFile(config: Config, allExports: string) {
  * @param name name of the type definition and after normalization of the resulting interface + file
  */
 export function processDefinition(def: Schema, name: string, config: Config): ProcessedDefinition {
-  if (!isWritable(name)) return;
-
   name = normalizeDef(name);
 
   let output = '';
   if (def.type === 'array') {
-    const property = processProperty(def);
+    const property = processProperty(def)[0];
     if (!property.native) {
       output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     if (def.description) output += `/** ${def.description} */\n`;
     output += `export type ${name} = ${property.property};\n`;
-  } else if (def.properties) {
-    const properties = _.map(def.properties, (v, k) => processProperty(v, k, name, def.required));
+  } else if (def.properties || def.additionalProperties) {
+    const properties = processProperty(def, undefined, name);
     // conditional import of global types
     if (properties.some(p => !p.native)) {
       output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
@@ -113,16 +111,4 @@ function createExportComments(file: string, sources: string[]): string {
   }
 
   return '';
-}
-
-/**
- * Checks whether this type's file shall be serialized
- * @param type name
- */
-function isWritable(type: string) {
-  if ((type.startsWith('Collection«')) || (type.startsWith('Map«'))) {
-    return false;
-  }
-
-  return true;
 }

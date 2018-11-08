@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import * as conf from './conf';
 
-import {createFormArrayExtended} from './common/form-extensions';
+import {addFormExtensions, addUtils} from './common/generate';
 import {processDefinitions} from './definitions';
 import {processPaths} from './requests/process-paths';
 import {createDir, emptyDir, out, processHeader, TermColors} from './utils';
@@ -58,7 +58,7 @@ export function generate(
   const header = processHeader(schema, omitVersion);
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
-  generateCommon(path.join(dest, conf.commonDir), generateStore, config);
+  generateCommon(path.join(dest, conf.commonDir), generateStore);
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
   const definitions = processDefinitions(schema.definitions, config);
@@ -79,6 +79,7 @@ function recreateDirectories(dest: string, generateStore: boolean) {
 }
 
 /** Generates common classes, methods, utils */
-function generateCommon(dest: string, generateStore: boolean, config: Config) {
-  if (generateStore) createFormArrayExtended(dest, config);
+function generateCommon(dest: string, generateStore: boolean) {
+  addUtils(dest);
+  if (generateStore) addFormExtensions(dest);
 }

@@ -26,7 +26,10 @@ export class RestAuthUserUpdateFormService {
     });
   }
 
-  submit() {
-    return this.restAuthService.restAuthUserUpdate(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.restAuthService.restAuthUserUpdate(data);
   }
 }

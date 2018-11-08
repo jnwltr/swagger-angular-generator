@@ -24,7 +24,10 @@ export class OrderFormService {
     });
   }
 
-  submit() {
-    return this.orderService.order(this.form.value);
+  submit(raw = false) {
+    const data = raw ?
+      this.form.getRawValue() :
+      this.form.value;
+    return this.orderService.order(data);
   }
 }

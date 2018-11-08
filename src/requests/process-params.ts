@@ -27,7 +27,7 @@ export function processParams(def: Parameter[], paramsType: string): ProcessPara
   paramDef += `export interface ${paramsType} {\n`;
 
   const params = _.map(def, p => processProperty(
-    parameterToSchema(p), p.name, paramsType, p.required));
+    parameterToSchema(p), p.name, paramsType, p.required)[0]);
   const isInterfaceEmpty = !params.length;
   const usesGlobalType = params.some(p => !p.native);
 

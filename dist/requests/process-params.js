@@ -16,7 +16,7 @@ function processParams(def, paramsType) {
     let paramDef = '';
     let typesOnly = '';
     paramDef += `export interface ${paramsType} {\n`;
-    const params = _.map(def, p => common_1.processProperty(parameterToSchema(p), p.name, paramsType, p.required));
+    const params = _.map(def, p => common_1.processProperty(parameterToSchema(p), p.name, paramsType, p.required)[0]);
     const isInterfaceEmpty = !params.length;
     const usesGlobalType = params.some(p => !p.native);
     paramDef += utils_1.indent(_.map(params, 'property'));

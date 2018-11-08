@@ -21,7 +21,7 @@ import {HttpCode, HttpResponse, Schema} from '../types';
 export function processResponses(httpResponse: HttpResponse, name: string, config: Config) {
   const responses = _.filter(httpResponse, (r, status: HttpCode) => (
     r.schema && Math.floor(Number(status) / 100) === 2));
-  const properties: PropertyOutput[] = [];
+  let properties: PropertyOutput[] = [];
 
   for (const response of responses) {
     if (response.schema && response.schema.properties) {
@@ -35,7 +35,7 @@ export function processResponses(httpResponse: HttpResponse, name: string, confi
       };
       properties.push(propertyOutput);
     } else {
-      properties.push(processProperty(response.schema, undefined, name));
+      properties = properties.concat(processProperty(response.schema, undefined, name));
     }
   }
 
