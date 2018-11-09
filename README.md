@@ -22,7 +22,7 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 ##### Have a look at the [demo-app generated files](demo-app/client/generated) to get better understanding what is being generated.
 
 ## Install
-`npm i swagger-angular-generator --save-dev`
+`npm i swagger-angular-generator`
 
 ## Options
 `-h` - show help
@@ -323,6 +323,7 @@ generated inside Order.ts
 1. `docker build . -t swagger-angular-generator`
 1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
 1. `npm i`
+1. `npm run install:demo`
 
 ### Testing
 
