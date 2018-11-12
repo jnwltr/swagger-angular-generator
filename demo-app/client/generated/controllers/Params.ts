@@ -7,7 +7,7 @@
 
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 export interface DashedParams {
   /** testing number */
@@ -47,7 +47,7 @@ export class ParamsService {
     };
 
     let queryParams = new HttpParams();
-    Object.entries(queryParamBase).forEach(([key, value]) => {
+    Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) {
         if (typeof value === 'string') queryParams = queryParams.set(key, value);
         else queryParams = queryParams.set(key, JSON.stringify(value));
@@ -63,7 +63,7 @@ export class ParamsService {
       'dashed-body-param': params['dashed-body-param'],
     };
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     return this.http.post<void>(`/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParamsWithoutUndefined, {params: queryParams, headers: headerParams});
