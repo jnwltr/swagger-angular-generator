@@ -18,5 +18,6 @@ export * from './defs/ArrayOfObjects';
 export * from './defs/MapStructure'; // sources: mapStructure
 export * from './defs/MapContent'; // sources: mapContent
 export * from './defs/MapObject'; // sources: mapObject
+export * from './defs/TicketDetailOutput';
 export * from './defs/GetGoodsListGeneratedInlineModel';
 export * from './defs/ArrayGeneratedInlineModel';

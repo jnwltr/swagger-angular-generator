@@ -12,6 +12,8 @@ import {Observable} from 'rxjs';
 import * as __model from '../model';
 
 export interface RegistrationParams {
+  /** Registration type */
+  registrationType: string;
   /**
    * E-mail
    * format: email
@@ -23,8 +25,6 @@ export interface RegistrationParams {
   password2: string;
   /** Self ref parameter */
   selfRefParam: __model.SelfRefObject;
-  /** Registration type */
-  registrationType: string;
 }
 
 @Injectable()
@@ -36,14 +36,14 @@ export class RegistrationService {
    * http://example.com/swagger/swagger-ui.html#!/Registration/Registration
    */
   registration(params: RegistrationParams): Observable<object> {
+    const pathParams = {
+      registrationType: params.registrationType,
+    };
     const formDataParams = {
       email: params.email,
       password1: params.password1,
       password2: params.password2,
       selfRefParam: params.selfRefParam,
-    };
-    const pathParams = {
-      registrationType: params.registrationType,
     };
     return this.http.post<object>(`/api-base-path/registration/${pathParams.registrationType}`, formDataParams);
   }

@@ -50,3 +50,20 @@ function getValue(input: any, attribute: string | number) {
     undefined :
     input[attribute];
 }
+
+/**
+ * From others it filters out duplicate elements which are included in favoured.
+ * Duplicates = same values for keys.
+ * @param favoured
+ * @param others
+ * @param keys
+ */
+export function merge(favoured: any[], others: any[], ...keys: string[]): any[] {
+  return others
+    .filter(elem => {
+      return !favoured.find(subElem => keys
+        .map((k: string) => elem[k] === subElem[k])
+        .every(Boolean));
+    })
+    .concat(favoured);
+}

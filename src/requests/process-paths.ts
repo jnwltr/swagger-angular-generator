@@ -3,6 +3,7 @@
  * in the schema
  */
 import * as _ from 'lodash';
+import {merge} from '../common/templates/utils';
 import * as conf from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
@@ -85,7 +86,7 @@ function preProcessPaths(paths: PathsWithParameters): Paths {
         if (key === 'parameters') return;
 
         const method = pathValue[key as MethodName];
-        method.parameters = method.parameters.concat(pathValue.parameters);
+        method.parameters = merge(method.parameters, pathValue.parameters, 'in', 'name');
       });
     }
 
