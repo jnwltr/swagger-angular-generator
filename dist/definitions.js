@@ -76,6 +76,14 @@ function processDefinition(def, name, config) {
         if (enumLines)
             output += `\n${enumLines}\n`;
     }
+    else if (def.type === 'string' && def.enum) {
+        output += `export type ${name} = ${def.enum.map(enumValue => `'${enumValue}'`).join(' | ')};`;
+        output += `\n`;
+        output += `\n`;
+        output += `export const ${name} = {\n`;
+        output += def.enum.map(enumValue => utils_1.indent(`${enumValue.charAt(0).toUpperCase() + enumValue.slice(1)}: '${enumValue}' as ${name},`)).join('\n');
+        output += `\n};\n`;
+    }
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
     return { name, def };
