@@ -19,9 +19,9 @@ export function generateHttpEffects(config: Config, name: string, simpleName: st
 function getEffectsImports(name: string) {
   let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
   res += `import {Injectable} from '@angular/core';\n`;
-  res += `import {Actions, Effect} from '@ngrx/effects';\n`;
+  res += `import {Actions, Effect, ofType} from '@ngrx/effects';\n`;
   res += '\n';
-  res += `import {of} from 'rxjs/observable/of';\n`;
+  res += `import {of} from 'rxjs';\n`;
   res += '\n';
   res += `import {catchError, map, switchMap} from 'rxjs/operators';\n`;
   res += `import {${name}Service} from '../../../../controllers/${name}';\n`;
@@ -51,7 +51,8 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
   const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
 
   let res = indent(`@Effect()\n`);
-  res += indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
+  res += indent(`${actionClassNameBase} = this.storeActions.pipe(\n`);
+  res += indent(`ofType<actions.Start>(actions.Actions.START),\n`, 2);
   const actionParam = hasParams ? 'action: actions.Start' : '';
   res += indent(
     `switchMap((${actionParam}) => ` +

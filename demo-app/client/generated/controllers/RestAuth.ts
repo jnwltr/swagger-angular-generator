@@ -7,7 +7,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
@@ -74,7 +74,7 @@ export class RestAuthService {
   restAuthUserUpdate(params: RestAuthUserUpdateParams): Observable<__model.UserDetails> {
     const bodyParams = params.data;
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     return this.http.put<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParamsWithoutUndefined);
@@ -97,7 +97,7 @@ export class RestAuthService {
   restAuthUserPartialUpdate(params: RestAuthUserPartialUpdateParams): Observable<__model.UserDetails> {
     const bodyParams = params.data;
     const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]) => {
+    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
     });
     return this.http.patch<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParamsWithoutUndefined);

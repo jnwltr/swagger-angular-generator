@@ -7,9 +7,9 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 
-import {of} from 'rxjs/observable/of';
+import {of} from 'rxjs';
 
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {LogoutService} from '../../../../controllers/Logout';
@@ -18,7 +18,8 @@ import * as actions from './actions';
 @Injectable()
 export class LogoutEffects {
   @Effect()
-  Logout = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+  Logout = this.storeActions.pipe(
+    ofType<actions.Start>(actions.Actions.START),
     switchMap(() => this.logoutService.logout()
       .pipe(
         map(result => new actions.Success(result)),

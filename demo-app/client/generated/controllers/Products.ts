@@ -7,7 +7,7 @@
 
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
@@ -55,7 +55,7 @@ export class ProductsService {
     };
 
     let queryParams = new HttpParams();
-    Object.entries(queryParamBase).forEach(([key, value]) => {
+    Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) {
         if (typeof value === 'string') queryParams = queryParams.set(key, value);
         else queryParams = queryParams.set(key, JSON.stringify(value));
