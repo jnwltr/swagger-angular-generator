@@ -13,4 +13,6 @@ export interface ArrayStructure {
   arrayStringInline: string[];
   arrayArrayStringsRef: __model.ArrayOfStrings[];
   arrayArrayObjectRef: __model.ArrayOfObjects[];
+  nestedArray?: string[][];
+  nestedRefsArray?: __model.ArrayOfObjects[][];
 }

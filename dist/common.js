@@ -46,10 +46,13 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                 break;
             case 'array':
                 defType = translateType(prop.items.type || prop.items.$ref);
-                if (defType.arraySimple)
-                    type = `${defType.type}[]`;
-                else
-                    type = `Array<${defType.type}>`;
+                const itemProp = processProperty(prop.items)[0];
+                if (defType.arraySimple) {
+                    type = `${itemProp.property}[]`;
+                }
+                else {
+                    type = `Array<${itemProp.property}>`;
+                }
                 break;
             default:
                 if (prop.additionalProperties) {

@@ -35,6 +35,16 @@ export class ArrayFormService {
               id: new FormControl(undefined, [Validators.required]),
               name: new FormControl(undefined, []),
             }, [Validators.required])), [], [Validators.required])), [], [Validators.required]),
+        nestedArray: new FormArrayExtended(() => (
+          new FormArrayExtended(() => (
+            new FormControl(undefined, [])), [], [])), [], []),
+        nestedRefsArray: new FormArrayExtended(() => (
+          new FormArrayExtended(() => (
+            new FormArrayExtended(() => (
+              new FormGroup({
+                id: new FormControl(undefined, [Validators.required]),
+                name: new FormControl(undefined, []),
+              }, [])), [], [])), [], [])), [], []),
       }, [Validators.required]),
     });
   }

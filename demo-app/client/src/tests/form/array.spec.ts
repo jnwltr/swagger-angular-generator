@@ -21,6 +21,8 @@ const formDataMock: ArrayParams = {
     arrayStringInline: stringArray,
     arrayArrayStringsRef: [[...stringArray], [...stringArray].reverse()],
     arrayArrayObjectRef: [[...objectArray].reverse(), [...objectArray]],
+    nestedArray: [[...stringArray]],
+    nestedRefsArray: [[[...objectArray]]],
   },
 };
 
@@ -29,6 +31,8 @@ const emptyDataMock: ArrayStructure = {
   arrayStringInline: [],
   arrayArrayStringsRef: [],
   arrayArrayObjectRef: [],
+  nestedArray: [],
+  nestedRefsArray: [],
 };
 
 describe(`Array form`, () => {
