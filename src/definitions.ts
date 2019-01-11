@@ -84,13 +84,13 @@ export function processDefinition(def: Schema, name: string, config: Config): Pr
     // concat non-empty enum lines
     const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
     if (enumLines) output += `\n${enumLines}\n`;
-  } else if (def.type !== "object") {
+  } else if (def.type !== 'object') {
     const property = processProperty(def)[0];
     if (!property.native) {
       output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
 
-    output += `export type ${name} = ${property.property};\n`
+    output += `export type ${name} = ${property.property};\n`;
   }
 
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);

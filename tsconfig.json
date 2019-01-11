@@ -4,6 +4,7 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "importHelpers": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,

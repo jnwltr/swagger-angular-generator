@@ -9,7 +9,6 @@
     "dist"
   ],
   "scripts": {
-    
     "install:demo": "cd demo-app/client && npm i",
     "start": "ts-node src/index.ts",
     "start:debug": "node -r ts-node/register --inspect-brk src/index.ts",
@@ -45,35 +44,30 @@
   "dependencies": {
     "commander": "^2.18.0",
     "lodash": "^4.17.11",
-    "tsutils": "^2.12.1"
+    "tslib": "^1.9.0",
+    "tsutils": "^3.7.0"
   },
   "devDependencies": {
-    "@angular/cli": "^6.2.2",
-    "@angular/common": "^6.1.7",
-    "@angular/core": "^6.1.7",
-    "@angular/forms": "^6.1.7",
-    "@angular/http": "^6.1.7",
-    "@angular/platform-browser": "^6.1.7",
-    "@ngrx/effects": "^6.1.0",
-    "@ngrx/store": "^6.1.0",
+    "@angular-devkit/build-angular": "~0.12.0",
+    "@angular/cli": "^7.2.1",
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0",
+    "@angular/forms": "^7.2.0",
+    "@angular/http": "^7.2.0",
+    "@angular/platform-browser": "^7.2.0",
+    "@ngrx/effects": "^7.0.0",
+    "@ngrx/store": "^7.0.0",
     "@types/commander": "^2.12.2",
-    "@types/lodash": "^4.14.116",
-    "@types/node": "^10.10.1",
+    "@types/lodash": "^4.14.119",
+    "@types/node": "^10.12.18",
     "rxjs": "^6.3.2",
     "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
+    "tslint": "^5.12.1",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "~3.0.3",
-    "zone.js": "^0.8.26"
+    "typescript": "~3.2.2",
+    "zone.js": "^0.8.27"
   },
   "peerDependencies": {
-    "@angular/common": "^6.1.7",
-    "@angular/core": "^6.1.7",
-    "@angular/http": "^6.1.7",
-    "@angular/platform-browser": "^6.1.7",
-    "@ngrx/effects": "^6.1.0",
-    "@ngrx/store": "^6.1.0",
-    "rxjs": "^6.3.2",
-    "zone.js": "^0.8.26"
+    "rxjs": "^6.3.2"
   }
 }
