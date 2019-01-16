@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
@@ -38,5 +38,26 @@ export class GoodsService {
     });
 
     return this.http.get<__model.GetGoodsListGeneratedInlineModel>(`/api-base-path/goods/get-goods-list/`, {params: queryParams});
+  }
+
+  /**
+   * http://example.com/swagger/swagger-ui.html#!/goods/goods_get-goods-list_list
+   * return httpResponse
+   */
+  getGoodsListWithResponse(params: GetGoodsListParams): Observable<HttpResponse<__model.GetGoodsListGeneratedInlineModel>> {
+    const queryParamBase = {
+      limit: params.limit,
+      offset: params.offset,
+    };
+
+    let queryParams = new HttpParams();
+    Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {
+      if (value !== undefined) {
+        if (typeof value === 'string') queryParams = queryParams.set(key, value);
+        else queryParams = queryParams.set(key, JSON.stringify(value));
+      }
+    });
+
+    return this.http.get<__model.GetGoodsListGeneratedInlineModel>(`/api-base-path/goods/get-goods-list/`, {params: queryParams, observe: 'response'});
   }
 }

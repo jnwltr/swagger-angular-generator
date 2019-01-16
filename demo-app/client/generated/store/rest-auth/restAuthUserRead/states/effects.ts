@@ -20,7 +20,7 @@ export class RestAuthUserReadEffects {
   @Effect()
   RestAuthUserRead = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap(() => this.restauthService.restAuthUserRead()
+    switchMap(() => this.restauthService.restAuthUserReadWithResponse()
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),

@@ -48,6 +48,8 @@ export function processController(methods: ControllerMethod[], name: string, con
   if (processedMethods.some(c => 'query' in c.paramGroups)) {
     angularCommonHttp.push('HttpParams');
   }
+  angularCommonHttp.push('HttpResponse');
+
   content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
 
   content += 'import {Injectable} from \'@angular/core\';\n';

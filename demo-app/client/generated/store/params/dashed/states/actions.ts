@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
 import {DashedParams} from '../../../../controllers/Params';
 
@@ -22,7 +22,7 @@ export class Start implements Action {
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: void) {}
+  constructor(public payload: HttpResponse<void>) {}
 }
 
 export class Error implements Action {

@@ -25,7 +25,7 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
 
 function getActionImports(name: string, simpleName: string, hasParams: boolean,
                           importModels: boolean) {
-  let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
+  let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
   res += `import {Action} from '@ngrx/store';\n`;
 
   if (hasParams) {
@@ -63,7 +63,7 @@ function getActionStartDefinition(name: string, hasParams: boolean) {
 function getActionSuccessDefinition(response: ResponseDef) {
   let res = `export class Success implements Action {\n`;
   res += indent(`readonly type = Actions.SUCCESS;\n`);
-  res += indent(`constructor(public payload: ${response.type}) {}\n`);
+  res += indent(`constructor(public payload: HttpResponse<${response.type}>) {}\n`);
   res += `}\n`;
   res += `\n`;
 

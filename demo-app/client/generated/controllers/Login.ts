@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
@@ -29,6 +29,18 @@ export class LoginService {
       loginDto: params.loginDto,
     };
     return this.http.post<object>(`/api-base-path/login`, formDataParams);
+  }
+
+  /**
+   * create registration credentials
+   * http://example.com/swagger/swagger-ui.html#!/Login/Registration
+   * return httpResponse
+   */
+  loginWithResponse(params: LoginParams): Observable<HttpResponse<object>> {
+    const formDataParams = {
+      loginDto: params.loginDto,
+    };
+    return this.http.post<object>(`/api-base-path/login`, formDataParams, {observe: 'response'});
   }
   login_(loginDto: __model.LoginDto): Observable<object> {
     return this.login({loginDto});

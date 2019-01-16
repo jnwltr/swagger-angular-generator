@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
@@ -19,5 +19,14 @@ export class LogoutService {
    */
   logout(): Observable<object> {
     return this.http.post<object>(`/api-base-path/logout`, {});
+  }
+
+  /**
+   * Logout - empty post body
+   * http://example.com/swagger/swagger-ui.html#!/Logout/Logout
+   * return httpResponse
+   */
+  logoutWithResponse(): Observable<HttpResponse<object>> {
+    return this.http.post<object>(`/api-base-path/logout`, {}, {observe: 'response'});
   }
 }

@@ -20,7 +20,7 @@ export class MapEffects {
   @Effect()
   Map = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap((action: actions.Start) => this.structuresService.map(action.payload)
+    switchMap((action: actions.Start) => this.structuresService.mapWithResponse(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
