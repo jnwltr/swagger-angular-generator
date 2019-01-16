@@ -20,7 +20,7 @@ export class RestAuthLogoutCreateEffects {
   @Effect()
   RestAuthLogoutCreate = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap(() => this.restauthService.restAuthLogoutCreate()
+    switchMap(() => this.restauthService.restAuthLogoutCreateWithResponse()
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),

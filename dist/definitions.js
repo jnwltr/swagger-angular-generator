@@ -76,7 +76,7 @@ function processDefinition(def, name, config) {
         if (enumLines)
             output += `\n${enumLines}\n`;
     }
-    else if (def.type !== "object") {
+    else if (def.type !== 'object') {
         const property = common_1.processProperty(def)[0];
         if (!property.native) {
             output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;

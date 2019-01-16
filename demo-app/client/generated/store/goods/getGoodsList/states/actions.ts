@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Action} from '@ngrx/store';
 import {GetGoodsListParams} from '../../../../controllers/Goods';
 import * as __model from '../../../../model';
@@ -23,7 +23,7 @@ export class Start implements Action {
 
 export class Success implements Action {
   readonly type = Actions.SUCCESS;
-  constructor(public payload: __model.GetGoodsListGeneratedInlineModel) {}
+  constructor(public payload: HttpResponse<__model.GetGoodsListGeneratedInlineModel>) {}
 }
 
 export class Error implements Action {

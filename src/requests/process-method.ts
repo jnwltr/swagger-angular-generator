@@ -61,8 +61,29 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
   if (paramSeparation.length) methodDef += '\n';
 
   const body = `return this.http.${method.methodName}<${method.responseDef.type}>` +
-               `(\`${method.basePath}${url}\`${params});`;
+    `(\`${method.basePath}${url}\`${params});`;
   methodDef += indent(body);
+  methodDef += `\n`;
+  methodDef += `}`;
+
+  // make method for httpResponse
+  methodDef += '\n';
+  methodDef += '\n';
+  methodDef += makeComment([
+    method.summary,
+    method.description,
+    method.swaggerUrl,
+    'return httpResponse'].filter(Boolean));
+  methodDef += `${method.simpleName}WithResponse(${paramsSignature}):` +
+    `Observable<HttpResponse<${method.responseDef.type}>> {\n`;
+
+  // apply the param definitions, e.g. bodyParams
+  methodDef += indent(paramSeparation);
+  if (paramSeparation.length) methodDef += '\n';
+  params = getRequestParams(paramTypes, method.methodName, true);
+  const body2 = `return this.http.${method.methodName}<${method.responseDef.type}>` +
+    `(\`${method.basePath}${url}\`${params});`;
+  methodDef += indent(body2);
   methodDef += `\n`;
   methodDef += `}`;
 
@@ -177,8 +198,9 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
  * Returns a list of additional params for http client call invocation
  * @param paramTypes list of params types
  * @param methodName name of http method to invoke
+ * @param withResponse add observe: response
  */
-function getRequestParams(paramTypes: ParamLocation[], methodName: string) {
+function getRequestParams(paramTypes: ParamLocation[], methodName: string, withResponse = false) {
   let res = '';
 
   if (['post', 'put', 'patch'].includes(methodName)) {
@@ -197,6 +219,10 @@ function getRequestParams(paramTypes: ParamLocation[], methodName: string) {
   }
   if (paramTypes.includes('header')) {
     optionParams.push('headers: headerParams');
+  }
+
+  if (withResponse) {
+    optionParams.push('observe: \'response\'');
   }
 
   if (optionParams.length) res += `, {${optionParams.join(', ')}}`;

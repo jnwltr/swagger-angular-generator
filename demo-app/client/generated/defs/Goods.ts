@@ -22,11 +22,11 @@ export type CurrencyGoodsEnum =
   'CZK';
 
 export type StatusGoodsEnum =
-  1 |
-  2 |
-  3;
+  '1' |
+  '2' |
+  '3';
 
 export type RefStatusGoodsEnum =
-  1 |
-  2 |
-  3;
+  '1' |
+  '2' |
+  '3';

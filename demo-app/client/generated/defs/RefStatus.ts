@@ -5,4 +5,3 @@
  * example.com/api-base-path
  */
 
-export type RefStatus = number;

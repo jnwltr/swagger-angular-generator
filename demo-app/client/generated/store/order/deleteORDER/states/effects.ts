@@ -20,7 +20,7 @@ export class DeleteORDEREffects {
   @Effect()
   DeleteORDER = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap((action: actions.Start) => this.orderService.deleteORDER(action.payload)
+    switchMap((action: actions.Start) => this.orderService.deleteORDERWithResponse(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),

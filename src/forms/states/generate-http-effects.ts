@@ -56,7 +56,7 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
   const actionParam = hasParams ? 'action: actions.Start' : '';
   res += indent(
     `switchMap((${actionParam}) => ` +
-    `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);
+    `this.${name.toLowerCase()}Service.${simpleName}WithResponse(${startActionPayloadDefinition})\n`, 2);
   res += indent(`.pipe(\n`, 3);
   res += indent(`map(result => new actions.Success(result)),\n`, 4);
   res += indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error))),\n`, 4);

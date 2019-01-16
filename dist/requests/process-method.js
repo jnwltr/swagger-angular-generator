@@ -57,6 +57,27 @@ function processMethod(method, unwrapSingleParamMethods) {
     methodDef += utils_1.indent(body);
     methodDef += `\n`;
     methodDef += `}`;
+    // make method for httpResponse
+    methodDef += '\n';
+    methodDef += '\n';
+    methodDef += utils_1.makeComment([
+        method.summary,
+        method.description,
+        method.swaggerUrl,
+        'return httpResponse'
+    ].filter(Boolean));
+    methodDef += `${method.simpleName}WithResponse(${paramsSignature}):` +
+        `Observable<HttpResponse<${method.responseDef.type}>> {\n`;
+    // apply the param definitions, e.g. bodyParams
+    methodDef += utils_1.indent(paramSeparation);
+    if (paramSeparation.length)
+        methodDef += '\n';
+    params = getRequestParams(paramTypes, method.methodName, true);
+    const body2 = `return this.http.${method.methodName}<${method.responseDef.type}>` +
+        `(\`${method.basePath}${url}\`${params});`;
+    methodDef += utils_1.indent(body2);
+    methodDef += `\n`;
+    methodDef += `}`;
     methodDef += splitParamsMethod;
     if (method.responseDef.enumDeclaration) {
         if (interfaceDef)
@@ -152,8 +173,9 @@ function getParamSeparation(paramGroups) {
  * Returns a list of additional params for http client call invocation
  * @param paramTypes list of params types
  * @param methodName name of http method to invoke
+ * @param withResponse add observe: response
  */
-function getRequestParams(paramTypes, methodName) {
+function getRequestParams(paramTypes, methodName, withResponse = false) {
     let res = '';
     if (['post', 'put', 'patch'].includes(methodName)) {
         if (paramTypes.includes('body')) {
@@ -172,6 +194,9 @@ function getRequestParams(paramTypes, methodName) {
     }
     if (paramTypes.includes('header')) {
         optionParams.push('headers: headerParams');
+    }
+    if (withResponse) {
+        optionParams.push('observe: \'response\'');
     }
     if (optionParams.length)
         res += `, {${optionParams.join(', ')}}`;

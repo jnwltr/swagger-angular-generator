@@ -20,7 +20,7 @@ export class PatchOrderEffects {
   @Effect()
   PatchOrder = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap((action: actions.Start) => this.orderService.patchOrder(action.payload)
+    switchMap((action: actions.Start) => this.orderService.patchOrderWithResponse(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),

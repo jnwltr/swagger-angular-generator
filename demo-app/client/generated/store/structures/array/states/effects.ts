@@ -20,7 +20,7 @@ export class ArrayEffects {
   @Effect()
   Array = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap((action: actions.Start) => this.structuresService.array(action.payload)
+    switchMap((action: actions.Start) => this.structuresService.arrayWithResponse(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
