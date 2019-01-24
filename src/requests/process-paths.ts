@@ -3,11 +3,11 @@
  * in the schema
  */
 import * as _ from 'lodash';
-import {merge} from '../common/templates/utils';
 import * as conf from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
 import {Method, MethodName} from '../types';
+import {merge} from '../utils';
 import {processController} from './process-controller';
 import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
 

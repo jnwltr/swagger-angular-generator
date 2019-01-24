@@ -13,4 +13,3 @@ script:
     "npm i && npm run install:demo &&
     npm run build &&
     npm test && npm run lint"
-

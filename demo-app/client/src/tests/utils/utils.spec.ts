@@ -1,4 +1,4 @@
-import {merge} from '../../../../../src/common/templates/utils';
+import {merge} from '../../../../../src/utils';
 
 describe('Merge two arrays of objects favouring duplicate elems from one', () => {
 
