@@ -138,3 +138,20 @@ export function out(text: string | string[], color?: TermColors) {
 
   process.stdout.write(`${text}\n`);
 }
+
+/**
+ * From others it filters out duplicate elements which are included in favoured.
+ * Duplicates = same values for keys.
+ * @param favoured
+ * @param others
+ * @param keys
+ */
+export function merge(favoured: any[], others: any[], ...keys: string[]): any[] {
+  const othersFiltered = others
+    .filter(elem => {
+      return !favoured.find(subElem => keys
+        .map((k: string) => elem[k] === subElem[k])
+        .every(Boolean));
+    });
+  return favoured.concat(othersFiltered);
+}

@@ -143,4 +143,21 @@ function out(text, color) {
     process.stdout.write(`${text}\n`);
 }
 exports.out = out;
+/**
+ * From others it filters out duplicate elements which are included in favoured.
+ * Duplicates = same values for keys.
+ * @param favoured
+ * @param others
+ * @param keys
+ */
+function merge(favoured, others, ...keys) {
+    const othersFiltered = others
+        .filter(elem => {
+        return !favoured.find(subElem => keys
+            .map((k) => elem[k] === subElem[k])
+            .every(Boolean));
+    });
+    return favoured.concat(othersFiltered);
+}
+exports.merge = merge;
 //# sourceMappingURL=utils.js.map

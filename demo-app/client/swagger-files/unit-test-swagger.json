@@ -757,6 +757,56 @@
           "200": {}
         }
       }
+    },
+    "/ticketing/show-ticket-detail/{id}/": {
+      "get": {
+        "operationId": "ticketing_show-ticket-detail_read",
+        "description": "show_ticket_detail",
+        "parameters": [
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TicketDetailOutput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "ticketing"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
     }
   },
   "definitions": {
@@ -1013,6 +1063,36 @@
       "type": "object",
       "additionalProperties": {
         "type": "number"
+      }
+    },
+    "TicketDetailOutput": {
+      "required": [
+        "status",
+        "created_date",
+        "created_by_user",
+        "issue__origin"
+      ],
+      "type": "object",
+      "properties": {
+        "status": {
+          "title": "Status",
+          "type": "string",
+          "minLength": 1
+        },
+        "created_date": {
+          "title": "Created date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by_user": {
+          "title": "Created by user",
+          "type": "boolean"
+        },
+        "issue__origin": {
+          "title": "Issue  origin",
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   }

@@ -16,7 +16,7 @@ exports.generateHttpEffects = generateHttpEffects;
 function getEffectsImports(name) {
     let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
     res += `import {Injectable} from '@angular/core';\n`;
-    res += `import {Actions, Effect} from '@ngrx/effects';\n`;
+    res += `import {Actions, Effect, ofType} from '@ngrx/effects';\n`;
     res += '\n';
     res += `import {of} from 'rxjs';\n`;
     res += '\n';
@@ -41,7 +41,8 @@ function getConstructorDefinition(name) {
 function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
     const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
     let res = utils_1.indent(`@Effect()\n`);
-    res += utils_1.indent(`${actionClassNameBase} = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(\n`);
+    res += utils_1.indent(`${actionClassNameBase} = this.storeActions.pipe(\n`);
+    res += utils_1.indent(`ofType<actions.Start>(actions.Actions.START),\n`, 2);
     const actionParam = hasParams ? 'action: actions.Start' : '';
     res += utils_1.indent(`switchMap((${actionParam}) => ` +
         `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);

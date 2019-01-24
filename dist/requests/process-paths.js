@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const _ = require("lodash");
 const conf = require("../conf");
+const utils_1 = require("../utils");
 const process_controller_1 = require("./process-controller");
 /**
  * Entry point, processes all possible api requests and exports them
@@ -74,7 +75,7 @@ function preProcessPaths(paths) {
                 if (key === 'parameters')
                     return;
                 const method = pathValue[key];
-                method.parameters = method.parameters.concat(pathValue.parameters);
+                method.parameters = utils_1.merge(method.parameters, pathValue.parameters, 'in', 'name');
             });
         }
         delete pathValue.parameters;
