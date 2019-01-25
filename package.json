@@ -20,7 +20,8 @@
     "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
     "postlint": "cd demo-app/client; npm run lint",
-    "test": "cd demo-app/client && npm run test:ci"
+    "test": "npm run test:src && cd demo-app/client && npm run test:ci",
+    "test:src": "ts-node node_modules/.bin/tape 'src/**/*.spec.ts'"
   },
   "repository": {
     "type": "git",
@@ -58,7 +59,9 @@
     "@types/commander": "^2.12.2",
     "@types/lodash": "^4.14.116",
     "@types/node": "^10.10.1",
+    "@types/tape": "^4.2.33",
     "rxjs": "^6.3.2",
+    "tape": "^4.9.2",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.4.0",
