@@ -1,6 +1,6 @@
 {
   "name": "swagger-angular-generator",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "Generator of API layer in TypeScript for Angular 5 apps",
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
