@@ -43,6 +43,17 @@ function writeToBaseModelFile(config, allExports) {
     utils_1.writeFile(filename, allExports, config.header);
 }
 exports.writeToBaseModelFile = writeToBaseModelFile;
+function isStringArray(value) {
+    if (value instanceof Array) {
+        value.forEach(item => {
+            if (typeof item !== 'string') {
+                return false;
+            }
+        });
+        return true;
+    }
+    return false;
+}
 /**
  * Creates the file of the type definition
  * @param def type definition
@@ -51,7 +62,6 @@ exports.writeToBaseModelFile = writeToBaseModelFile;
 function processDefinition(def, name, config) {
     name = common_1.normalizeDef(name);
     let output = '';
-    console.log(name, def.$ref, def.type, def.properties);
     if (def.type === 'array') {
         const property = common_1.processProperty(def)[0];
         if (!property.native) {
@@ -77,21 +87,23 @@ function processDefinition(def, name, config) {
         if (enumLines)
             output += `\n${enumLines}\n`;
     }
-    else if (def.type !== 'object') {
-        if (def.enum) {
-            const { enumDeclaration, native } = common_1.processProperty(def, name)[0];
-            if (!native) {
-                output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
-            }
-            output += enumDeclaration;
+    else if (def.type === 'string' || def.type === 'number' && def.enum) {
+        if (isStringArray(def.enum)) {
+            output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
+            output += `export const ${name} = {\n`;
+            output += def.enum.map(e => utils_1.indent(`${e.charAt(0).toUpperCase() + e.slice(1)}: '${e}' as ${name},`)).join('\n');
+            output += `\n};\n`;
         }
         else {
-            const property = common_1.processProperty(def)[0];
-            if (!property.native) {
-                output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
-            }
-            output += `export type ${name} = ${property.property};\n`;
+            output += `export type ${name} = ${def.enum.map(e => `${e}`).join(' | ')};`;
         }
+    }
+    else if (def.type !== 'object') {
+        const property = common_1.processProperty(def)[0];
+        if (!property.native) {
+            output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+        }
+        output += `export type ${name} = ${property.property};\n`;
     }
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);
