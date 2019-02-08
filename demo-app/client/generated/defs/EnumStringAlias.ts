@@ -5,6 +5,9 @@
  * example.com/api-base-path
  */
 
-export type EnumStringAlias =
-  'A' |
-  'B';
+export type EnumStringAlias = 'A' | 'B';
+
+export const EnumStringAlias = {
+  A: 'A' as EnumStringAlias,
+  B: 'B' as EnumStringAlias,
+};

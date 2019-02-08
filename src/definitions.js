@@ -43,6 +43,17 @@ function writeToBaseModelFile(config, allExports) {
     utils_1.writeFile(filename, allExports, config.header);
 }
 exports.writeToBaseModelFile = writeToBaseModelFile;
+function isStringArray(value) {
+    if (value instanceof Array) {
+        value.forEach(item => {
+            if (typeof item !== 'string') {
+                return false;
+            }
+        });
+        return true;
+    }
+    return false;
+}
 /**
  * Creates the file of the type definition
  * @param def type definition
@@ -51,7 +62,6 @@ exports.writeToBaseModelFile = writeToBaseModelFile;
 function processDefinition(def, name, config) {
     name = common_1.normalizeDef(name);
     let output = '';
-    console.log(name, def.$ref, def.type, def.properties);
     if (def.type === 'array') {
         const property = common_1.processProperty(def)[0];
         if (!property.native) {
@@ -76,6 +86,17 @@ function processDefinition(def, name, config) {
         const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
         if (enumLines)
             output += `\n${enumLines}\n`;
+    }
+    else if (def.type === 'string' || def.type === 'number' && def.enum) {
+        if (isStringArray(def.enum)) {
+            output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
+            output += `export const ${name} = {\n`;
+            output += def.enum.map(e => utils_1.indent(`${e.charAt(0).toUpperCase() + e.slice(1)}: '${e}' as ${name},`)).join('\n');
+            output += `\n};\n`;
+        }
+        else {
+            output += `export type ${name} = ${def.enum.map(e => `${e}`).join(' | ')};`;
+        }
     }
     else if (def.type !== 'object') {
         if (def.enum) {

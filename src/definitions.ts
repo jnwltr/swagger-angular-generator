@@ -53,6 +53,18 @@ export function writeToBaseModelFile(config: Config, allExports: string) {
   writeFile(filename, allExports, config.header);
 }
 
+function isStringArray(value: any): value is string[] {
+  if (value instanceof Array) {
+    value.forEach(item => { // maybe only check first value?
+      if (typeof item !== 'string') {
+        return false;
+      }
+    })
+    return true;
+  }
+  return false;
+}
+
 /**
  * Creates the file of the type definition
  * @param def type definition
@@ -84,21 +96,24 @@ export function processDefinition(def: Schema, name: string, config: Config): Pr
     // concat non-empty enum lines
     const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
     if (enumLines) output += `\n${enumLines}\n`;
-  } else if (def.type !== 'object') {
-
-    if (def.enum) {
-      const {enumDeclaration, native} = processProperty(def, name)[0];
-      if (!native) {
-        output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
-      }
-      output += enumDeclaration;
+  } else if (def.type === 'string' || def.type === 'number' && def.enum) {
+    if (isStringArray(def.enum)) {
+      output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
+      output += `export const ${name} = {\n`;
+      output += def.enum.map(e =>
+        indent(`${e.charAt(0).toUpperCase() + e.slice(1)}: '${e}' as ${name},`),
+      ).join('\n');
+      output += `\n};\n`;
     } else {
-      const property = processProperty(def)[0];
-      if (!property.native) {
-        output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
-      }
-      output += `export type ${name} = ${property.property};\n`;
+      output += `export type ${name} = ${def.enum.map(e => `${e}`).join(' | ')};`;
     }
+
+  } else if (def.type !== 'object') {
+    const property = processProperty(def)[0];
+    if (!property.native) {
+      output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+    }
+    output += `export type ${name} = ${property.property};\n`;
   }
 
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
