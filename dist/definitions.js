@@ -87,7 +87,7 @@ function processDefinition(def, name, config) {
         if (enumLines)
             output += `\n${enumLines}\n`;
     }
-    else if (def.type === 'string' || def.type === 'number' && def.enum) {
+    else if ((def.type === 'string' || def.type === 'number') && def.enum) {
         if (isStringArray(def.enum)) {
             output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
             output += `export const ${name} = {\n`;

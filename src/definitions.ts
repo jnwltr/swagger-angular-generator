@@ -96,7 +96,7 @@ export function processDefinition(def: Schema, name: string, config: Config): Pr
     // concat non-empty enum lines
     const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
     if (enumLines) output += `\n${enumLines}\n`;
-  } else if (def.type === 'string' || def.type === 'number' && def.enum) {
+  } else if ((def.type === 'string' || def.type === 'number') && def.enum) {
     if (isStringArray(def.enum)) {
       output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
       output += `export const ${name} = {\n`;
