@@ -39,7 +39,7 @@ export class ProductDetailService {
    * http://example.com/swagger/swagger-ui.html#!/ProductDetail/ProductDetail
    * return httpResponse
    */
-  productDetailWithResponse(params: ProductDetailParams): Observable<HttpResponse<__model.ProductDetail>> {
+  productDetailWithResponse(params: ProductDetailParams):Observable<HttpResponse<__model.ProductDetail>> {
     const pathParams = {
       productId: params.productId,
     };

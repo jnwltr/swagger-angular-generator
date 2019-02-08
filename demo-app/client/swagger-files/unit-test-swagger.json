@@ -1135,12 +1135,28 @@
       "description": "Alias",
       "format": "int32"
     },
+    "EnumStringAlias": {
+      "type": "string",
+      "description": "EnumStringAlias",
+      "enum": ["A", "B"]
+    },
+    "EnumIntAlias": {
+      "type": "integer",
+      "description": "EnumIntAlias",
+      "enum": [1, 2]
+    },
     "UseAlias": {
       "type": "object",
       "required": [],
       "properties": {
         "alias": {
           "$ref": "#/definitions/Alias"
+        },
+        "enumIntAlias": {
+          "$ref": "#/definitions/EnumIntAlias"
+        },
+        "enumStringAlias": {
+          "$ref": "#/definitions/EnumStringAlias"
         }
       }
     }

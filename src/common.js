@@ -18,6 +18,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     if (prop.properties) {
         return _.flatMap(prop.properties, (v, k) => processProperty(v, k, namespace, prop.required));
     }
+    console.log(prop.$ref, prop.type, prop.enum);
     if (prop.enum || (prop.items && prop.items.enum)) {
         type = _.upperFirst(name);
         // file added to make the enum globally unique
@@ -26,7 +27,14 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
             type += 'Enum';
         const list = prop.enum || prop.items.enum;
         const exp = exportEnums ? 'export ' : '';
-        enumDeclaration = `${exp}type ${type} =\n` + utils_1.indent('\'' + list.join('\' |\n\'')) + '\';';
+        let enumValues;
+        if (typeof list[0] === 'number') {
+            enumValues = utils_1.indent(list.join(' |\n'));
+        }
+        else {
+            enumValues = utils_1.indent('\'' + list.join('\' |\n\'')) + '\'';
+        }
+        enumDeclaration = `${exp}type ${type} =\n${enumValues};`;
         if (prop.type === 'array')
             type += '[]';
     }
@@ -39,10 +47,13 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                 break;
             case 'array':
                 defType = translateType(prop.items.type || prop.items.$ref);
-                if (defType.arraySimple)
-                    type = `${defType.type}[]`;
-                else
-                    type = `Array<${defType.type}>`;
+                const itemProp = processProperty(prop.items)[0];
+                if (defType.arraySimple) {
+                    type = `${itemProp.property}[]`;
+                }
+                else {
+                    type = `Array<${itemProp.property}>`;
+                }
                 break;
             default:
                 if (prop.additionalProperties) {

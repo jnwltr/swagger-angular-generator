@@ -1,0 +1,1 @@
+{"version":3,"file":"test-generate.js","sourceRoot":"","sources":["test-generate.ts"],"names":[],"mappings":";;AAAA,iDAA4C;AAE5C,MAAM,aAAa;IACjB,iBAAiB;QACf,mBAAQ,CAAC,sCAAsC,EAAE,WAAW,EAAE,IAAI,EAAE,IAAI,EAAE,UAAU,CAAC,CAAC;IACxF,CAAC;CACF;AAED,MAAM,aAAa,GAAG,IAAI,aAAa,EAAE,CAAC;AAC1C,aAAa,CAAC,iBAAiB,EAAE,CAAC"}

@@ -5,4 +5,6 @@
  * example.com/api-base-path
  */
 
-export type RefStatus = number;
+export type EnumIntAlias =
+  1 |
+  2;

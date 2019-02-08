@@ -36,7 +36,7 @@ export class LoginService {
    * http://example.com/swagger/swagger-ui.html#!/Login/Registration
    * return httpResponse
    */
-  loginWithResponse(params: LoginParams): Observable<HttpResponse<object>> {
+  loginWithResponse(params: LoginParams):Observable<HttpResponse<object>> {
     const formDataParams = {
       loginDto: params.loginDto,
     };

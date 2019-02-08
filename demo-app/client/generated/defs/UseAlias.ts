@@ -9,4 +9,6 @@ import * as __model from '../model';
 
 export interface UseAlias {
   alias?: __model.Alias;
+  enumIntAlias?: __model.EnumIntAlias;
+  enumStringAlias?: __model.EnumStringAlias;
 }

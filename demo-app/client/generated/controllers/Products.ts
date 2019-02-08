@@ -70,7 +70,7 @@ export class ProductsService {
    * http://example.com/swagger/swagger-ui.html#!/Products/Products
    * return httpResponse
    */
-  productsWithResponse(params: ProductsParams): Observable<HttpResponse<__model.Products>> {
+  productsWithResponse(params: ProductsParams):Observable<HttpResponse<__model.Products>> {
     const queryParamBase = {
       stringField: params.stringField,
       BooleanField: params.BooleanField,

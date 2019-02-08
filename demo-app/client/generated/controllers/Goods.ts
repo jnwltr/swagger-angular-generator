@@ -44,7 +44,7 @@ export class GoodsService {
    * http://example.com/swagger/swagger-ui.html#!/goods/goods_get-goods-list_list
    * return httpResponse
    */
-  getGoodsListWithResponse(params: GetGoodsListParams): Observable<HttpResponse<__model.GetGoodsListGeneratedInlineModel>> {
+  getGoodsListWithResponse(params: GetGoodsListParams):Observable<HttpResponse<__model.GetGoodsListGeneratedInlineModel>> {
     const queryParamBase = {
       limit: params.limit,
       offset: params.offset,

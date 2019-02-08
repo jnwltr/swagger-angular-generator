@@ -6,7 +6,7 @@
   "rules": {
     "arrow-parens": [true, "ban-single-arg-parens"],
     "object-curly-spacing": [true, "never"],
-    "no-console": true,
+    "no-console": false,
     "curly": [true, "ignore-same-line"],
     "interface-name": false,
     "member-access": [true, "no-public"],

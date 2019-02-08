@@ -74,7 +74,7 @@ export class ParamsService {
    * http://example.com/swagger/swagger-ui.html#!/Params/params_test
    * return httpResponse
    */
-  dashedWithResponse(params: DashedParams): Observable<HttpResponse<void>> {
+  dashedWithResponse(params: DashedParams):Observable<HttpResponse<void>> {
     const pathParams = {
       pathParam: params.pathParam,
       'dashed-path-param': params['dashed-path-param'],

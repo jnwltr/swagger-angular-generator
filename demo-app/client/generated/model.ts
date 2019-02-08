@@ -21,6 +21,8 @@ export * from './defs/MapObject'; // sources: mapObject
 export * from './defs/TicketDetailOutput';
 export * from './defs/RefStatus';
 export * from './defs/Alias';
+export * from './defs/EnumStringAlias';
+export * from './defs/EnumIntAlias';
 export * from './defs/UseAlias';
 export * from './defs/GetGoodsListGeneratedInlineModel';
 export * from './defs/ArrayGeneratedInlineModel';

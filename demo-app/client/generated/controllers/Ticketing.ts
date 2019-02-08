@@ -17,7 +17,6 @@ export interface ShowTicketDetailParams {
   /** format: date-time */
   date_to?: string;
   id: number;
-  id: string;
 }
 
 @Injectable()
@@ -44,7 +43,6 @@ export class TicketingService {
 
     const pathParams = {
       id: params.id,
-      id: params.id,
     };
     return this.http.get<__model.TicketDetailOutput[]>(`/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams});
   }
@@ -54,7 +52,7 @@ export class TicketingService {
    * http://example.com/swagger/swagger-ui.html#!/ticketing/ticketing_show-ticket-detail_read
    * return httpResponse
    */
-  showTicketDetailWithResponse(params: ShowTicketDetailParams): Observable<HttpResponse<__model.TicketDetailOutput[]>> {
+  showTicketDetailWithResponse(params: ShowTicketDetailParams):Observable<HttpResponse<__model.TicketDetailOutput[]>> {
     const queryParamBase = {
       date_from: params.date_from,
       date_to: params.date_to,
@@ -69,7 +67,6 @@ export class TicketingService {
     });
 
     const pathParams = {
-      id: params.id,
       id: params.id,
     };
     return this.http.get<__model.TicketDetailOutput[]>(`/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams, observe: 'response'});

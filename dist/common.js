@@ -18,6 +18,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     if (prop.properties) {
         return _.flatMap(prop.properties, (v, k) => processProperty(v, k, namespace, prop.required));
     }
+    console.log(prop.$ref, prop.type, prop.enum);
     if (prop.enum || (prop.items && prop.items.enum)) {
         type = _.upperFirst(name);
         // file added to make the enum globally unique

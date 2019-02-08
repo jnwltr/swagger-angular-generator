@@ -40,7 +40,7 @@ export class CareerService {
    * http://example.com/swagger/swagger-ui.html#!/Career/Career
    * return httpResponse
    */
-  positionsWithResponse(params: PositionsParams): Observable<HttpResponse<object>> {
+  positionsWithResponse(params: PositionsParams):Observable<HttpResponse<object>> {
     const pathParams = {
       positionId: params.positionId,
       version: params.version,

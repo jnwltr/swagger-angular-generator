@@ -57,7 +57,7 @@ export class StructuresService {
    * http://example.com/swagger/swagger-ui.html#!/Structures/structures_array
    * return httpResponse
    */
-  arrayWithResponse(params: ArrayParams): Observable<HttpResponse<__model.ArrayGeneratedInlineModel>> {
+  arrayWithResponse(params: ArrayParams):Observable<HttpResponse<__model.ArrayGeneratedInlineModel>> {
     const queryParamBase = {
       id: params.id,
     };
@@ -96,7 +96,7 @@ export class StructuresService {
    * http://example.com/swagger/swagger-ui.html#!/Structures/structures_map
    * return httpResponse
    */
-  mapWithResponse(params: MapParams): Observable<HttpResponse<void>> {
+  mapWithResponse(params: MapParams):Observable<HttpResponse<void>> {
     const bodyParams = params.mapSection;
     const bodyParamsWithoutUndefined: any = {};
     Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {

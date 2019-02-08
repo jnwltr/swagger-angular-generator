@@ -53,7 +53,7 @@ export class RegistrationService {
    * http://example.com/swagger/swagger-ui.html#!/Registration/Registration
    * return httpResponse
    */
-  registrationWithResponse(params: RegistrationParams): Observable<HttpResponse<object>> {
+  registrationWithResponse(params: RegistrationParams):Observable<HttpResponse<object>> {
     const formDataParams = {
       email: params.email,
       password1: params.password1,

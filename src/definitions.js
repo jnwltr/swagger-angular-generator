@@ -51,6 +51,7 @@ exports.writeToBaseModelFile = writeToBaseModelFile;
 function processDefinition(def, name, config) {
     name = common_1.normalizeDef(name);
     let output = '';
+    console.log(name, def.$ref, def.type, def.properties);
     if (def.type === 'array') {
         const property = common_1.processProperty(def)[0];
         if (!property.native) {
@@ -75,6 +76,22 @@ function processDefinition(def, name, config) {
         const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
         if (enumLines)
             output += `\n${enumLines}\n`;
+    }
+    else if (def.type !== 'object') {
+        if (def.enum) {
+            const { enumDeclaration, native } = common_1.processProperty(def, name)[0];
+            if (!native) {
+                output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+            }
+            output += enumDeclaration;
+        }
+        else {
+            const property = common_1.processProperty(def)[0];
+            if (!property.native) {
+                output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
+            }
+            output += `export type ${name} = ${property.property};\n`;
+        }
     }
     const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
     utils_1.writeFile(filename, output, config.header);

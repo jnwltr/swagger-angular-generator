@@ -60,8 +60,14 @@ function processMethod(method, unwrapSingleParamMethods) {
     // make method for httpResponse
     methodDef += '\n';
     methodDef += '\n';
-    methodDef += utils_1.makeComment([method.summary, method.description, method.swaggerUrl, 'return httpResponse'].filter(Boolean));
-    methodDef += `${method.simpleName}WithResponse(${paramsSignature}): Observable<HttpResponse<${method.responseDef.type}>> {\n`;
+    methodDef += utils_1.makeComment([
+        method.summary,
+        method.description,
+        method.swaggerUrl,
+        'return httpResponse'
+    ].filter(Boolean));
+    methodDef += `${method.simpleName}WithResponse(${paramsSignature}):` +
+        `Observable<HttpResponse<${method.responseDef.type}>> {\n`;
     // apply the param definitions, e.g. bodyParams
     methodDef += utils_1.indent(paramSeparation);
     if (paramSeparation.length)
