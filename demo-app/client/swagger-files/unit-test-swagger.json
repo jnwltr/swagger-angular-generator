@@ -711,6 +711,49 @@
             "type": "integer"
           },
           {
+            "name": "queryParamCollectionDefault",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "queryParamCollectionCsv",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          },
+          {
+            "name": "queryParamCollectionSsv",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "collectionFormat": "ssv"
+          },
+          {
+            "name": "queryParamCollectionMulti",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "collectionFormat": "multi"
+          },
+          {
             "name": "headerParam",
             "in": "header",
             "description": "testing number",
@@ -737,6 +780,36 @@
             "description": "testing number",
             "required": true,
             "type": "integer"
+          },
+          {
+            "name": "dashed-query-param-collection-tsv",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "tsv"
+          },
+          {
+            "name": "dashed-query-param-collection-pipes",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "collectionFormat": "pipes"
+          },
+          {
+            "name": "dashed-query-param-collection-multi",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           },
           {
             "name": "dashed-header-param",

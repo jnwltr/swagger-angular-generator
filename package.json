@@ -21,7 +21,7 @@
     "lint": "tslint -p tsconfig.json",
     "postlint": "cd demo-app/client; npm run lint",
     "test": "npm run test:src && cd demo-app/client && npm run test:ci",
-    "test:src": "ts-node node_modules/.bin/tape 'src/**/*.spec.ts'"
+    "test:src": "ts-node node_modules/tape/bin/tape 'src/**/*.spec.ts'"
   },
   "repository": {
     "type": "git",
