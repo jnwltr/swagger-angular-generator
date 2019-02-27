@@ -107,9 +107,24 @@ function getParamSeparation(paramGroups) {
         let def;
         const list = lodash_1.map(group, p => {
             // header params values need to be strings
-            const suffix = groupName === 'header' && p.type !== 'string' ?
-                '.toString()' :
-                '';
+            let suffix;
+            if (groupName === 'header' && p.type !== 'string')
+                suffix = '.toString()';
+            else if (groupName === 'query' && p.type === 'array') {
+                let separator;
+                if (p.collectionFormat === 'ssv')
+                    separator = ' ';
+                else if (p.collectionFormat === 'tsv')
+                    separator = '\\t';
+                else if (p.collectionFormat === 'pipes')
+                    separator = '|';
+                else if (['csv', undefined].includes(p.collectionFormat))
+                    separator = ',';
+                if (separator)
+                    suffix = `.join('${separator}')`;
+            }
+            else
+                suffix = '';
             return common_1.getObjectPropSetter(p.name, 'params', suffix);
         });
         if (groupName === 'query') {
@@ -119,6 +134,8 @@ function getParamSeparation(paramGroups) {
             def += 'Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {\n';
             def += '  if (value !== undefined) {\n';
             def += '    if (typeof value === \'string\') queryParams = queryParams.set(key, value);\n';
+            // `collectionFormat` set to multi viz. https://swagger.io/docs/specification/2-0/describing-parameters/
+            def += '    else if (Array.isArray(value)) value.forEach(v => queryParams = queryParams.append(key, v));\n';
             def += '    else queryParams = queryParams.set(key, JSON.stringify(value));\n';
             def += '  }\n';
             def += '});\n';

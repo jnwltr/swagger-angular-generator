@@ -43,7 +43,10 @@ export interface Parameter extends ParameterSchemaBase {
   name: string;
   required: boolean;
   schema?: Schema;
+  collectionFormat?: QueryCollectionFormat;
 }
+
+export type QueryCollectionFormat = 'csv' | 'ssv' | 'tsv' | 'pipes' | 'multi';
 
 export interface Schema extends ParameterSchemaBase {
   $ref?: string;

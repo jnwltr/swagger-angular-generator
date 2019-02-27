@@ -15,6 +15,14 @@ export interface DashedParams {
   /** testing number */
   queryParam: number;
   /** testing number */
+  queryParamCollectionDefault: string[];
+  /** testing number */
+  queryParamCollectionCsv: string[];
+  /** testing number */
+  queryParamCollectionSsv: number[];
+  /** testing number */
+  queryParamCollectionMulti: number[];
+  /** testing number */
   headerParam: number;
   /** testing number */
   bodyParam: number;
@@ -22,6 +30,9 @@ export interface DashedParams {
   'dashed-path-param': number;
   /** testing number */
   'dashed-query-param': number;
+  'dashed-query-param-collection-tsv': string[];
+  'dashed-query-param-collection-pipes': number[];
+  'dashed-query-param-collection-multi': string[];
   /** testing number */
   'dashed-header-param': number;
   /** testing number */
@@ -43,13 +54,21 @@ export class ParamsService {
     };
     const queryParamBase = {
       queryParam: params.queryParam,
+      queryParamCollectionDefault: params.queryParamCollectionDefault.join(','),
+      queryParamCollectionCsv: params.queryParamCollectionCsv.join(','),
+      queryParamCollectionSsv: params.queryParamCollectionSsv.join(' '),
+      queryParamCollectionMulti: params.queryParamCollectionMulti,
       'dashed-query-param': params['dashed-query-param'],
+      'dashed-query-param-collection-tsv': params['dashed-query-param-collection-tsv'].join('\t'),
+      'dashed-query-param-collection-pipes': params['dashed-query-param-collection-pipes'].join('|'),
+      'dashed-query-param-collection-multi': params['dashed-query-param-collection-multi'],
     };
 
     let queryParams = new HttpParams();
     Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) {
         if (typeof value === 'string') queryParams = queryParams.set(key, value);
+        else if (Array.isArray(value)) value.forEach(v => queryParams = queryParams.append(key, v));
         else queryParams = queryParams.set(key, JSON.stringify(value));
       }
     });
