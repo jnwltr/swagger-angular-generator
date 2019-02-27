@@ -34,3 +34,6 @@ node_modules/
 # testing input/output
 conf/
 src/api/
+
+# build dir
+dist/
