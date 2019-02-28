@@ -1,39 +1,23 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
+import {HttpTestingController} from '@angular/common/http/testing';
 import {LogoutService} from '../../../generated/controllers/Logout';
+import {initHttpBed} from '../common';
 
 describe(`OrderService`, () => {
+  let service: LogoutService;
+  let backend: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [LogoutService],
-    });
+    ({service, backend} = initHttpBed<LogoutService>(LogoutService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check request parameters are correct`,
-    async(
-
-      inject([LogoutService, HttpTestingController],
-        (service: LogoutService, backend: HttpTestingController) => {
-
-        service.logout().subscribe();
-
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'POST'
-            && req.url === '/api-base-path/logout'
-            && JSON.stringify(req.body) === '{}';
-        });
-      }),
-    ),
-  );
-
+  it(`should check request parameters are correct`, () => {
+    service.logout().subscribe();
+    const req = backend.expectOne('/api-base-path/logout').request;
+    expect(req.method).toBe('POST');
+    expect(req.body).toEqual({});
+  });
 });
