@@ -1,38 +1,22 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
+import {HttpTestingController} from '@angular/common/http/testing';
 import {GoodsService} from '../../../generated/controllers/Goods';
+import {initHttpBed} from '../common';
 
 describe(`GoodsService`, () => {
+  let service: GoodsService;
+  let backend: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [GoodsService],
-    });
+    ({service, backend} = initHttpBed<GoodsService>(GoodsService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check request parameters are correct`,
-    async(
-
-      inject([GoodsService, HttpTestingController],
-        (service: GoodsService, backend: HttpTestingController) => {
-
-        service.getGoodsList({}).subscribe();
-
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'GET'
-            && req.url === '/api-base-path/goods/get-goods-list/';
-        });
-      }),
-    ),
-  );
-
+  it(`should check request parameters are correct`, () => {
+    service.getGoodsList({}).subscribe();
+    const req = backend.expectOne('/api-base-path/goods/get-goods-list/').request;
+    expect(req.method).toBe('GET');
+  });
 });

@@ -1,58 +1,36 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
+import {HttpTestingController} from '@angular/common/http/testing';
 
 import {OrderService} from '../../../generated/controllers/Order';
+import {initHttpBed} from '../common';
 
 describe(`OrderService`, () => {
+  let service: OrderService;
+  let backend: HttpTestingController;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [OrderService],
-    });
+    ({service, backend} = initHttpBed<OrderService>(OrderService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check request parameters are correct`,
-    async(
-      inject([OrderService, HttpTestingController],
-        (service: OrderService, backend: HttpTestingController) => {
+  it(`should check request parameters are correct`, () => {
+    const bodyParam = {id: 15, name: 'example order'};
+    service.order({orderDto: bodyParam, producer: 'test-producer'}).subscribe();
 
-        const bodyParam = {id: 15, name: 'example order'};
-        service.order({orderDto: bodyParam, producer: 'test-producer'}).subscribe();
-        backend.expectOne((req: HttpRequest<any>) => {
-          expect(req.method).toEqual('POST');
-          expect(req.url).toEqual('/api-base-path/order');
-          expect(req.params.toString()).toEqual('producer=test-producer');
-          expect(req.body).toEqual(bodyParam);
+    const req = backend.expectOne(r => r.url === '/api-base-path/order').request;
+    expect(req.method).toBe('POST');
+    expect(req.params.get('producer')).toBe('test-producer');
+    expect(req.body).toEqual(bodyParam);
+  });
 
-          return true;
-        });
-      }),
-    ),
-  );
+  it(`should check missing single optional body param works and produces empty body object {}`, () => {
+    service.order({}).subscribe();
 
-  it(`should check missing single optional body param works and produces empty body object {}`,
-    async(
-      inject([OrderService, HttpTestingController],
-        (service: OrderService, backend: HttpTestingController) => {
-
-        service.order({}).subscribe();
-        backend.expectOne((req: HttpRequest<any>) => {
-          expect(req.method).toEqual('POST');
-          expect(req.url).toEqual('/api-base-path/order');
-          expect(req.params.toString()).toEqual('');
-          expect(req.body).toEqual({});
-
-          return true;
-        });
-      }),
-    ),
-  );
+    const req = backend.expectOne('/api-base-path/order').request;
+    expect(req.method).toBe('POST');
+    expect(req.params.toString()).toBe('');
+    expect(req.body).toEqual({});
+  });
 });

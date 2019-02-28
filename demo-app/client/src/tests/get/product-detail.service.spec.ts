@@ -1,38 +1,22 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
+import {HttpTestingController} from '@angular/common/http/testing';
 import {ProductDetailService} from '../../../generated/controllers/ProductDetail';
+import {initHttpBed} from '../common';
 
 describe(`ProductDetailService`, () => {
+  let service: ProductDetailService;
+  let backend: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [ProductDetailService],
-    });
+    ({service, backend} = initHttpBed<ProductDetailService>(ProductDetailService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check request parameters are correct`,
-    async(
-
-      inject([ProductDetailService, HttpTestingController],
-        (service: ProductDetailService, backend: HttpTestingController) => {
-
-        service.productDetail({productId: 1}).subscribe();
-
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'GET'
-            && req.url === '/api-base-path/product-detail/1';
-        });
-      }),
-    ),
-  );
-
+  it(`should check request parameters are correct`, () => {
+    service.productDetail({productId: 1}).subscribe();
+    const req = backend.expectOne('/api-base-path/product-detail/1').request;
+    expect(req.method).toBe('GET');
+    });
 });

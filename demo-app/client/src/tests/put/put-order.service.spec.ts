@@ -1,42 +1,33 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
-import {OrderService} from '../../../generated/controllers/Order';
+import {HttpTestingController} from '@angular/common/http/testing';
+
+import {OrderService, PutOrderParams} from '../../../generated/controllers/Order';
+import {initHttpBed} from '../common';
 
 describe(`Order put`, () => {
+  let service: OrderService;
+  let backend: HttpTestingController;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [OrderService],
-    });
+    ({service, backend} = initHttpBed<OrderService>(OrderService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check request parameters are correct`,
-    async(
-      inject([OrderService, HttpTestingController],
-        (service: OrderService, backend: HttpTestingController) => {
-          service.putOrder({
-            orderId: '100',
-            producer: 'test-producer',
-            model: 'test-model',
-            customerName: 'Johny Cash'},
-          ).subscribe();
+  it(`should check request parameters are correct`, () => {
+    const params: PutOrderParams = {
+      orderId: '100',
+      producer: 'test-producer',
+      model: 'test-model',
+      customerName: 'Johnny Cash',
+    };
+    service.putOrder(params).subscribe();
 
-          backend.expectOne((req: HttpRequest<any>) => {
-            return req.method === 'PUT'
-              && req.url === '/api-base-path/order/100'
-              && req.body.producer === 'test-producer'
-              && req.body.model === 'test-model'
-              && req.body.customerName === 'Johny Cash';
-          });
-      }),
-    ),
-  );
+    const req = backend.expectOne('/api-base-path/order/100').request;
+    expect(req.method).toBe('PUT');
+    const bodyParams = {...params};
+    delete bodyParams.orderId;
+    expect(req.body).toEqual(bodyParams);
+  });
 });

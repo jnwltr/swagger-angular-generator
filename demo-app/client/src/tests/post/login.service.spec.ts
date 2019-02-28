@@ -1,40 +1,26 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
+import {HttpTestingController} from '@angular/common/http/testing';
+
 import {LoginService} from '../../../generated/controllers/Login';
+import {initHttpBed} from '../common';
 
 describe(`LoginService`, () => {
+  let service: LoginService;
+  let backend: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [LoginService],
-    });
+    ({service, backend} = initHttpBed<LoginService>(LoginService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check request parameters are correct`,
-    async(
+  it(`should check request parameters are correct`, () => {
+    service.login({loginDto: {email: 'test@test.com', password: 'password'}}).subscribe();
 
-      inject([LoginService, HttpTestingController],
-        (service: LoginService, backend: HttpTestingController) => {
-
-        service.login({loginDto: {email: 'test@test.com', password: 'password'}}).subscribe();
-
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'POST'
-            && req.url === '/api-base-path/login'
-            && req.body.loginDto.email === 'test@test.com'
-            && req.body.loginDto.password === 'password';
-        });
-      }),
-    ),
-  );
-
+    const req = backend.expectOne('/api-base-path/login').request;
+    expect(req.method).toBe('POST');
+    expect(req.body.loginDto.email).toBe('test@test.com');
+    expect(req.body.loginDto.password).toBe('password');
+  });
 });
