@@ -872,6 +872,13 @@
           "title": "Last name",
           "type": "string",
           "maxLength": 150
+        },
+        "gender": {
+          "type": "string",
+          "enum": [
+            "male",
+            "female"
+          ]
         }
       }
     },
