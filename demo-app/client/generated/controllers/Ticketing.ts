@@ -11,22 +11,26 @@ import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
-export interface GetGoodsListParams {
-  /** Number of results to return per page. */
-  limit?: number;
-  /** The initial index from which to return the results. */
-  offset?: number;
+export interface ShowTicketDetailParams {
+  /** format: date-time */
+  date_from?: string;
+  /** format: date-time */
+  date_to?: string;
+  id: number;
 }
 
 @Injectable()
-export class GoodsService {
+export class TicketingService {
   constructor(private http: HttpClient) {}
 
-  /** http://example.com/swagger/swagger-ui.html#!/goods/goods_get-goods-list_list */
-  getGoodsList(params: GetGoodsListParams): Observable<__model.GetGoodsListGeneratedInlineModel> {
+  /**
+   * show_ticket_detail
+   * http://example.com/swagger/swagger-ui.html#!/ticketing/ticketing_show-ticket-detail_read
+   */
+  showTicketDetail(params: ShowTicketDetailParams): Observable<__model.TicketDetailOutput[]> {
     const queryParamBase = {
-      limit: params.limit,
-      offset: params.offset,
+      date_from: params.date_from,
+      date_to: params.date_to,
     };
 
     let queryParams = new HttpParams();
@@ -38,6 +42,9 @@ export class GoodsService {
       }
     });
 
-    return this.http.get<__model.GetGoodsListGeneratedInlineModel>(`/api-base-path/goods/get-goods-list/`, {params: queryParams});
+    const pathParams = {
+      id: params.id,
+    };
+    return this.http.get<__model.TicketDetailOutput[]>(`/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams});
   }
 }

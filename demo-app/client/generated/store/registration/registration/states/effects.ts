@@ -7,9 +7,9 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 
-import {of} from 'rxjs/observable/of';
+import {of} from 'rxjs';
 
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {RegistrationService} from '../../../../controllers/Registration';
@@ -18,7 +18,8 @@ import * as actions from './actions';
 @Injectable()
 export class RegistrationEffects {
   @Effect()
-  Registration = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+  Registration = this.storeActions.pipe(
+    ofType<actions.Start>(actions.Actions.START),
     switchMap((action: actions.Start) => this.registrationService.registration(action.payload)
       .pipe(
         map(result => new actions.Success(result)),

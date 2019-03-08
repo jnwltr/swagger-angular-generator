@@ -1,11 +1,10 @@
-import {HttpClientModule} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
+import {HttpTestingController} from '@angular/common/http/testing';
 import {cloneDeep} from 'lodash';
 
 import {safeSetValue} from '../../../generated/common/utils';
 import {MapParams, StructuresService} from '../../../generated/controllers/Structures';
 import {MapFormService} from '../../../generated/store/structures/map/map.service';
+import {initHttpBed} from '../common';
 
 const objectArray = [
   {id: 1, name: 'John'},
@@ -37,63 +36,55 @@ const formDataMock: MapParams = {
 const emptyDataMock: MapParams = {mapSection: {}};
 
 describe(`Map form`, () => {
+  let service: MapFormService;
+  let backend: HttpTestingController;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [
-        MapFormService,
-        StructuresService,
-      ],
-    });
+    ({service, backend} = initHttpBed<MapFormService>(MapFormService, [StructuresService]));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should set and send structured value properly`, async(inject([MapFormService, HttpTestingController],
-    (formService: MapFormService, backend: HttpTestingController) => {
-      formService.form.setValue(formDataMock);
+  it(`should set and send structured value properly`, () => {
+    service.form.setValue(formDataMock);
 
-      expect(formService.form.value !== formDataMock).toBeTruthy('Form object does not differ from mock object');
-      expect(formService.form.value).toEqual(formDataMock, 'Form value differs from mock value');
+    expect(service.form.value !== formDataMock).toBeTruthy('Form object does not differ from mock object');
+    expect(service.form.value).toEqual(formDataMock, 'Form value differs from mock value');
 
-      formService.submit().subscribe();
+    service.submit().subscribe();
 
-      const req = backend.expectOne('/api-base-path/structures/map').request;
-      expect(req.body).toEqual(formDataMock.mapSection);
-    },
-  )));
+    const req = backend.expectOne('/api-base-path/structures/map').request;
+    expect(req.body).toEqual(formDataMock.mapSection);
+  });
 
-  it(`should add and remove keys properly`, async(inject([MapFormService], (formService: MapFormService) => {
-    formService.form.setValue(formDataMock);
-    expect(formService.form.value).toEqual(formDataMock, 'Form value differs from mock value');
+  it(`should add and remove keys properly`, () => {
+    service.form.setValue(formDataMock);
+    expect(service.form.value).toEqual(formDataMock, 'Form value differs from mock value');
 
     // modify data
     const formDataMockModified = cloneDeep(formDataMock);
     formDataMockModified.mapSection.key3 = formDataMockModified.mapSection.key1;
     delete formDataMockModified.mapSection.key1;
 
-    formService.form.setValue(formDataMockModified);
+    service.form.setValue(formDataMockModified);
 
-    expect(formService.form.value !== formDataMockModified).toBeTruthy('Form object does not differ from mock object');
-    expect(formService.form.value).toEqual(formDataMockModified, 'Form value differs from modified mock value');
-  })));
+    expect(service.form.value !== formDataMockModified).toBeTruthy('Form object does not differ from mock object');
+    expect(service.form.value).toEqual(formDataMockModified, 'Form value differs from modified mock value');
+  });
 
-  it(`should clear objects properly`, async(inject([MapFormService], (formService: MapFormService) => {
-    formService.form.setValue(formDataMock);
-    expect(formService.form.value).toEqual(formDataMock, 'Form value differs from mock value');
+  it(`should clear objects properly`, () => {
+    service.form.setValue(formDataMock);
+    expect(service.form.value).toEqual(formDataMock, 'Form value differs from mock value');
 
     // clear data
-    safeSetValue(formService.form, null);
-    expect(formService.form.value).toEqual(emptyDataMock, 'Form value is empty');
-  })));
+    safeSetValue(service.form, null);
+    expect(service.form.value).toEqual(emptyDataMock, 'Form value is empty');
+  });
 
-  it(`should throw error on non-object value`, async(inject([MapFormService], (formService: MapFormService) => {
-    const arrayForm = formService.form.get('mapSection');
+  it(`should throw error on non-object value`, () => {
+    const arrayForm = service.form.get('mapSection');
     if (!arrayForm) throw new Error('Subform not found');
 
     expect(() => safeSetValue(arrayForm, undefined)).not.toThrowError(TypeError);
@@ -108,5 +99,5 @@ describe(`Map form`, () => {
     expect(() => safeSetValue(arrayForm, NaN)).toThrowError(TypeError);
     expect(() => safeSetValue(arrayForm, true)).toThrowError(TypeError);
     expect(() => safeSetValue(arrayForm, false)).toThrowError(TypeError);
-  })));
+  });
 });

@@ -10,6 +10,6 @@ before_install:
 
 script:
   - docker run -it swagger-angular-generator bash -c
-    "npm i && npm run build &&
-    npm run install:demo &&
+    "npm i && npm run install:demo &&
+    npm run build &&
     npm test && npm run lint"

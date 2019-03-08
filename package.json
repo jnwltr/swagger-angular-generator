@@ -1,6 +1,6 @@
 {
   "name": "swagger-angular-generator",
-  "version": "2.2.1",
+  "version": "4.0.0",
   "description": "Generator of API layer in TypeScript for Angular 5 apps",
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
@@ -20,7 +20,9 @@
     "generate": "cd demo-app/client && npm run generate",
     "lint": "tslint -p tsconfig.json",
     "postlint": "cd demo-app/client; npm run lint",
-    "test": "cd demo-app/client && npm run test:ci"
+    "test": "npm run test:src && npm run test:demo",
+    "test:demo": "cd demo-app/client && npm run test:ci",
+    "test:src": "ts-node node_modules/tape/bin/tape src/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -42,36 +44,39 @@
   },
   "homepage": "https://github.com/jnwltr/swagger-angular-generator#readme",
   "dependencies": {
-    "commander": "^2.15.1",
-    "lodash": "^4.17.10",
-    "tsutils": "^2.12.1"
+    "commander": "^2.18.0",
+    "lodash": "^4.17.11",
+    "tsutils": "^3.8.0"
   },
   "devDependencies": {
-    "@angular/common": "^5.2.11",
-    "@angular/core": "^5.2.11",
-    "@angular/forms": "^5.2.11",
-    "@angular/http": "^5.2.11",
-    "@angular/platform-browser": "^5.2.11",
-    "@ngrx/effects": "^5.2.0",
-    "@ngrx/store": "^5.2.0",
+    "@angular/cli": "^7.3.3",
+    "@angular/common": "^7.2.7",
+    "@angular/core": "^7.2.7",
+    "@angular/forms": "^7.2.7",
+    "@angular/http": "^7.2.7",
+    "@angular/platform-browser": "^7.2.7",
+    "@ngrx/effects": "^7.3.0",
+    "@ngrx/store": "^7.3.0",
     "@types/commander": "^2.12.2",
-    "@types/lodash": "^4.14.110",
-    "@types/node": "^9.6.22",
-    "rxjs": "^5.5.11",
-    "ts-node": "^5.0.1",
-    "tslint": "^5.10.0",
-    "tslint-eslint-rules": "^5.3.1",
-    "typescript": "~2.6.2",
-    "zone.js": "^0.8.26"
+    "@types/lodash": "^4.14.121",
+    "@types/node": "^11.9.5",
+    "@types/tape": "^4.2.33",
+    "rxjs": "^6.4.0",
+    "tape": "^4.10.1",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.13.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.3.3333",
+    "zone.js": "^0.8.29"
   },
   "peerDependencies": {
-    "@angular/common": "^5.2.4",
-    "@angular/core": "^5.2.4",
-    "@angular/http": "^5.2.4",
-    "@angular/platform-browser": "^5.2.4",
-    "@ngrx/effects": "^5.1.0",
-    "@ngrx/store": "^5.1.0",
-    "rxjs": "^5.5.0",
-    "zone.js": "^0.8.18"
+    "@angular/common": "^7.2.7",
+    "@angular/core": "^7.2.7",
+    "@angular/http": "^7.2.7",
+    "@angular/platform-browser": "^7.2.7",
+    "@ngrx/effects": "^7.3.0",
+    "@ngrx/store": "^7.3.0",
+    "rxjs": "^6.4.0",
+    "zone.js": "^0.8.29"
   }
 }

@@ -8,7 +8,7 @@ import {indent, makeComment} from './utils';
 export interface PropertyOutput {
   property: string;
   propertyAsMethodParameter: string;
-  enumDeclaration: string;
+  enumDeclaration: string | undefined;
   native: boolean;
   isRequired: boolean;
 }
@@ -23,7 +23,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
                                 required: (string[] | boolean) = false,
                                 exportEnums = true): PropertyOutput[] {
   let type: string;
-  let enumDeclaration: string;
+  let enumDeclaration: string | undefined;
   let native = true;
   let isMap = false;
 
@@ -37,7 +37,9 @@ export function processProperty(prop: Schema, name = '', namespace = '',
     type += _.upperFirst(namespace);
     if (!type.match(/Enum/)) type += 'Enum';
 
-    const list = prop.enum || prop.items.enum;
+    let list = [] as string[];
+    if (prop.enum) list = prop.enum;
+    if (prop.items && prop.items.enum) list = prop.items.enum;
     const exp = exportEnums ? 'export ' : '';
     enumDeclaration = `${exp}type ${type} =\n` + indent('\'' + list.join('\' |\n\'')) + '\';';
 
@@ -50,7 +52,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
         type = defType.type;
         break;
       case 'array':
-        defType = translateType(prop.items.type || prop.items.$ref);
+        defType = translateType(prop.items && (prop.items.type || prop.items.$ref));
         if (defType.arraySimple) type = `${defType.type}[]`;
         else type = `Array<${defType.type}>`;
         break;
@@ -59,7 +61,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
           const ap = prop.additionalProperties;
           let additionalType: string;
           if (ap.type === 'array') {
-            defType = translateType(ap.items.type || ap.items.$ref);
+            defType = translateType(ap.items && (ap.items.type || ap.items.$ref));
             additionalType = `${defType.type}[]`;
           } else {
             defType = translateType(
@@ -156,7 +158,7 @@ interface DefType {
  * Translates schema type into native/defined type for typescript
  * @param type definition
  */
-export function translateType(type: string): DefType {
+export function translateType(type: string | undefined): DefType {
   if (type in conf.nativeTypes) {
     const typeType = type as NativeNames;
     return {

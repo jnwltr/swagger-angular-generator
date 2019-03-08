@@ -7,6 +7,7 @@ import * as conf from '../conf';
 import {ProcessedDefinition} from '../definitions';
 import {Config} from '../generate';
 import {Method, MethodName} from '../types';
+import {merge} from '../utils';
 import {processController} from './process-controller';
 import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
 
@@ -85,7 +86,7 @@ function preProcessPaths(paths: PathsWithParameters): Paths {
         if (key === 'parameters') return;
 
         const method = pathValue[key as MethodName];
-        method.parameters = method.parameters.concat(pathValue.parameters);
+        method.parameters = merge(method.parameters, pathValue.parameters, 'in', 'name');
       });
     }
 

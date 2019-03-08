@@ -1,56 +1,38 @@
-import {HttpClientModule, HttpRequest} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {async, inject, TestBed} from '@angular/core/testing';
-import {ProductsService} from '../../../generated/controllers/Products';
+import {HttpTestingController} from '@angular/common/http/testing';
+
+import {ProductsParams, ProductsService} from '../../../generated/controllers/Products';
+import {initHttpBed} from '../common';
 
 describe(`ProductsService`, () => {
+  let service: ProductsService;
+  let backend: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
-      ],
-      providers: [ProductsService],
-    });
+    ({service, backend} = initHttpBed<ProductsService>(ProductsService));
   });
 
-  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+  afterEach(() => {
     backend.verify();
-  }));
+  });
 
-  it(`should check service makes request as expected`,
-    async(
+  it(`should check service makes request as expected`, () => {
+    const params: ProductsParams = {
+      stringField: 'example-producer',
+      int32Field: 10,
+      BooleanField: true,
+      longField: 100000,
+      floatField: 10,
+      doubleField: 10,
+      dateField: '2017-04-12',
+      dateTimeField: '2017-04-12T23:20:50.52Z',
+    };
 
-      inject([ProductsService, HttpTestingController],
-        (service: ProductsService, backend: HttpTestingController) => {
+    service.products(params).subscribe();
 
-        service.products({
-          stringField: 'example-producer',
-          int32Field: 10,
-          BooleanField: true,
-          longField: 100000,
-          floatField: 10,
-          doubleField: 10,
-          dateField: '2017-04-12',
-          dateTimeField: '2017-04-12T23:20:50.52Z',
-        }).subscribe();
+    const req = backend.expectOne(r => r.url === '/api-base-path/products').request;
+    expect(req.method).toBe('GET');
+    expect(req.body).toBe(null);
 
-        backend.expectOne((req: HttpRequest<any>) => {
-          return req.method === 'GET'
-            && req.url === '/api-base-path/products'
-            && req.params.toString() === 'stringField=example-producer' +
-                                         '&BooleanField=true' +
-                                         '&int32Field=10' +
-                                         '&longField=100000' +
-                                         '&floatField=10' +
-                                         '&doubleField=10' +
-                                         '&dateField=2017-04-12' +
-                                         '&dateTimeField=2017-04-12T23:20:50.52Z'
-            && req.body === null;
-        });
-      }),
-    ),
-  );
-
+    Object.entries(params).forEach(([k, v]) => expect(req.params.get(k)).toBe(v.toString()));
+  });
 });

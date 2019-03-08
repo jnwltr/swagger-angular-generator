@@ -12,15 +12,15 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {of} from 'rxjs';
 
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {RestAuthService} from '../../../../controllers/RestAuth';
+import {TicketingService} from '../../../../controllers/Ticketing';
 import * as actions from './actions';
 
 @Injectable()
-export class RestAuthLogoutListEffects {
+export class ShowTicketDetailEffects {
   @Effect()
-  RestAuthLogoutList = this.storeActions.pipe(
+  ShowTicketDetail = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap(() => this.restauthService.restAuthLogoutList()
+    switchMap((action: actions.Start) => this.ticketingService.showTicketDetail(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
@@ -30,6 +30,6 @@ export class RestAuthLogoutListEffects {
 
   constructor(
     private storeActions: Actions,
-    private restauthService: RestAuthService,
+    private ticketingService: TicketingService,
   ) {}
 }

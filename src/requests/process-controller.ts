@@ -51,7 +51,7 @@ export function processController(methods: ControllerMethod[], name: string, con
   content += `import {${angularCommonHttp.join(', ')}} from \'@angular/common/http\';\n`;
 
   content += 'import {Injectable} from \'@angular/core\';\n';
-  content += 'import {Observable} from \'rxjs/Observable\';\n\n';
+  content += 'import {Observable} from \'rxjs\';\n\n';
 
   if (usesGlobalType) {
     content += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;

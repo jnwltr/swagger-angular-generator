@@ -711,6 +711,49 @@
             "type": "integer"
           },
           {
+            "name": "queryParamCollectionDefault",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "queryParamCollectionCsv",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          },
+          {
+            "name": "queryParamCollectionSsv",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "collectionFormat": "ssv"
+          },
+          {
+            "name": "queryParamCollectionMulti",
+            "in": "query",
+            "description": "testing number",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "collectionFormat": "multi"
+          },
+          {
             "name": "headerParam",
             "in": "header",
             "description": "testing number",
@@ -739,6 +782,36 @@
             "type": "integer"
           },
           {
+            "name": "dashed-query-param-collection-tsv",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "tsv"
+          },
+          {
+            "name": "dashed-query-param-collection-pipes",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "collectionFormat": "pipes"
+          },
+          {
+            "name": "dashed-query-param-collection-multi",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
             "name": "dashed-header-param",
             "in": "header",
             "description": "testing number",
@@ -757,6 +830,56 @@
           "200": {}
         }
       }
+    },
+    "/ticketing/show-ticket-detail/{id}/": {
+      "get": {
+        "operationId": "ticketing_show-ticket-detail_read",
+        "description": "show_ticket_detail",
+        "parameters": [
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TicketDetailOutput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "ticketing"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
     }
   },
   "definitions": {
@@ -1020,6 +1143,36 @@
       "type": "object",
       "additionalProperties": {
         "type": "number"
+      }
+    },
+    "TicketDetailOutput": {
+      "required": [
+        "status",
+        "created_date",
+        "created_by_user",
+        "issue__origin"
+      ],
+      "type": "object",
+      "properties": {
+        "status": {
+          "title": "Status",
+          "type": "string",
+          "minLength": 1
+        },
+        "created_date": {
+          "title": "Created date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by_user": {
+          "title": "Created by user",
+          "type": "boolean"
+        },
+        "issue__origin": {
+          "title": "Issue  origin",
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   }
