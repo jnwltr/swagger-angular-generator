@@ -14,7 +14,19 @@ export interface Goods {
   /** format: decimal */
   price: string;
   currency: CurrencyGoodsEnum;
+  status?: StatusGoodsEnum;
+  refStatus?: RefStatusGoodsEnum;
 }
 
 export type CurrencyGoodsEnum =
   'CZK';
+
+export type StatusGoodsEnum =
+  1 |
+  2 |
+  3;
+
+export type RefStatusGoodsEnum =
+  1 |
+  2 |
+  3;
