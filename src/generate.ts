@@ -31,7 +31,9 @@ export function generate(
   generateStore = true,
   unwrapSingleParamMethods = false,
   swaggerUrlPath: string = conf.swaggerUrlPath,
-  omitVersion = false) {
+  omitVersion = conf.omitVersion,
+  alwaysOpId = conf.alwaysOpId,
+) {
 
   let schema: any;
 
@@ -63,7 +65,7 @@ export function generate(
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
   const definitions = processDefinitions(schema.definitions, config);
   processPaths(schema.paths, `http://${schema.host}${swaggerUrlPath}${conf.swaggerFile}`,
-               config, definitions, schema.basePath);
+               config, definitions, schema.basePath, alwaysOpId);
 }
 
 function recreateDirectories(dest: string, generateStore: boolean) {

@@ -20,14 +20,14 @@ import {ControllerMethod, MethodOutput} from './requests.models';
  * @param name
  */
 export function processController(methods: ControllerMethod[], name: string, config: Config,
-                                  definitions: ProcessedDefinition[]) {
+                                  definitions: ProcessedDefinition[], alwaysOpId: boolean) {
   const filename = path.join(config.dest, conf.apiDir, `${name}.ts`);
   let usesGlobalType = false;
 
   // make simpleNames unique and process responses
   const simpleNames = _.map(methods, 'simpleName');
   methods.forEach(controller => {
-    if (simpleNames.filter(n => n === controller.simpleName).length > 1) {
+    if (alwaysOpId || simpleNames.filter(n => n === controller.simpleName).length > 1) {
       const preserveCapitals = controller.operationId.replace(/([A-Z])/g, '-$1');
       controller.simpleName = _.lowerFirst(_.camelCase(preserveCapitals));
     }

@@ -21,7 +21,7 @@ import {ControllerMethod, Paths, PathsWithParameters} from './requests.models';
  * @param basePath base URL path
  */
 export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPath: string, config: Config,
-                             definitions: ProcessedDefinition[], basePath: string) {
+                             definitions: ProcessedDefinition[], basePath: string, alwaysOpId: boolean) {
 
   const paths = preProcessPaths(pathsWithParameters);
   const controllers: ControllerMethod[] = _.flatMap(paths, (methods, url: string) => (
@@ -43,7 +43,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
-  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, definitions));
+  _.forEach(controllerFiles, (methods, name) => processController(methods, name, config, definitions, alwaysOpId));
 }
 
 /**

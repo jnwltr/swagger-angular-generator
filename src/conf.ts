@@ -13,6 +13,7 @@ export const modelFile = 'model';
 export const indentation = 2;
 export const swaggerUrlPath = '/swagger';
 export const omitVersion = false;
+export const alwaysOpId = false;
 // part of path in url
 export const swaggerFile = '/swagger-ui.html#!/';
 

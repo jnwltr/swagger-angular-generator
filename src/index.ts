@@ -13,11 +13,15 @@ commander
   /* tslint:disable-next-line:max-line-length */
   .option('-u, --swagger-url-path <path>', `swagger URL path, where the swagger ui documentation can be found; default: ${conf.swaggerUrlPath}, i.e. the resulting address would be http://example${conf.swaggerUrlPath}`)
   .option('-o, --omit-version', `Write version info, default: ${conf.omitVersion}`)
+  .option('-a, --always-operation-id', `Use always operationId to name methods: ${conf.alwaysOpId}`)
   .parse(process.argv);
 
-generate(commander.src,
+generate(
+  commander.src,
   commander.dest,
   commander.store,
   commander.unwrapSingleParamMethods,
   commander.swaggerUrlPath,
-  commander.omitVersion);
+  commander.omitVersion,
+  commander.alwaysOperationId,
+);
