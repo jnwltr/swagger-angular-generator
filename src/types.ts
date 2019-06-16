@@ -2,7 +2,7 @@
 /* The 'parameters' MethodName type is only technical and serves for situations when common parameters are defined
 * on the same level as HTTP methods */
 export type MethodName = 'get' | 'patch' | 'post' | 'put' | 'delete';
-export type ParamLocation = 'path' | 'body' | 'query' | 'formData' | 'header';
+export type ParamLocation = 'path' | 'body' | 'query' | 'formData' | 'header' | 'iczData';
 export type HttpCode = '200' | '201' | '204' |
   '400' | '401' | '403' | '404' | '409' | '417' |
   '500';

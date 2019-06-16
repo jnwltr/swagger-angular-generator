@@ -42,7 +42,7 @@ export const nativeTypes: {[key in NativeNames]: string} = {
 export const allowedParams: {[key in MethodName]: ParamLocation[]} = {
   get: ['path', 'query', 'header'],
   patch: ['path', 'body', 'query', 'formData', 'header'],
-  post: ['path', 'body', 'query', 'formData', 'header'],
+  post: ['path', 'body', 'query', 'formData', 'header', 'iczData'],
   put: ['path', 'body', 'query', 'header'],
   delete: ['path', 'header'],
 };

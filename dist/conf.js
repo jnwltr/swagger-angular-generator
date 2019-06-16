@@ -39,7 +39,7 @@ exports.nativeTypes = {
 exports.allowedParams = {
     get: ['path', 'query', 'header'],
     patch: ['path', 'body', 'query', 'formData', 'header'],
-    post: ['path', 'body', 'query', 'formData', 'header'],
+    post: ['path', 'body', 'query', 'formData', 'header', 'iczData'],
     put: ['path', 'body', 'query', 'header'],
     delete: ['path', 'header'],
 };

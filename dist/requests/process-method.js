@@ -157,6 +157,25 @@ function getParamSeparation(paramGroups) {
             res += '});';
             return res;
         }
+        if (groupName === 'iczData') {
+            // when the schema: { '$ref': '#/definitions/exampleDto' } construct is used
+            if ('schema' in group[0]) {
+                def = `params.${group[0].name}`;
+            }
+            else {
+                def = '{\n' + utils_1.indent(list) + '\n}';
+            }
+            let res = 'const iczDataParams = Object\n';
+            res += `  .entries(${def})\n`;
+            res += '  .map(([key, value]) => {\n';
+            res += '    const param = typeof value === \'string\' ?\n';
+            res += '      value :\n';
+            res += '      JSON.stringify(value);\n\n';
+            res += '    return `${encodeURIComponent(key)}=${encodeURIComponent(param)}`;\n';
+            res += '  })\n';
+            res += '  .join(\'&\');';
+            return res;
+        }
         def = '{\n' + utils_1.indent(list) + '\n}';
         if (groupName === 'header') {
             def = `new HttpHeaders(${def})`;
@@ -175,6 +194,9 @@ function getRequestParams(paramTypes, methodName) {
     if (['post', 'put', 'patch'].includes(methodName)) {
         if (paramTypes.includes('body')) {
             res += ', bodyParamsWithoutUndefined';
+        }
+        else if (paramTypes.includes('iczData')) {
+            res += ', iczDataParams';
         }
         else if (paramTypes.includes('formData')) {
             res += ', formDataParams';
