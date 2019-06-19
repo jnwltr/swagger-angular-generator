@@ -90,6 +90,15 @@ export function processDefinition(def: Schema, name: string, config: Config): Pr
       output += `import * as __${conf.modelFile} from \'../${conf.modelFile}\';\n\n`;
     }
     output += `export type ${name} = ${property.property};\n`;
+  } else if (def.type === 'string' && def.enum) {
+    output += `export type ${name} = ${def.enum.map(enumValue => `'${enumValue}'`).join(' | ')};`;
+    output += `\n`;
+    output += `\n`;
+    output += `export const ${name} = {\n`;
+    output += def.enum.map(enumValue =>
+      indent(`${enumValue.charAt(0).toUpperCase() + enumValue.slice(1)}: '${enumValue}' as ${name},`),
+    ).join('\n');
+    output += `\n};\n`;
   }
 
   const filename = path.join(config.dest, conf.defsDir, `${name}.ts`);
