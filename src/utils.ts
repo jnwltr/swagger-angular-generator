@@ -52,7 +52,9 @@ export function emptyDir(path: string, removeSelf = false) {
  * @param input string (with new-line separation) or array of lines
  * @param level of indentation, takes into account `conf` indentation setting
  */
-export function indent(input: string | string[], level = 1): string {
+export function indent(input: string | string[] | undefined, level = 1): string {
+  if (!input) return '';
+  
   if (Array.isArray(input)) input = input.join('\n');
 
   let res: string;
