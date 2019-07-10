@@ -84,6 +84,15 @@ export function processDefinition(def: Schema, name: string, config: Config): Pr
     // concat non-empty enum lines
     const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
     if (enumLines) output += `\n${enumLines}\n`;
+  } else if (def.type === 'string' && def.enum) {
+    output += `export type ${name} = ${def.enum.map((enumValue: string): string => `'${enumValue}'`).join(' | ')};`;
+    output += `\n`;
+    output += `\n`;
+    output += `export const ${name} = {\n`;
+    output += def.enum.map((enumValue: string) =>
+      indent(`${enumValue.charAt(0).toUpperCase() + enumValue.slice(1)}: '${enumValue}' as ${name},`),
+    ).join('\n');
+    output += `\n};\n`;
   } else if (def.type !== 'object') {
     const property = processProperty(def)[0];
     if (!property.native) {
