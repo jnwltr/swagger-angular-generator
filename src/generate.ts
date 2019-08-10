@@ -72,14 +72,18 @@ function recreateDirectories(dest: string, generateStore: boolean) {
   emptyDir(path.join(dest, conf.apiDir), true);
   emptyDir(path.join(dest, conf.storeDir), true);
 
-  createDir(path.join(dest, conf.commonDir));
   createDir(path.join(dest, conf.defsDir));
   createDir(path.join(dest, conf.apiDir));
-  if (generateStore) createDir(path.join(dest, conf.storeDir));
+  if (generateStore) {
+    createDir(path.join(dest, conf.commonDir));
+    createDir(path.join(dest, conf.storeDir));
+  }
 }
 
 /** Generates common classes, methods, utils */
 function generateCommon(dest: string, generateStore: boolean) {
-  addUtils(dest);
-  if (generateStore) addFormExtensions(dest);
+  if (generateStore) {
+    addUtils(dest);
+    addFormExtensions(dest);
+  }
 }
