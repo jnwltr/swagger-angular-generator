@@ -20,6 +20,7 @@ describe(`Order patch`, () => {
 
     const req = backend.expectOne('/api-base-path/order/100').request;
     expect(req.method).toBe('PATCH');
-    expect(req.body).toEqual({model: 'test-model'});
+    expect(JSON.parse(JSON.stringify(req.body)))
+      .toEqual({model: 'test-model'});
   });
 });
