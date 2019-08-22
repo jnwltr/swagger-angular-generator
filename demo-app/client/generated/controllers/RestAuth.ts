@@ -73,11 +73,8 @@ export class RestAuthService {
    */
   restAuthUserUpdate(params: RestAuthUserUpdateParams): Observable<__model.UserDetails> {
     const bodyParams = params.data;
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.put<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParamsWithoutUndefined);
+
+    return this.http.put<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParams || {});
   }
   restAuthUserUpdate_(data: __model.UserDetails): Observable<__model.UserDetails> {
     return this.restAuthUserUpdate({data});
@@ -96,11 +93,8 @@ export class RestAuthService {
    */
   restAuthUserPartialUpdate(params: RestAuthUserPartialUpdateParams): Observable<__model.UserDetails> {
     const bodyParams = params.data;
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.patch<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParamsWithoutUndefined);
+
+    return this.http.patch<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParams || {});
   }
   restAuthUserPartialUpdate_(data: __model.UserDetails): Observable<__model.UserDetails> {
     return this.restAuthUserPartialUpdate({data});

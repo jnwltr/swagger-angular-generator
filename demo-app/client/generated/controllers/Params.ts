@@ -81,10 +81,7 @@ export class ParamsService {
       bodyParam: params.bodyParam,
       'dashed-body-param': params['dashed-body-param'],
     };
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.post<void>(`/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParamsWithoutUndefined, {params: queryParams, headers: headerParams});
+
+    return this.http.post<void>(`/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParams || {}, {params: queryParams, headers: headerParams});
   }
 }

@@ -46,11 +46,8 @@ export class StructuresService {
     });
 
     const bodyParams = params.arraySection;
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.post<__model.ArrayGeneratedInlineModel>(`/api-base-path/structures/array`, bodyParamsWithoutUndefined, {params: queryParams});
+
+    return this.http.post<__model.ArrayGeneratedInlineModel>(`/api-base-path/structures/array`, bodyParams || {}, {params: queryParams});
   }
 
   /**
@@ -59,11 +56,8 @@ export class StructuresService {
    */
   map(params: MapParams): Observable<void> {
     const bodyParams = params.mapSection;
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.post<void>(`/api-base-path/structures/map`, bodyParamsWithoutUndefined);
+
+    return this.http.post<void>(`/api-base-path/structures/map`, bodyParams || {});
   }
   map_(mapSection: __model.MapStructure): Observable<void> {
     return this.map({mapSection});

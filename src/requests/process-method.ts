@@ -164,14 +164,7 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
         def = '{\n' + indent(list) + '\n};';
       }
 
-      // bodyParams keys with value === undefined are removed
-      let res = `const ${groupName}Params = ${def}\n`;
-      res += 'const bodyParamsWithoutUndefined: any = {};\n';
-      res += 'Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {\n';
-      res += '  if (value !== undefined) bodyParamsWithoutUndefined[key] = value;\n';
-      res += '});';
-
-      return res;
+      return `const ${groupName}Params = ${def}\n`;
     }
 
     def = '{\n' + indent(list) + '\n}';
@@ -194,7 +187,7 @@ function getRequestParams(paramTypes: ParamLocation[], methodName: string) {
 
   if (['post', 'put', 'patch'].includes(methodName)) {
     if (paramTypes.includes('body')) {
-      res += ', bodyParamsWithoutUndefined';
+      res += ', bodyParams || {}';
     } else if (paramTypes.includes('formData')) {
       res += ', formDataParams';
     } else {
