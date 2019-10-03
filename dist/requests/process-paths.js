@@ -23,7 +23,7 @@ function processPaths(pathsWithParameters, swaggerPath, config, definitions, bas
         url,
         name: getName(method),
         methodName,
-        simpleName: getSimpleName(url),
+        simpleName: method.operationId,
         summary: method.summary,
         operationId: method.operationId,
         swaggerUrl: `${swaggerPath}${method.tags[0]}/${method.operationId}`,
