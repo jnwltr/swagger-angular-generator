@@ -36,4 +36,4 @@ conf/
 src/api/
 
 # build dir
-dist/
+# dist/

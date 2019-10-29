@@ -13,4 +13,9 @@ export interface UserDetails {
   readonly email?: string;
   first_name?: string;
   last_name?: string;
+  gender?: GenderUserDetailsEnum;
 }
+
+export type GenderUserDetailsEnum =
+  'male' |
+  'female';

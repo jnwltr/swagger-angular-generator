@@ -22,6 +22,7 @@ export class RestAuthUserUpdateFormService {
         email: new FormControl(undefined, [Validators.email]),
         first_name: new FormControl(undefined, [Validators.maxLength(30)]),
         last_name: new FormControl(undefined, [Validators.maxLength(150)]),
+        gender: new FormControl(undefined, []),
       }, [Validators.required]),
     });
   }
