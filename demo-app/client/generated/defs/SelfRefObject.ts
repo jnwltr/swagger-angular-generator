@@ -10,4 +10,5 @@ import * as __model from '../model';
 export interface SelfRefObject {
   prop1?: string;
   parent?: __model.SelfRefObject;
+  children?: __model.SelfRefObject[];
 }

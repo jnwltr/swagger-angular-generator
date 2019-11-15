@@ -128,6 +128,7 @@ function makeField(param: Schema, name: string, required: boolean,
     control = 'FormArrayExtended';
     initializer = `() => `;
     const controlInstance = makeField(param.items, undefined, required, definitions, newParentTypes);
+    if (!controlInstance) return;
     initializer += `(\n${indent(controlInstance)}), []`;
   } else if (type === 'object') {
     const def = {

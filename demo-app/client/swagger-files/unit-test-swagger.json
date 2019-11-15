@@ -943,6 +943,12 @@
         },
         "parent": {
           "$ref": "#/definitions/selfRefObject"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/selfRefObject"
+          }
         }
       }
     },
