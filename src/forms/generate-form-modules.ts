@@ -43,19 +43,21 @@ export function createForms(config: Config, name: string, processedMethods: Meth
       generateFormService(config, name, formParams, definitions, simpleName, formSubDirName, className);
     }
 
-    // states
-    const statesDirName = path.join(formSubDirName, conf.stateDir);
-    createDir(statesDirName);
+    if (config.generateStore) {
+      // states
+      const statesDirName = path.join(formSubDirName, conf.stateDir);
+      createDir(statesDirName);
 
-    // actions.ts
-    generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
-    // reducers.ts
-    generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseDef.type);
-    // effects.ts
-    generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
-    // form-shared-module.ts
-    createSharedModule(config);
-    // module.ts
-    createModule(config, name, actionClassNameBase, formSubDirName, simpleName, className, generateForms);
+      // actions.ts
+      generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
+      // reducers.ts
+      generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseDef.type);
+      // effects.ts
+      generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, formParams);
+      // form-shared-module.ts
+      createSharedModule(config);
+      // module.ts
+      createModule(config, name, actionClassNameBase, formSubDirName, simpleName, className, generateForms);
+    }
   }
 }

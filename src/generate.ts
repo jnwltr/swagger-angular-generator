@@ -53,12 +53,12 @@ export function generate(
     schema.basePath = basePath.replace(/\/+$/, '');
   } else schema.basePath = '';
 
-  recreateDirectories(dest, generateStore);
+  recreateDirectories(dest);
 
   const header = processHeader(schema, omitVersion);
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
 
-  generateCommon(path.join(dest, conf.commonDir), generateStore);
+  generateCommon(path.join(dest, conf.commonDir));
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
   const definitions = processDefinitions(schema.definitions, config);
@@ -66,7 +66,7 @@ export function generate(
                config, definitions, schema.basePath);
 }
 
-function recreateDirectories(dest: string, generateStore: boolean) {
+function recreateDirectories(dest: string) {
   emptyDir(path.join(dest, conf.commonDir), true);
   emptyDir(path.join(dest, conf.defsDir), true);
   emptyDir(path.join(dest, conf.apiDir), true);
@@ -75,11 +75,11 @@ function recreateDirectories(dest: string, generateStore: boolean) {
   createDir(path.join(dest, conf.commonDir));
   createDir(path.join(dest, conf.defsDir));
   createDir(path.join(dest, conf.apiDir));
-  if (generateStore) createDir(path.join(dest, conf.storeDir));
+  createDir(path.join(dest, conf.storeDir));
 }
 
 /** Generates common classes, methods, utils */
-function generateCommon(dest: string, generateStore: boolean) {
+function generateCommon(dest: string) {
   addUtils(dest);
-  if (generateStore) addFormExtensions(dest);
+  addFormExtensions(dest);
 }
