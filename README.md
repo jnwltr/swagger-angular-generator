@@ -26,15 +26,10 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 
 ## Options
 `-h` - show help
-
 `-s`, `--src` - source directory
-
 `-d`, `--dest` - destination directory, default: `src/api`
-
 `--no-store` - do not generate the ngrx modules
-
 `-u, --swagger-URL-path` - swagger URL path, where the swagger ui documentation can be found; default: `/swagger`, i.e. the resulting address would be `http://example/swagger`
-
 `-o, --omit-version` - disables API version information to be generated in comments for each file
 
 

@@ -1059,7 +1059,9 @@
         "arrayObjectRef",
         "arrayStringInline",
         "arrayArrayStringsRef",
-        "arrayArrayObjectRef"
+        "arrayArrayObjectRef",
+        "nestedArray",
+        "nestedRefsArray"
       ],
       "properties": {
         "arrayObjectRef": {
@@ -1084,6 +1086,24 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/ArrayOfObjects"
+          }
+        },
+        "nestedArray": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "nestedRefsArray": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ArrayOfObjects"
+            }
           }
         }
       },
