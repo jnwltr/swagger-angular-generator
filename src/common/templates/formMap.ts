@@ -1,4 +1,4 @@
-import {AbstractControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormGroup} from '|shared/forms';
 import {ControlFactory} from './utils';
 
 /** Extends FormGroup so it contains definition of map items for further creation */

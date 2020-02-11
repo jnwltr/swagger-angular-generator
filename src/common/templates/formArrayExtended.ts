@@ -1,4 +1,4 @@
-import {AbstractControl, FormArray} from '@angular/forms';
+import {AbstractControl, FormArray} from '|shared/forms';
 import {ControlFactory} from './utils';
 
 /** Extends FormArray so it contains definition of items for further creation */

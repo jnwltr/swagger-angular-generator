@@ -1,4 +1,4 @@
-import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormControl, FormGroup} from '|shared/forms';
 
 import {FormArrayExtended} from './formArrayExtended';
 import {FormMap} from './formMap';
