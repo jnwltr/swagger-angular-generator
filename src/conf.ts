@@ -2,13 +2,13 @@
 import {MethodName, NativeNames, ParamLocation} from './types';
 
 // relative to project root
-export const outDir = 'src/api';
+export const outDir = '../esslg2/frontend/frontend/src/api';
 export const commonDir = 'common';
 export const defsDir = 'defs';
 export const apiDir = 'controllers';
 export const storeDir = 'store';
 export const stateDir = 'states';
-export const apiFile = 'conf/api/api-docs.json';
+export const apiFile = '../esslg2/frontend/frontend/src/api/document.json';
 export const modelFile = 'model';
 export const indentation = 2;
 export const swaggerUrlPath = '/swagger';
