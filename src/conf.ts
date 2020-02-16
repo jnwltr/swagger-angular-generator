@@ -12,6 +12,7 @@ export const apiFile = '../esslg2/frontend/frontend/src/api/document.json';
 export const modelFile = 'model';
 export const indentation = 2;
 export const swaggerUrlPath = '/swagger';
+export const apiUrlPrefix = '/api';
 export const omitVersion = false;
 // part of path in url
 export const swaggerFile = '/swagger-ui.html#!/';

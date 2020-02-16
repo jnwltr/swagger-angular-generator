@@ -61,7 +61,7 @@ export function processMethod(method: ControllerMethod, unwrapSingleParamMethods
   if (paramSeparation.length) methodDef += '\n';
 
   const body = `return this.http.${method.methodName}<${method.responseDef.type}>` +
-               `(\`${method.basePath}${url}\`${params});`;
+               `(\`${conf.apiUrlPrefix}${method.basePath}${url}\`${params});`;
   methodDef += indent(body);
   methodDef += `\n`;
   methodDef += `}`;

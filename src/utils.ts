@@ -108,7 +108,7 @@ export function makeComment(input: string | string[]): string {
 export function processHeader(schemaDef: any, omitVersion = false): string {
   const relevant = {
     info: schemaDef.info,
-    path: schemaDef.host + (schemaDef.basePath || ''),
+    path: schemaDef.host + conf.apiUrlPrefix + (schemaDef.basePath || ''),
   };
 
   if (omitVersion) delete relevant.info.version;
