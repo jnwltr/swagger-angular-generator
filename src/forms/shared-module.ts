@@ -7,18 +7,18 @@ export function createSharedModule(config: Config) {
   let content = '';
   content += `import {CommonModule} from '@angular/common';\n`;
   content += `import {NgModule} from '@angular/core';\n`;
-  content += `import {ReactiveFormsModule} from '@angular/forms';\n`;
+  content += `import {IczFormsModule} from '|shared/forms';\n`;
   content += '\n';
   content += '@NgModule({\n';
 
   content += indent('imports: [\n');
   content += indent('CommonModule,\n', 2);
-  content += indent('ReactiveFormsModule,\n', 2);
+  content += indent('IczFormsModule,\n', 2);
   content += indent('],\n');
 
   content += indent('exports: [\n');
   content += indent('CommonModule,\n', 2);
-  content += indent('ReactiveFormsModule,\n', 2);
+  content += indent('IczFormsModule,\n', 2);
   content += indent('],\n');
 
   content += '})\n';
