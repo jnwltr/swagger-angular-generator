@@ -29,7 +29,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
       url,
       name: getName(method),
       methodName,
-      simpleName: getSimpleName(url),
+      simpleName: getSimpleName(method.operationId),
       summary: method.summary,
       operationId: method.operationId,
       swaggerUrl: `${swaggerPath}${method.tags[0]}/${method.operationId}`,
@@ -47,22 +47,13 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
 }
 
 /**
- * Returns simple name from last static URL segment
- * example: `/accounts/${accountId}/updateMothersName` => `updateMothersName`
- * @param url
+ * Returns simple name by remove number ID from operationId
+ * example: `updateMothersName_2` => `updateMothersName`
+ * @param operationId
  */
-function getSimpleName(url: string) {
-  // remove url params
-  let method = url.replace(/\/{[^}]+}/g, '');
-  // remove trailing `/` if present
-  method = method.replace(/\/$/, '');
-  // take trailing url folder
-  method = method.replace(/(.*\/)*/, '');
-  // subst spaces and underscores
-  method = _.camelCase(method);
-  method = method.replace(/[^\w]/g, '');
-
-  return method;
+function getSimpleName(operationId: string) {
+  // remove id if present
+  return operationId.replace(/_\d+$/, '');
 }
 
 /**
