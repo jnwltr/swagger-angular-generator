@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
@@ -20,7 +20,7 @@ export class LogoutEffects {
   @Effect()
   Logout = this.storeActions.pipe(
     ofType<actions.Start>(actions.Actions.START),
-    switchMap(() => this.logoutService.logout()
+    switchMap(() => this.logoutService.Logout()
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error))),

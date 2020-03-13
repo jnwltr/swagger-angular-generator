@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
@@ -11,9 +11,9 @@ import {ProductDetailParams} from '../../../../controllers/ProductDetail';
 import * as __model from '../../../../model';
 
 export enum Actions {
-  START = '[ProductDetail productDetail] Start',
-  SUCCESS = '[ProductDetail productDetail] Success',
-  ERROR = '[ProductDetail productDetail] Error',
+  START = '[ProductDetail ProductDetail] Start',
+  SUCCESS = '[ProductDetail ProductDetail] Success',
+  ERROR = '[ProductDetail ProductDetail] Error',
 }
 
 export class Start implements Action {

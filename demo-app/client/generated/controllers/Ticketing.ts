@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -11,7 +11,7 @@ import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
-export interface ShowTicketDetailParams {
+export interface Ticketing_show-ticket-detail_readParams {
   /** format: date-time */
   date_from?: string;
   /** format: date-time */
@@ -27,7 +27,7 @@ export class TicketingService {
    * show_ticket_detail
    * http://example.com/swagger/swagger-ui.html#!/ticketing/ticketing_show-ticket-detail_read
    */
-  showTicketDetail(params: ShowTicketDetailParams): Observable<__model.TicketDetailOutput[]> {
+  ticketing_show-ticket-detail_read(params: Ticketing_show-ticket-detail_readParams): Observable<__model.TicketDetailOutput[]> {
     const queryParamBase = {
       date_from: params.date_from,
       date_to: params.date_to,
@@ -45,6 +45,6 @@ export class TicketingService {
     const pathParams = {
       id: params.id,
     };
-    return this.http.get<__model.TicketDetailOutput[]>(`/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams});
+    return this.http.get<__model.TicketDetailOutput[]>(`/api/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams});
   }
 }

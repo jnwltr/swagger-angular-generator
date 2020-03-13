@@ -2,21 +2,21 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
+import {IczFormsModule} from '|shared/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    ReactiveFormsModule,
+    IczFormsModule,
   ],
   exports: [
     CommonModule,
-    ReactiveFormsModule,
+    IczFormsModule,
   ],
 })
 export class FormsSharedModule {}

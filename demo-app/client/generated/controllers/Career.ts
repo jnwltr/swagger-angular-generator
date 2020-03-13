@@ -2,14 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
-export interface PositionsParams {
+export interface CareerParams {
   /**
    * Position Id
    * format: int32
@@ -27,11 +27,11 @@ export class CareerService {
    * get career
    * http://example.com/swagger/swagger-ui.html#!/Career/Career
    */
-  positions(params: PositionsParams): Observable<object> {
+  Career(params: CareerParams): Observable<object> {
     const pathParams = {
       positionId: params.positionId,
       version: params.version,
     };
-    return this.http.get<object>(`/api-base-path/career/v${pathParams.version}/positions/${pathParams.positionId}`);
+    return this.http.get<object>(`/api/api-base-path/career/v${pathParams.version}/positions/${pathParams.positionId}`);
   }
 }

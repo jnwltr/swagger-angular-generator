@@ -2,11 +2,11 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '|shared/forms';
 import {OrderService} from '../../../controllers/Order';
 
 @Injectable()
@@ -28,6 +28,6 @@ export class OrderFormService {
     const data = raw ?
       this.form.getRawValue() :
       this.form.value;
-    return this.orderService.order(data);
+    return this.orderService.Order(data);
   }
 }

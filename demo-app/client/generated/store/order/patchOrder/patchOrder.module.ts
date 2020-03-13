@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {NgModule} from '@angular/core';
@@ -11,7 +11,7 @@ import {StoreModule as NgrxStoreModule} from '@ngrx/store';
 
 import {OrderService} from '../../../controllers/Order';
 import {FormsSharedModule} from '../../forms-shared.module';
-import {PatchOrderFormService} from './patchOrder.service';
+import {PatchOrderFormService} from './PatchOrder.service';
 
 import {PatchOrderEffects} from './states/effects';
 import {PatchOrderReducer} from './states/reducers';

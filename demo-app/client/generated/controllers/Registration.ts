@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -35,7 +35,7 @@ export class RegistrationService {
    * create registration credentials
    * http://example.com/swagger/swagger-ui.html#!/Registration/Registration
    */
-  registration(params: RegistrationParams): Observable<object> {
+  Registration(params: RegistrationParams): Observable<object> {
     const formDataParams = {
       email: params.email,
       password1: params.password1,
@@ -45,6 +45,6 @@ export class RegistrationService {
     const pathParams = {
       registrationType: params.registrationType,
     };
-    return this.http.post<object>(`/api-base-path/registration/${pathParams.registrationType}`, formDataParams);
+    return this.http.post<object>(`/api/api-base-path/registration/${pathParams.registrationType}`, formDataParams);
   }
 }

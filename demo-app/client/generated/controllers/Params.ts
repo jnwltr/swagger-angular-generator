@@ -2,14 +2,14 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
-export interface DashedParams {
+export interface Params_testParams {
   /** testing number */
   pathParam: number;
   /** testing number */
@@ -47,7 +47,7 @@ export class ParamsService {
    * Test of param handling
    * http://example.com/swagger/swagger-ui.html#!/Params/params_test
    */
-  dashed(params: DashedParams): Observable<void> {
+  params_test(params: Params_testParams): Observable<void> {
     const pathParams = {
       pathParam: params.pathParam,
       'dashed-path-param': params['dashed-path-param'],
@@ -82,6 +82,6 @@ export class ParamsService {
       'dashed-body-param': params['dashed-body-param'],
     };
 
-    return this.http.post<void>(`/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParams || {}, {params: queryParams, headers: headerParams});
+    return this.http.post<void>(`/api/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParams || {}, {params: queryParams, headers: headerParams});
   }
 }

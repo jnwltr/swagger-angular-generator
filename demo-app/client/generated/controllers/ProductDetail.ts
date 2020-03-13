@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -27,14 +27,14 @@ export class ProductDetailService {
    * Get product detail
    * http://example.com/swagger/swagger-ui.html#!/ProductDetail/ProductDetail
    */
-  productDetail(params: ProductDetailParams): Observable<__model.ProductDetail> {
+  ProductDetail(params: ProductDetailParams): Observable<__model.ProductDetail> {
     const pathParams = {
       productId: params.productId,
     };
-    return this.http.get<__model.ProductDetail>(`/api-base-path/product-detail/${pathParams.productId}`);
+    return this.http.get<__model.ProductDetail>(`/api/api-base-path/product-detail/${pathParams.productId}`);
   }
-  productDetail_(productId: number): Observable<__model.ProductDetail> {
-    return this.productDetail({productId});
+  ProductDetail_(productId: number): Observable<__model.ProductDetail> {
+    return this.ProductDetail({productId});
   }
 
 }

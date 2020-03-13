@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -11,14 +11,14 @@ import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
-export interface ArrayParams {
+export interface Structures_arrayParams {
   /** testing number */
   id: number;
   /** array structures */
   arraySection: __model.ArrayStructure;
 }
 
-export interface MapParams {
+export interface Structures_mapParams {
   /** map structures */
   mapSection: __model.MapStructure;
 }
@@ -31,7 +31,7 @@ export class StructuresService {
    * structural test for arrays and arrays of arrays
    * http://example.com/swagger/swagger-ui.html#!/Structures/structures_array
    */
-  array(params: ArrayParams): Observable<__model.ArrayGeneratedInlineModel> {
+  structures_array(params: Structures_arrayParams): Observable<__model.Structures_arrayGeneratedInlineModel> {
     const queryParamBase = {
       id: params.id,
     };
@@ -47,20 +47,20 @@ export class StructuresService {
 
     const bodyParams = params.arraySection;
 
-    return this.http.post<__model.ArrayGeneratedInlineModel>(`/api-base-path/structures/array`, bodyParams || {}, {params: queryParams});
+    return this.http.post<__model.Structures_arrayGeneratedInlineModel>(`/api/api-base-path/structures/array`, bodyParams || {}, {params: queryParams});
   }
 
   /**
    * structural test for maps
    * http://example.com/swagger/swagger-ui.html#!/Structures/structures_map
    */
-  map(params: MapParams): Observable<void> {
+  structures_map(params: Structures_mapParams): Observable<void> {
     const bodyParams = params.mapSection;
 
-    return this.http.post<void>(`/api-base-path/structures/map`, bodyParams || {});
+    return this.http.post<void>(`/api/api-base-path/structures/map`, bodyParams || {});
   }
-  map_(mapSection: __model.MapStructure): Observable<void> {
-    return this.map({mapSection});
+  structures_map_(mapSection: __model.MapStructure): Observable<void> {
+    return this.structures_map({mapSection});
   }
 
 }

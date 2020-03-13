@@ -2,11 +2,11 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup} from '|shared/forms';
 import {ProductsService} from '../../../controllers/Products';
 
 @Injectable()
@@ -33,6 +33,6 @@ export class ProductsFormService {
     const data = raw ?
       this.form.getRawValue() :
       this.form.value;
-    return this.productsService.products(data);
+    return this.productsService.Products(data);
   }
 }

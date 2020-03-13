@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -40,7 +40,7 @@ export class ProductsService {
    * Get all products
    * http://example.com/swagger/swagger-ui.html#!/Products/Products
    */
-  products(params: ProductsParams): Observable<__model.Products> {
+  Products(params: ProductsParams): Observable<__model.Products> {
     const queryParamBase = {
       stringField: params.stringField,
       BooleanField: params.BooleanField,
@@ -63,6 +63,6 @@ export class ProductsService {
       }
     });
 
-    return this.http.get<__model.Products>(`/api-base-path/products`, {params: queryParams});
+    return this.http.get<__model.Products>(`/api/api-base-path/products`, {params: queryParams});
   }
 }

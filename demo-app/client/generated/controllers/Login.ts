@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -11,7 +11,7 @@ import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
-export interface LoginParams {
+export interface RegistrationParams {
   /** login */
   loginDto: __model.LoginDto;
 }
@@ -24,14 +24,14 @@ export class LoginService {
    * create registration credentials
    * http://example.com/swagger/swagger-ui.html#!/Login/Registration
    */
-  login(params: LoginParams): Observable<object> {
+  Registration(params: RegistrationParams): Observable<object> {
     const formDataParams = {
       loginDto: params.loginDto,
     };
-    return this.http.post<object>(`/api-base-path/login`, formDataParams);
+    return this.http.post<object>(`/api/api-base-path/login`, formDataParams);
   }
-  login_(loginDto: __model.LoginDto): Observable<object> {
-    return this.login({loginDto});
+  Registration_(loginDto: __model.LoginDto): Observable<object> {
+    return this.Registration({loginDto});
   }
 
 }

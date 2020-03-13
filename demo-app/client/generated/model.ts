@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 export * from './defs/Products'; // sources: products
@@ -20,5 +20,5 @@ export * from './defs/MapContent'; // sources: mapContent
 export * from './defs/MapObject'; // sources: mapObject
 export * from './defs/TicketDetailOutput';
 export * from './defs/RefStatus';
-export * from './defs/GetGoodsListGeneratedInlineModel';
-export * from './defs/ArrayGeneratedInlineModel';
+export * from './defs/Goods_get-goods-list_listGeneratedInlineModel';
+export * from './defs/Structures_arrayGeneratedInlineModel';

@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -11,7 +11,7 @@ import {Observable} from 'rxjs';
 
 import * as __model from '../model';
 
-export interface GetGoodsListParams {
+export interface Goods_get-goods-list_listParams {
   /** Number of results to return per page. */
   limit?: number;
   /** The initial index from which to return the results. */
@@ -23,7 +23,7 @@ export class GoodsService {
   constructor(private http: HttpClient) {}
 
   /** http://example.com/swagger/swagger-ui.html#!/goods/goods_get-goods-list_list */
-  getGoodsList(params: GetGoodsListParams): Observable<__model.GetGoodsListGeneratedInlineModel> {
+  goods_get-goods-list_list(params: Goods_get-goods-list_listParams): Observable<__model.Goods_get-goods-list_listGeneratedInlineModel> {
     const queryParamBase = {
       limit: params.limit,
       offset: params.offset,
@@ -38,6 +38,6 @@ export class GoodsService {
       }
     });
 
-    return this.http.get<__model.GetGoodsListGeneratedInlineModel>(`/api-base-path/goods/get-goods-list/`, {params: queryParams});
+    return this.http.get<__model.Goods_get-goods-list_listGeneratedInlineModel>(`/api/api-base-path/goods/get-goods-list/`, {params: queryParams});
   }
 }

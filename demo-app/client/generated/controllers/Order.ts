@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -29,7 +29,7 @@ export interface PatchOrderParams {
   model?: string;
 }
 
-export interface PutOrderParams {
+export interface Put-OrderParams {
   /**
    * order Id
    * format: uuid
@@ -59,7 +59,7 @@ export class OrderService {
    * create order
    * http://example.com/swagger/swagger-ui.html#!/Order/Order
    */
-  order(params: OrderParams): Observable<object> {
+  Order(params: OrderParams): Observable<object> {
     const bodyParams = params.orderDto;
 
     const queryParamBase = {
@@ -75,14 +75,14 @@ export class OrderService {
       }
     });
 
-    return this.http.post<object>(`/api-base-path/order`, bodyParams || {}, {params: queryParams});
+    return this.http.post<object>(`/api/api-base-path/order`, bodyParams || {}, {params: queryParams});
   }
 
   /**
    * Patches order
    * http://example.com/swagger/swagger-ui.html#!/Order/PatchOrder
    */
-  patchOrder(params: PatchOrderParams): Observable<object> {
+  PatchOrder(params: PatchOrderParams): Observable<object> {
     const pathParams = {
       orderId: params.orderId,
     };
@@ -91,14 +91,14 @@ export class OrderService {
       model: params.model,
     };
 
-    return this.http.patch<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
+    return this.http.patch<object>(`/api/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
   }
 
   /**
    * Put for order
    * http://example.com/swagger/swagger-ui.html#!/Order/Put-Order
    */
-  putOrder(params: PutOrderParams): Observable<object> {
+  Put-Order(params: Put-OrderParams): Observable<object> {
     const pathParams = {
       orderId: params.orderId,
     };
@@ -108,7 +108,7 @@ export class OrderService {
       customerName: params.customerName,
     };
 
-    return this.http.put<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
+    return this.http.put<object>(`/api/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
   }
 
   /**
@@ -119,7 +119,7 @@ export class OrderService {
     const pathParams = {
       orderId: params.orderId,
     };
-    return this.http.delete<object>(`/api-base-path/order/${pathParams.orderId}`);
+    return this.http.delete<object>(`/api/api-base-path/order/${pathParams.orderId}`);
   }
   deleteORDER_(orderId: string): Observable<object> {
     return this.deleteORDER({orderId});

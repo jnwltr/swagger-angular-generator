@@ -2,11 +2,11 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '|shared/forms';
 import {RegistrationService} from '../../../controllers/Registration';
 
 @Injectable()
@@ -30,6 +30,6 @@ export class RegistrationFormService {
     const data = raw ?
       this.form.getRawValue() :
       this.form.value;
-    return this.registrationService.registration(data);
+    return this.registrationService.Registration(data);
   }
 }

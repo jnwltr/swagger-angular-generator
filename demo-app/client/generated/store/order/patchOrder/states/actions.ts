@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
@@ -10,9 +10,9 @@ import {Action} from '@ngrx/store';
 import {PatchOrderParams} from '../../../../controllers/Order';
 
 export enum Actions {
-  START = '[Order patchOrder] Start',
-  SUCCESS = '[Order patchOrder] Success',
-  ERROR = '[Order patchOrder] Error',
+  START = '[Order PatchOrder] Start',
+  SUCCESS = '[Order PatchOrder] Success',
+  ERROR = '[Order PatchOrder] Error',
 }
 
 export class Start implements Action {

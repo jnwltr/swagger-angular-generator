@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {HttpErrorResponse} from '@angular/common/http';
@@ -10,9 +10,9 @@ import {Action} from '@ngrx/store';
 import {RegistrationParams} from '../../../../controllers/Registration';
 
 export enum Actions {
-  START = '[Registration registration] Start',
-  SUCCESS = '[Registration registration] Success',
-  ERROR = '[Registration registration] Error',
+  START = '[Registration Registration] Start',
+  SUCCESS = '[Registration Registration] Success',
+  ERROR = '[Registration Registration] Error',
 }
 
 export class Start implements Action {

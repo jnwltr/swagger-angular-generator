@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api-base-path
+ * example.com/api/api-base-path
  */
 
 import {NgModule} from '@angular/core';
@@ -11,7 +11,7 @@ import {StoreModule as NgrxStoreModule} from '@ngrx/store';
 
 import {RegistrationService} from '../../../controllers/Registration';
 import {FormsSharedModule} from '../../forms-shared.module';
-import {RegistrationFormService} from './registration.service';
+import {RegistrationFormService} from './Registration.service';
 
 import {RegistrationEffects} from './states/effects';
 import {RegistrationReducer} from './states/reducers';
