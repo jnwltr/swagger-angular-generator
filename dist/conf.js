@@ -11,7 +11,7 @@ exports.apiFile = '../esslg2/frontend/frontend/src/api/document.json';
 exports.modelFile = 'model';
 exports.indentation = 2;
 exports.swaggerUrlPath = '/swagger';
-exports.apiUrlPrefix = '/api';
+exports.apiUrlPrefix = '';
 exports.omitVersion = false;
 // part of path in url
 exports.swaggerFile = '/swagger-ui.html#!/';
