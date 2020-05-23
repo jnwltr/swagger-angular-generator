@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -45,6 +45,6 @@ export class TicketingService {
     const pathParams = {
       id: params.id,
     };
-    return this.http.get<__model.TicketDetailOutput[]>(`/api/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams});
+    return this.http.get<__model.TicketDetailOutput[]>(`/api-base-path/ticketing/show-ticket-detail/${pathParams.id}/`, {params: queryParams});
   }
 }

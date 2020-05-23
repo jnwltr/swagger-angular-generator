@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -18,6 +18,6 @@ export class LogoutService {
    * http://example.com/swagger/swagger-ui.html#!/Logout/Logout
    */
   Logout(): Observable<object> {
-    return this.http.post<object>(`/api/api-base-path/logout`, {});
+    return this.http.post<object>(`/api-base-path/logout`, {});
   }
 }

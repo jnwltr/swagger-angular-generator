@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -47,7 +47,7 @@ export class StructuresService {
 
     const bodyParams = params.arraySection;
 
-    return this.http.post<__model.Structures_arrayGeneratedInlineModel>(`/api/api-base-path/structures/array`, bodyParams || {}, {params: queryParams});
+    return this.http.post<__model.Structures_arrayGeneratedInlineModel>(`/api-base-path/structures/array`, bodyParams || {}, {params: queryParams});
   }
 
   /**
@@ -57,7 +57,7 @@ export class StructuresService {
   structures_map(params: Structures_mapParams): Observable<void> {
     const bodyParams = params.mapSection;
 
-    return this.http.post<void>(`/api/api-base-path/structures/map`, bodyParams || {});
+    return this.http.post<void>(`/api-base-path/structures/map`, bodyParams || {});
   }
   structures_map_(mapSection: __model.MapStructure): Observable<void> {
     return this.structures_map({mapSection});

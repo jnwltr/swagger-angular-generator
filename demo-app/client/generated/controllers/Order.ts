@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -75,7 +75,7 @@ export class OrderService {
       }
     });
 
-    return this.http.post<object>(`/api/api-base-path/order`, bodyParams || {}, {params: queryParams});
+    return this.http.post<object>(`/api-base-path/order`, bodyParams || {}, {params: queryParams});
   }
 
   /**
@@ -91,7 +91,7 @@ export class OrderService {
       model: params.model,
     };
 
-    return this.http.patch<object>(`/api/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
+    return this.http.patch<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
   }
 
   /**
@@ -108,7 +108,7 @@ export class OrderService {
       customerName: params.customerName,
     };
 
-    return this.http.put<object>(`/api/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
+    return this.http.put<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParams || {});
   }
 
   /**
@@ -119,7 +119,7 @@ export class OrderService {
     const pathParams = {
       orderId: params.orderId,
     };
-    return this.http.delete<object>(`/api/api-base-path/order/${pathParams.orderId}`);
+    return this.http.delete<object>(`/api-base-path/order/${pathParams.orderId}`);
   }
   deleteORDER_(orderId: string): Observable<object> {
     return this.deleteORDER({orderId});

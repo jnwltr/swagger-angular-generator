@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -38,6 +38,6 @@ export class GoodsService {
       }
     });
 
-    return this.http.get<__model.Goods_get-goods-list_listGeneratedInlineModel>(`/api/api-base-path/goods/get-goods-list/`, {params: queryParams});
+    return this.http.get<__model.Goods_get-goods-list_listGeneratedInlineModel>(`/api-base-path/goods/get-goods-list/`, {params: queryParams});
   }
 }

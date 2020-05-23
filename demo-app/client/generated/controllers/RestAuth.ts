@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -31,7 +31,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_list
    */
   rest-auth_logout_list(): Observable<void> {
-    return this.http.get<void>(`/api/api-base-path/rest-auth/logout/`);
+    return this.http.get<void>(`/api-base-path/rest-auth/logout/`);
   }
 
   /**
@@ -42,7 +42,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_create
    */
   rest-auth_logout_create(): Observable<void> {
-    return this.http.post<void>(`/api/api-base-path/rest-auth/logout/`, {});
+    return this.http.post<void>(`/api-base-path/rest-auth/logout/`, {});
   }
 
   /**
@@ -57,7 +57,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_read
    */
   rest-auth_user_read(): Observable<__model.UserDetails> {
-    return this.http.get<__model.UserDetails>(`/api/api-base-path/rest-auth/user/`);
+    return this.http.get<__model.UserDetails>(`/api-base-path/rest-auth/user/`);
   }
 
   /**
@@ -74,7 +74,7 @@ export class RestAuthService {
   rest-auth_user_update(params: Rest-auth_user_updateParams): Observable<__model.UserDetails> {
     const bodyParams = params.data;
 
-    return this.http.put<__model.UserDetails>(`/api/api-base-path/rest-auth/user/`, bodyParams || {});
+    return this.http.put<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParams || {});
   }
   rest-auth_user_update_(data: __model.UserDetails): Observable<__model.UserDetails> {
     return this.rest-auth_user_update({data});
@@ -94,7 +94,7 @@ export class RestAuthService {
   rest-auth_user_partial_update(params: Rest-auth_user_partial_updateParams): Observable<__model.UserDetails> {
     const bodyParams = params.data;
 
-    return this.http.patch<__model.UserDetails>(`/api/api-base-path/rest-auth/user/`, bodyParams || {});
+    return this.http.patch<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParams || {});
   }
   rest-auth_user_partial_update_(data: __model.UserDetails): Observable<__model.UserDetails> {
     return this.rest-auth_user_partial_update({data});

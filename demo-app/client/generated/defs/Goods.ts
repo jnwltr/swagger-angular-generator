@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 export interface Goods {
@@ -18,15 +18,18 @@ export interface Goods {
   refStatus?: RefStatusGoodsEnum;
 }
 
-export type CurrencyGoodsEnum =
-  'CZK';
+export enum CurrencyGoodsEnum {
+  CZK = 'CZK'
+}
 
-export type StatusGoodsEnum =
-  1 |
-  2 |
-  3;
+export enum StatusGoodsEnum {
+  _NR_1 = 1,
+  _NR_2 = 2,
+  _NR_3 = 3
+}
 
-export type RefStatusGoodsEnum =
-  1 |
-  2 |
-  3;
+export enum RefStatusGoodsEnum {
+  _NR_1 = 1,
+  _NR_2 = 2,
+  _NR_3 = 3
+}

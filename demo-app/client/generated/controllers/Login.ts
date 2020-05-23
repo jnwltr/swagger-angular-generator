@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -28,7 +28,7 @@ export class LoginService {
     const formDataParams = {
       loginDto: params.loginDto,
     };
-    return this.http.post<object>(`/api/api-base-path/login`, formDataParams);
+    return this.http.post<object>(`/api-base-path/login`, formDataParams);
   }
   Registration_(loginDto: __model.LoginDto): Observable<object> {
     return this.Registration({loginDto});

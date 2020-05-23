@@ -24,16 +24,13 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         type += _.upperFirst(namespace);
         if (!type.match(/Enum/))
             type += 'Enum';
-        const list = prop.enum || prop.items.enum;
+        const list = (prop.enum || prop.items.enum);
         const exp = exportEnums ? 'export ' : '';
-        let enumValues;
-        if (typeof list[0] === 'number') {
-            enumValues = utils_1.indent(list.join(' |\n'));
-        }
-        else {
-            enumValues = utils_1.indent('\'' + list.join('\' |\n\'')) + '\'';
-        }
-        enumDeclaration = `${exp}type ${type} =\n${enumValues};`;
+        const keyValuePairs = list.map(entry => (typeof entry === 'number')
+            ? `_NR_${entry} = ${entry}`
+            : `${_.toUpper(_.snakeCase(entry))} = '${entry}'`);
+        const enumValues = utils_1.indent(keyValuePairs.join(',\n'));
+        enumDeclaration = `${exp}enum ${type} {\n${enumValues}\n}`;
         if (prop.type === 'array')
             type += '[]';
     }

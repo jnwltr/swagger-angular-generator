@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient} from '@angular/common/http';
@@ -32,6 +32,6 @@ export class CareerService {
       positionId: params.positionId,
       version: params.version,
     };
-    return this.http.get<object>(`/api/api-base-path/career/v${pathParams.version}/positions/${pathParams.positionId}`);
+    return this.http.get<object>(`/api-base-path/career/v${pathParams.version}/positions/${pathParams.positionId}`);
   }
 }

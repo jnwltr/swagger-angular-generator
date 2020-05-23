@@ -37,17 +37,16 @@ export function processProperty(prop: Schema, name = '', namespace = '',
     type += _.upperFirst(namespace);
     if (!type.match(/Enum/)) type += 'Enum';
 
-    const list = prop.enum || prop.items.enum;
+    const list = (prop.enum || prop.items.enum) as Array<string | number> ;
     const exp = exportEnums ? 'export ' : '';
 
-    let enumValues;
-    if (typeof list[0] === 'number') {
-      enumValues = indent(list.join(' |\n'));
-    } else {
-      enumValues = indent('\'' + list.join('\' |\n\'')) + '\'';
-    }
+    const keyValuePairs = list.map(entry => (typeof entry === 'number')
+      ? `_NR_${entry} = ${entry}`
+      : `${_.toUpper(_.snakeCase(entry))} = '${entry}'`);
 
-    enumDeclaration = `${exp}type ${type} =\n${enumValues};`;
+    const enumValues = indent(keyValuePairs.join(',\n'));
+
+    enumDeclaration = `${exp}enum ${type} {\n${enumValues}\n}`;
 
     if (prop.type === 'array') type += '[]';
   } else {

@@ -2,7 +2,7 @@
 /**
  * Test Swagger
  * v1
- * example.com/api/api-base-path
+ * example.com/api-base-path
  */
 
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
@@ -82,6 +82,6 @@ export class ParamsService {
       'dashed-body-param': params['dashed-body-param'],
     };
 
-    return this.http.post<void>(`/api/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParams || {}, {params: queryParams, headers: headerParams});
+    return this.http.post<void>(`/api-base-path/params/normal/${pathParams.pathParam}/dashed/${pathParams['dashed-path-param']}`, bodyParams || {}, {params: queryParams, headers: headerParams});
   }
 }
