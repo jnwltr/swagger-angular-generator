@@ -36,12 +36,12 @@ export class RegistrationService {
    * http://example.com/swagger/swagger-ui.html#!/Registration/Registration
    */
   Registration(params: RegistrationParams): Observable<object> {
-    const formDataParams = {
-      email: params.email,
-      password1: params.password1,
-      password2: params.password2,
-      selfRefParam: params.selfRefParam,
-    };
+    const formDataParams = new FormData();
+    formDataParams.append('email', params.email);
+    formDataParams.append('password1', params.password1);
+    formDataParams.append('password2', params.password2);
+    formDataParams.append('selfRefParam', params.selfRefParam);
+
     const pathParams = {
       registrationType: params.registrationType,
     };

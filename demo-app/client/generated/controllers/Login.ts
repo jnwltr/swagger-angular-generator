@@ -25,9 +25,9 @@ export class LoginService {
    * http://example.com/swagger/swagger-ui.html#!/Login/Registration
    */
   Registration(params: RegistrationParams): Observable<object> {
-    const formDataParams = {
-      loginDto: params.loginDto,
-    };
+    const formDataParams = new FormData();
+    formDataParams.append('loginDto', params.loginDto);
+
     return this.http.post<object>(`/api-base-path/login`, formDataParams);
   }
   Registration_(loginDto: __model.LoginDto): Observable<object> {

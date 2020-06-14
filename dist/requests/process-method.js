@@ -141,6 +141,13 @@ function getParamSeparation(paramGroups) {
             def += '});\n';
             return def;
         }
+        if (groupName === 'formData') {
+            def = `const ${groupName}Params = new FormData();\n`;
+            group.forEach(g => {
+                def += `${groupName}Params.append('${g.name}', params.${g.name});\n`;
+            });
+            return def;
+        }
         if (groupName === 'body') {
             // when the schema: { '$ref': '#/definitions/exampleDto' } construct is used
             if ('schema' in group[0]) {
