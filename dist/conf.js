@@ -7,7 +7,7 @@ exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.storeDir = 'store';
 exports.stateDir = 'states';
-exports.apiFile = '../esslg2/frontend/frontend/src/api/document.json';
+exports.apiFile = '../esslg2/frontend/frontend/src/api/elastic.json';
 exports.modelFile = 'model';
 exports.indentation = 2;
 exports.swaggerUrlPath = '/swagger';
@@ -46,6 +46,9 @@ exports.allowedParams = {
 // list of simplified names of controllers
 // that do not to generate api layer
 exports.controllerIgnores = ['BackOffice'];
+// tag of ignored methods
+// that do not to generate api layer
+exports.methodIgnoredByTag = 'internal-use-only';
 // implemented only for api
 // once other one is needed, make it file-based
 exports.adHocExceptions = {

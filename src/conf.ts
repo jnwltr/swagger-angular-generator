@@ -8,7 +8,7 @@ export const defsDir = 'defs';
 export const apiDir = 'controllers';
 export const storeDir = 'store';
 export const stateDir = 'states';
-export const apiFile = '../esslg2/frontend/frontend/src/api/document.json';
+export const apiFile = '../esslg2/frontend/frontend/src/api/elastic.json';
 export const modelFile = 'model';
 export const indentation = 2;
 export const swaggerUrlPath = '/swagger';
@@ -49,6 +49,9 @@ export const allowedParams: {[key in MethodName]: ParamLocation[]} = {
 // list of simplified names of controllers
 // that do not to generate api layer
 export const controllerIgnores = ['BackOffice'];
+// tag of ignored methods
+// that do not to generate api layer
+export const methodIgnoredByTag = 'internal-use-only';
 // implemented only for api
 // once other one is needed, make it file-based
 export const adHocExceptions: {[key: string]: {[key: string]: [RegExp, string]}} = {

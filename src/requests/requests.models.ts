@@ -25,6 +25,7 @@ export interface ResponseDef {
 }
 
 export interface ControllerMethod {
+  tags: [string];
   summary: string;
   operationId: string;
   description: string;

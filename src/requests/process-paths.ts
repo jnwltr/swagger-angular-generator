@@ -30,6 +30,7 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
       name: getName(method),
       methodName,
       simpleName: getSimpleName(method.operationId),
+      tags: method.tags,
       summary: method.summary,
       operationId: method.operationId,
       swaggerUrl: `${swaggerPath}${method.tags[0]}/${method.operationId}`,
@@ -39,7 +40,8 @@ export function processPaths(pathsWithParameters: PathsWithParameters, swaggerPa
       responseDef: null,
       basePath,
     }))
-  ));
+  ))
+    .filter(method => !method.tags.includes(conf.methodIgnoredByTag));
 
   const controllerFiles = _.groupBy(controllers, 'name');
   conf.controllerIgnores.forEach(key => delete controllerFiles[key]);
