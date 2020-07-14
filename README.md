@@ -339,6 +339,14 @@ To run client tests in interactive mode:
 
 ---
 
+### Release
+
+* `git checkout -b tech/release` on master or other branch you want to release
+* `npm version patch` or other version change you want
+* make a PR
+* once merged `npm publish`
+
+
 ### _Pull requests are welcome!_
 
 Please do the following before making a PR:
