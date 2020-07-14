@@ -167,11 +167,11 @@ function getValidators(param: Parameter | Schema) {
 
   if (param.format && param.format === 'email') validators.push('Validators.email');
 
-  if (param.maximum) validators.push(`Validators.max(${param.maximum})`);
-  if (param.minimum) validators.push(`Validators.min(${param.minimum})`);
+  if (!_.isNil(param.maximum)) validators.push(`Validators.max(${param.maximum})`);
+  if (!_.isNil(param.minimum)) validators.push(`Validators.min(${param.minimum})`);
 
-  if (param.maxLength) validators.push(`Validators.maxLength(${param.maxLength})`);
-  if (param.minLength) validators.push(`Validators.minLength(${param.minLength})`);
+  if (!_.isNil(param.maxLength)) validators.push(`Validators.maxLength(${param.maxLength})`);
+  if (!_.isNil(param.minLength)) validators.push(`Validators.minLength(${param.minLength})`);
 
   if (param.pattern) validators.push(`Validators.pattern(/${param.pattern}/)`);
 
