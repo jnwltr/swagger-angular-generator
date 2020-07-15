@@ -3,6 +3,7 @@
  * in the schema
  */
 import {groupBy, map, upperFirst} from 'lodash';
+import {flatMap} from 'tslint/lib/utils';
 
 import {getAccessor, getObjectPropSetter} from '../common';
 import * as conf from '../conf';
@@ -122,7 +123,8 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
   return map(paramGroups, (group, groupName: ParamLocation) => {
     let baseDef: string;
     let def: string;
-    const list = map(group, p => {
+    const fileGroups: Parameter[] = [];
+    const list = flatMap(group, p => {
       // header params values need to be strings
       let suffix: string;
       if (groupName === 'header' && p.type !== 'string') suffix = '.toString()';
@@ -136,7 +138,11 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
         if (separator) suffix = `.join('${separator}')`;
       } else suffix = '';
 
-      return getObjectPropSetter(p.name, 'params', suffix);
+      if ( groupName === 'formData' && p.type === 'file') {
+        fileGroups.push(p);
+        return [];
+      }
+      return [getObjectPropSetter(p.name, 'params', suffix)];
     });
 
     if (groupName === 'query') {
@@ -171,8 +177,18 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
     if (groupName === 'header') {
       def = `new HttpHeaders(${def})`;
     }
-    def += ';';
 
+    if (groupName === 'formData' && fileGroups.length > 0) {
+      let output = `const ${groupName}Params = `;
+      output += list.length > 0 ? `Object.assign( new FormData(), ${def});\n` : 'new FormData();\n';
+      const fileFormData = fileGroups.map(f =>                            // Change this to map(fileGroups, ...)?
+        `${groupName}Params.set('${f.name}', ${getAccessor(f.name, 'params')});`);
+      output += fileFormData.join('\n');
+      output += '\n';
+      return output;
+    }
+
+    def += ';';
     return `const ${groupName}Params = ${def}`;
   });
 }
