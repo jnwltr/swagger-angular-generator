@@ -22,12 +22,12 @@ export class MapFormService {
         new FormGroup({
           control: new FormControl(undefined, []),
           group: new FormGroup({
-            id: new FormControl(undefined, [Validators.required]),
+            id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
             name: new FormControl(undefined, []),
           }, []),
           arrayOfObjects: new FormArrayExtended(() => (
             new FormGroup({
-              id: new FormControl(undefined, [Validators.required]),
+              id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
               name: new FormControl(undefined, []),
             }, [])), [], []),
           mapRef: new FormMap(() => (
@@ -36,7 +36,7 @@ export class MapFormService {
             new FormControl(undefined, [])), {}, []),
           mapInlineRef: new FormMap(() => (
             new FormGroup({
-              id: new FormControl(undefined, [Validators.required]),
+              id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
               name: new FormControl(undefined, []),
             }, [])), {}, []),
           arrayOfMaps: new FormArrayExtended(() => (

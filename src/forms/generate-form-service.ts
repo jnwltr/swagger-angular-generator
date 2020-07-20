@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import * as nodePath from 'path';
-
 import {getAccessor, normalizeDef} from '../common';
 import {nativeTypes} from '../conf';
 import {ProcessedDefinition} from '../definitions';
@@ -87,7 +86,7 @@ function walkParamOrProp(definition: Parameter[] | ProcessedDefinition,
       if (param.required) required.push(param.name);
       schema[param.name] = parameterToSchema(param);
     });
-  // 2. properties
+    // 2. properties
   } else if (definition.def.properties) {
     required = definition.def.required;
     schema = definition.def.properties;
@@ -174,6 +173,8 @@ function getValidators(param: Parameter | Schema) {
   if (!_.isNil(param.minLength)) validators.push(`Validators.minLength(${param.minLength})`);
 
   if (param.pattern) validators.push(`Validators.pattern(/${param.pattern}/)`);
+
+  if (param.type === 'integer') validators.push('Validators.pattern(/^([+-]?[1-9]\\d*|0)$/)');
 
   return validators;
 }
