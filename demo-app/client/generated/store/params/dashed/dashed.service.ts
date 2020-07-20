@@ -17,9 +17,9 @@ export class DashedFormService {
     private paramsService: ParamsService,
   ) {
     this.form = new FormGroup({
-      pathParam: new FormControl(undefined, [Validators.required]),
-      'dashed-path-param': new FormControl(undefined, [Validators.required]),
-      queryParam: new FormControl(undefined, [Validators.required]),
+      pathParam: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+      'dashed-path-param': new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+      queryParam: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
       queryParamCollectionDefault: new FormArrayExtended(() => (
         new FormControl(undefined, [Validators.required])), [], [Validators.required]),
       queryParamCollectionCsv: new FormArrayExtended(() => (
@@ -28,17 +28,17 @@ export class DashedFormService {
         new FormControl(undefined, [Validators.required])), [], [Validators.required]),
       queryParamCollectionMulti: new FormArrayExtended(() => (
         new FormControl(undefined, [Validators.required])), [], [Validators.required]),
-      'dashed-query-param': new FormControl(undefined, [Validators.required]),
+      'dashed-query-param': new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
       'dashed-query-param-collection-tsv': new FormArrayExtended(() => (
         new FormControl(undefined, [Validators.required])), [], [Validators.required]),
       'dashed-query-param-collection-pipes': new FormArrayExtended(() => (
         new FormControl(undefined, [Validators.required])), [], [Validators.required]),
       'dashed-query-param-collection-multi': new FormArrayExtended(() => (
         new FormControl(undefined, [Validators.required])), [], [Validators.required]),
-      headerParam: new FormControl(undefined, [Validators.required]),
-      'dashed-header-param': new FormControl(undefined, [Validators.required]),
-      bodyParam: new FormControl(undefined, [Validators.required]),
-      'dashed-body-param': new FormControl(undefined, [Validators.required]),
+      headerParam: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+      'dashed-header-param': new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+      bodyParam: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+      'dashed-body-param': new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
     });
   }
 

@@ -18,7 +18,7 @@ export class ShowTicketDetailFormService {
     this.form = new FormGroup({
       date_from: new FormControl(undefined, []),
       date_to: new FormControl(undefined, []),
-      id: new FormControl(undefined, [Validators.required]),
+      id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
     });
   }
 

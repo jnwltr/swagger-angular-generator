@@ -16,7 +16,7 @@ export class ProductDetailFormService {
     private productDetailService: ProductDetailService,
   ) {
     this.form = new FormGroup({
-      productId: new FormControl(undefined, [Validators.required]),
+      productId: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
     });
   }
 

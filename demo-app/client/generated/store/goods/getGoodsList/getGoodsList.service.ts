@@ -6,7 +6,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {GoodsService} from '../../../controllers/Goods';
 
 @Injectable()
@@ -16,8 +16,8 @@ export class GetGoodsListFormService {
     private goodsService: GoodsService,
   ) {
     this.form = new FormGroup({
-      limit: new FormControl(undefined, []),
-      offset: new FormControl(undefined, []),
+      limit: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
+      offset: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
     });
   }
 

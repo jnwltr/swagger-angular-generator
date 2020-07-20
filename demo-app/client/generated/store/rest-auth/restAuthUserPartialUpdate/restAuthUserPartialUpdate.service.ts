@@ -17,7 +17,7 @@ export class RestAuthUserPartialUpdateFormService {
   ) {
     this.form = new FormGroup({
       data: new FormGroup({
-        pk: new FormControl(undefined, []),
+        pk: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
         username: new FormControl(undefined, [Validators.maxLength(150), Validators.pattern(/^[\w.@+-]+$/), Validators.required]),
         email: new FormControl(undefined, [Validators.email]),
         first_name: new FormControl(undefined, [Validators.maxLength(30)]),

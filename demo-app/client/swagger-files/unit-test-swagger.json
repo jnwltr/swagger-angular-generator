@@ -52,14 +52,14 @@
             "name": "floatField",
             "in": "query",
             "required": false,
-            "type": "integer",
+            "type": "number",
             "format": "float"
           },
           {
             "name": "doubleField",
             "in": "query",
             "required": false,
-            "type": "integer",
+            "type": "number",
             "format": "double"
           },
           {
@@ -1048,13 +1048,17 @@
           "title": "Status",
           "type": "integer",
           "enum": [
-            1, 2, 3
+            1,
+            2,
+            3
           ]
         },
         "refStatus": {
           "$ref": "#/definitions/RefStatus",
           "enum": [
-            1, 2, 3
+            1,
+            2,
+            3
           ]
         }
       }
