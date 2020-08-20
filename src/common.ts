@@ -208,3 +208,7 @@ export function getAccessor(key: string, propName = '') {
 export function getObjectPropSetter(key: string, propName: string, suffix = '') {
   return `${getAccessor(key)}: ${getAccessor(key, propName)}${suffix},`;
 }
+
+export function isMethodName(method : string): boolean {
+  return ['get' , 'patch' , 'post' ,'put' , 'delete'].includes(method)
+}

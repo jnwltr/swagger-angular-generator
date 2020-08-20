@@ -13,6 +13,8 @@ import {indent, writeFile} from '../utils';
 import {processMethod} from './process-method';
 import {processResponses} from './process-responses';
 import {ControllerMethod, MethodOutput} from './requests.models';
+import {isMethodName} from '../common'
+
 
 /**
  * Creates and serializes class for api communication for controller
@@ -36,7 +38,9 @@ export function processController(methods: ControllerMethod[], name: string, con
     usesGlobalType = usesGlobalType || controller.responseDef.usesGlobalType;
   });
 
-  const processedMethods: MethodOutput[] = methods.map(m => processMethod(m, config.unwrapSingleParamMethods));
+  const processedMethods: MethodOutput[] = methods
+    .filter(m => isMethodName(m.methodName)) //filter out all the unknown methods (like options)
+    .map(m => processMethod(m, config.unwrapSingleParamMethods));
   usesGlobalType = usesGlobalType || processedMethods.some(c => c.usesGlobalType);
 
   let content = '';
