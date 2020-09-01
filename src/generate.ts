@@ -57,13 +57,12 @@ export function generate(
 
   const header = processHeader(schema, omitVersion);
   const config: Config = {header, dest, generateStore, unwrapSingleParamMethods};
-
   generateCommon(path.join(dest, conf.commonDir));
 
   if (!fs.existsSync(dest)) fs.mkdirSync(dest);
   const definitions = processDefinitions(schema.definitions, config);
   processPaths(schema.paths, `http://${schema.host}${swaggerUrlPath}${conf.swaggerFile}`,
-               config, definitions, schema.basePath);
+    config, definitions, schema.basePath);
 }
 
 function recreateDirectories(dest: string) {

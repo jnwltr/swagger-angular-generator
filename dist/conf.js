@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // relative to project root
-exports.outDir = '../esslg2/frontend/frontend/src/api';
+exports.outDir = '../esslg2/frontend/frontend/src/api/codebook';
 exports.commonDir = 'common';
 exports.defsDir = 'defs';
 exports.apiDir = 'controllers';
 exports.storeDir = 'store';
 exports.stateDir = 'states';
-exports.apiFile = '../esslg2/frontend/frontend/src/api/elastic.json';
+exports.apiFile = '../esslg2/frontend/frontend/src/api/codebook.json';
 exports.modelFile = 'model';
 exports.indentation = 2;
 exports.swaggerUrlPath = '/swagger';

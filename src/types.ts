@@ -49,6 +49,8 @@ export interface Parameter extends ParameterSchemaBase {
 export type QueryCollectionFormat = 'csv' | 'ssv' | 'tsv' | 'pipes' | 'multi';
 
 export interface Schema extends ParameterSchemaBase {
+  title?: string;
+  allOf?: Schema[];
   $ref?: string;
   additionalProperties?: Schema;
   example?: any;
@@ -58,6 +60,10 @@ export interface Schema extends ParameterSchemaBase {
   properties?: {
     [key: string]: Schema;
   };
+}
+
+export interface SchemaDictionary {
+  [key: string]: Schema;
 }
 
 export interface Response {

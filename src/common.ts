@@ -37,7 +37,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
     type += _.upperFirst(namespace);
     if (!type.match(/Enum/)) type += 'Enum';
 
-    const list = (prop.enum || prop.items.enum) as Array<string | number> ;
+    const list = (prop.enum || prop.items.enum) as Array<string | number>;
     const exp = exportEnums ? 'export ' : '';
 
     const keyValuePairs = list.map(entry => (typeof entry === 'number')

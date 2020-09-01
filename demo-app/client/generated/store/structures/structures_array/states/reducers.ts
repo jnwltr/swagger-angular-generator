@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length */
+/* tslint:disable:max-line-length no-empty-interface */
 /**
  * Test Swagger
  * v1

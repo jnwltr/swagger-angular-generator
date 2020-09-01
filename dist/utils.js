@@ -72,7 +72,7 @@ exports.indent = indent;
 function writeFile(file, content, header = '', fileType = 'ts', disableFlags) {
     if (fileType === 'ts') {
         if (!disableFlags)
-            disableFlags = ['max-line-length'];
+            disableFlags = ['max-line-length', 'no-empty-interface'];
         let disable = '';
         if (disableFlags.length)
             disable = `/* tslint:disable:${disableFlags.join(' ')} */\n`;
