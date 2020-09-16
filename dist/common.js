@@ -97,9 +97,12 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
     let property;
     let propertyAsMethodParameter;
     // pure type is returned if no name is specified
-    if (name) {
-        if (!isMap)
-            name = getAccessor(name);
+    if (isMap) {
+        property = `{${name}: ${type}}`;
+        propertyAsMethodParameter = `{${name}: ${type}}`;
+    }
+    else if (name) {
+        name = getAccessor(name);
         property = `${comment}${readOnly}${name}${optional}: ${type};`;
         propertyAsMethodParameter = `${name}${optional}: ${type}`;
     }

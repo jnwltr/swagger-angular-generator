@@ -8,5 +8,5 @@
 import * as __model from '../model';
 
 export interface MapStructure {
-  [key: string]: __model.MapContent;
+  {[key: string]: __model.MapContent}
 }

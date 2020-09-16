@@ -6,5 +6,5 @@
  */
 
 export interface MapObject {
-  [key: string]: number;
+  {[key: string]: number}
 }
