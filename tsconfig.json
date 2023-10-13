@@ -10,18 +10,26 @@
     "noUnusedParameters": true,
     "lib": [
       "dom",
-      "es2017"
+      "es2022"
     ],
     "module": "commonjs",
     "sourceMap": true,
-    "target": "es2017"
+    "target": "ES2022"
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
+    "dist/**/*.ts",
+    "generated/**/*.ts",
     "src/api/**/*.ts",
     "src/**/*.spec.ts",
     "src/**/templates/*.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
 }

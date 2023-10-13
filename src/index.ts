@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-import * as commander from 'commander';
-
+import {program} from 'commander';
 import * as conf from './conf';
 import {generate} from './generate';
 
-commander
+program
   .option('-s, --src <source>', `Source directory, default: ${conf.apiFile}`)
   .option('-d, --dest <destination>', `Destination directory, default: ${conf.outDir}`)
   .option('--no-store', 'Do not generate store')
@@ -15,9 +14,12 @@ commander
   .option('-o, --omit-version', `Write version info, default: ${conf.omitVersion}`)
   .parse(process.argv);
 
-generate(commander.src,
-  commander.dest,
-  commander.store,
-  commander.unwrapSingleParamMethods,
-  commander.swaggerUrlPath,
-  commander.omitVersion);
+program.parse();
+const options = program.opts();
+
+generate(options.src,
+  options.dest,
+  options.store,
+  options.unwrapSingleParamMethods,
+  options.swaggerUrlPath,
+  options.omitVersion);

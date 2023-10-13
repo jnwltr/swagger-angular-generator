@@ -19,7 +19,7 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 - so that the server responses can be reached in the redux store
 - requests can be triggered by dispatching an action
 
-##### Have a look at the [demo-app generated files](demo-app/client/generated) to get better understanding what is being generated.
+##### Have a look at the [demo generated files](demo/generated) to get better understanding what is being generated.
 
 ## Install
 `npm i swagger-angular-generator`
@@ -318,7 +318,6 @@ generated inside Order.ts
 1. `docker build . -t swagger-angular-generator`
 1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
 1. `npm i`
-1. `npm run install:demo`
 
 ### Testing
 
@@ -353,4 +352,4 @@ Please do the following before making a PR:
 
 1. Build the app and regenerate testing files via `npm run build`.
 1. Check test pass via `npm test`.
-1. Check files lint via `npm run lint`.
+1. Check files lint via `npm run eslint`.

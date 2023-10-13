@@ -37,3 +37,6 @@ src/api/
 
 # build dir
 dist/
+
+# angular cache from demo
+.angular

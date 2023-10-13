@@ -1,19 +1,27 @@
-FROM node:10-stretch
+FROM node:20-buster-slim
 
-RUN apt-get update &&  \
-    apt-get install -y git wget build-essential && \
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    dpkg --unpack google-chrome-stable_current_amd64.deb && \
-    apt-get install -f -y && \
+RUN apt-get update && \
+    apt-get install -y \
+        git \
+        wget \
+        build-essential \
+        fonts-ipafont-gothic \
+        xfonts-100dpi \
+        xfonts-75dpi \
+        xfonts-cyrillic \
+        xfonts-scalable \
+        libfreetype6 \
+        libfontconfig \
+        chromium && \
     apt-get clean && \
-    rm google-chrome-stable_current_amd64.deb
+    rm -rf /var/lib/apt/lists/* /src/*.debnpm cache clean --force
 
-# Font libraries
-RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
+ENV CHROME_BIN /usr/bin/chromium
 
-RUN mkdir /code
 WORKDIR /code
-COPY . /code
+COPY . .
 
-RUN chown -R node:node /code
-USER node
+RUN adduser --uid 501 --disabled-password --gecos '' appuser && \
+    chown -R appuser:appuser /code
+
+USER appuser
