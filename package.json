@@ -20,7 +20,9 @@
     "eslint": "eslint \"**/*.{js,jsx,ts,tsx}\" --max-warnings=0",
     "postlint": "cd demo-app/client; npm run lint",
     "test": "npm run test:src && npm run test:demo",
+    "test:ci": "npm run test:src && npm run test:demo:ci",
     "test:demo": "ng test",
+    "test:demo:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "test:src": "ts-node node_modules/tape/bin/tape src/**/*.spec.ts",
     "clean": "rm -rf dist && rm -rf node_modules && rm -rf generated && rm -rf .angular && rm -rf ./src/api/",
     "test-headless": "ng test --watch=false --browsers=ChromeHeadless"
