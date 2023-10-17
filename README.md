@@ -19,7 +19,7 @@ Generate minimalistic TypeScript API layer for Angular with full type reflection
 - so that the server responses can be reached in the redux store
 - requests can be triggered by dispatching an action
 
-##### Have a look at the [demo-app generated files](demo-app/client/generated) to get better understanding what is being generated.
+##### Have a look at the [demo generated files](demo/generated) to get better understanding what is being generated.
 
 ## Install
 `npm i swagger-angular-generator`
@@ -125,9 +125,9 @@ export class MyComponent implements OnInit {
 - there's a helper method `safeSetValue()` that sets the shape and data of all `AbstractControl`'s ancestors and never fails (compatible data form the shape and are set, the rest is ignored).
 - use it in the template the following way
 - check the details in the generated test files, e.g.
-  - [generated form](demo-app/client/generated/store/structures/map/map.service.ts),
-  - [array tests](demo-app/client/src/tests/form/array.spec.ts),
-  - [map tests](demo-app/client/src/tests/form/map.spec.ts).
+  - [generated form](demo/generated/store/structures/map/map.service.ts),
+  - [array tests](demo/src/tests/form/array.spec.ts),
+  - [map tests](demo/src/tests/form/map.spec.ts).
 
 ```html
 <form [formGroup]="exampleFormService.form" (ngSubmit)="sendForm()" class="full-width">
@@ -235,16 +235,16 @@ export class ExampleComponent implements OnDestroy {
 ```typescript
 @Injectable()
 export class ExampleEffects {
-  @Effect()
-  CreateProductCategory = this.storeActions.ofType<actions.Start>(actions.Actions.START).pipe(
+  CreateProductCategory = createEffect(() => this.storeActions.pipe(
+    ofType<actions.Start>(actions.Actions.START),
     switchMap((action: actions.Start) => this.exampleService.exampleEndpointMethod(action.payload)
       .pipe(
         map(result => new actions.Success(result)),
         catchError((error: HttpErrorResponse) => of(new actions.Error(error.message))),
       ),
     ),
-  );
-
+  ));  
+  
   constructor(
     private storeActions: Actions,
     private adminproductService: AdminProductService,
@@ -311,30 +311,21 @@ generated inside Order.ts
 
 ## Development
 
-* at least Node.js 8 is needed
-
-### Docker image
-
-1. `docker build . -t swagger-angular-generator`
-1. `docker run -u $(id -u) -it -v "$PWD":/code swagger-angular-generator bash`
-1. `npm i`
-1. `npm run install:demo`
+* at least Node.js 10 is needed
 
 ### Testing
 
 #### How the testing works
 
-* tests are written in the demo-app
-* the test swagger files can be found in demo-app/client/test-swaggers
+* tests are written in the tests folder
+* the test swagger file can be found in demo/swagger-files
 * upon these swagger files, interfaces and services are generated
-* the generated services are manually imported to the app.module.ts
-* unit tests can be found in demo-app/client/src/tests
+* unit tests are located in `tests` folder
 
 #### Running the tests
 
 To run client tests in interactive mode:
 
-1. `cd demo-app/client`
 1. `npm test`
 
 ---
@@ -353,4 +344,4 @@ Please do the following before making a PR:
 
 1. Build the app and regenerate testing files via `npm run build`.
 1. Check test pass via `npm test`.
-1. Check files lint via `npm run lint`.
+1. Check files lint via `npm run eslint`.
