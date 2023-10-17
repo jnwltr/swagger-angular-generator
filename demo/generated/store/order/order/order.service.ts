@@ -17,7 +17,7 @@ export class OrderFormService {
   ) {
     this.form = new FormGroup({
       orderDto: new FormGroup({
-        id: new FormControl(undefined, [Validators.required]),
+        id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
         name: new FormControl(undefined, []),
       }, []),
       producer: new FormControl(undefined, []),

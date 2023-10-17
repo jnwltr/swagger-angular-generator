@@ -17,11 +17,11 @@ export class ArrayFormService {
     private structuresService: StructuresService,
   ) {
     this.form = new FormGroup({
-      id: new FormControl(undefined, [Validators.required]),
+      id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
       arraySection: new FormGroup({
         arrayObjectRef: new FormArrayExtended(() => (
           new FormGroup({
-            id: new FormControl(undefined, [Validators.required]),
+            id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
             name: new FormControl(undefined, []),
           }, [Validators.required])), [], [Validators.required]),
         arrayStringInline: new FormArrayExtended(() => (
@@ -32,7 +32,7 @@ export class ArrayFormService {
         arrayArrayObjectRef: new FormArrayExtended(() => (
           new FormArrayExtended(() => (
             new FormGroup({
-              id: new FormControl(undefined, [Validators.required]),
+              id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
               name: new FormControl(undefined, []),
             }, [Validators.required])), [], [Validators.required])), [], [Validators.required]),
         nestedArray: new FormArrayExtended(() => (
@@ -42,7 +42,7 @@ export class ArrayFormService {
           new FormArrayExtended(() => (
             new FormArrayExtended(() => (
               new FormGroup({
-                id: new FormControl(undefined, [Validators.required]),
+                id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
                 name: new FormControl(undefined, []),
               }, [Validators.required])), [], [Validators.required])), [], [Validators.required])), [], [Validators.required]),
       }, [Validators.required]),

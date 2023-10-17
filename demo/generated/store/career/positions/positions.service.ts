@@ -16,7 +16,7 @@ export class PositionsFormService {
     private careerService: CareerService,
   ) {
     this.form = new FormGroup({
-      positionId: new FormControl(undefined, [Validators.required]),
+      positionId: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
       version: new FormControl(undefined, [Validators.required]),
     });
   }
