@@ -175,6 +175,8 @@ function getValidators(param: Parameter | Schema) {
 
   if (param.pattern) validators.push(`Validators.pattern(/${param.pattern}/)`);
 
+  if (param.type === 'integer') validators.push('Validators.pattern(/^([+-]?[1-9]\\d*|0)$/)');
+
   return validators;
 }
 
