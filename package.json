@@ -83,12 +83,11 @@
     "zone.js": "^0.13.0"
   },
   "peerDependencies": {
-    "@angular/common": ">=12.1.1 <=16.2.6",
-    "@angular/core": ">=12.1.1 <=16.2.6",
-    "@angular/platform-browser": ">=12.1.1 <=16.2.6",
-    "@ngrx/effects": "^16.3.0",
-    "@ngrx/store": "^16.3.0",
-    "rxjs": "^7.8.1",
-    "zone.js": "^0.13.0"
+    "@angular/common": ">=12 <17",
+    "@angular/core": ">=12 <17",
+    "@angular/platform-browser": ">=12 <17",
+    "@ngrx/effects": ">=12 <17",
+    "@ngrx/store": ">=12 <17",
+    "rxjs": ">=6 <8"
   }
 }
