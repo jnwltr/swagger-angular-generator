@@ -1,6 +1,6 @@
 {
   "name": "swagger-angular-generator",
-  "version": "5.0.0",
+  "version": "6.0.0-kappka.1",
   "description": "Generator of API layer in TypeScript for Angular >= 12",
   "main": "dist/generate.js",
   "types": "dist/generate.d.ts",
