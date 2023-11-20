@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const commander = require("commander");
+const commander_1 = require("commander");
 const conf = require("./conf");
 const generate_1 = require("./generate");
-commander
+commander_1.program
     .option('-s, --src <source>', `Source directory, default: ${conf.apiFile}`)
     .option('-d, --dest <destination>', `Destination directory, default: ${conf.outDir}`)
     .option('--no-store', 'Do not generate store')
@@ -13,5 +13,7 @@ commander
     .option('-u, --swagger-url-path <path>', `swagger URL path, where the swagger ui documentation can be found; default: ${conf.swaggerUrlPath}, i.e. the resulting address would be http://example${conf.swaggerUrlPath}`)
     .option('-o, --omit-version', `Write version info, default: ${conf.omitVersion}`)
     .parse(process.argv);
-generate_1.generate(commander.src, commander.dest, commander.store, commander.unwrapSingleParamMethods, commander.swaggerUrlPath, commander.omitVersion);
+commander_1.program.parse();
+const options = commander_1.program.opts();
+(0, generate_1.generate)(options.src, options.dest, options.store, options.unwrapSingleParamMethods, options.swaggerUrlPath, options.omitVersion);
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getObjectPropSetter = exports.getAccessor = exports.translateType = exports.normalizeDef = exports.processProperty = void 0;
 const _ = require("lodash");
 const tsutils_1 = require("tsutils");
 const conf = require("./conf");
@@ -28,10 +29,10 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         const exp = exportEnums ? 'export ' : '';
         let enumValues;
         if (typeof list[0] === 'number') {
-            enumValues = utils_1.indent(list.join(' |\n'));
+            enumValues = (0, utils_1.indent)(list.join(' |\n'));
         }
         else {
-            enumValues = utils_1.indent('\'' + list.join('\' |\n\'')) + '\'';
+            enumValues = (0, utils_1.indent)('\'' + list.join('\' |\n\'')) + '\'';
         }
         enumDeclaration = `${exp}type ${type} =\n${enumValues};`;
         if (prop.type === 'array')
@@ -96,7 +97,7 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
         comments.push(`format: ${prop.format}`);
     if (prop.default)
         comments.push(`default: ${prop.default}`);
-    const comment = utils_1.makeComment(comments);
+    const comment = (0, utils_1.makeComment)(comments);
     let property;
     let propertyAsMethodParameter;
     // pure type is returned if no name is specified
@@ -173,7 +174,7 @@ function resolveDefType(type) {
 }
 function getAccessor(key, propName = '') {
     let res = key;
-    if (tsutils_1.isValidPropertyName(key)) {
+    if ((0, tsutils_1.isValidPropertyName)(key)) {
         if (propName)
             return `${propName}.${res}`;
         return res;

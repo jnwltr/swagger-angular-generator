@@ -9,7 +9,7 @@ import {FileType} from './types';
 function doesDirExist(path: string) {
   try {
     return fs.statSync(path).isDirectory();
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') {
       return false;
     } else {
@@ -23,7 +23,7 @@ function doesDirExist(path: string) {
  * @param path
  */
 export function createDir(path: string) {
-  if (!doesDirExist(path)) fs.mkdirSync(path);
+  if (!doesDirExist(path)) fs.mkdirSync(path, {recursive: true});
 }
 
 /**

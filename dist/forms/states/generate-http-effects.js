@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateHttpEffects = void 0;
 const path = require("path");
 const utils_1 = require("../../utils");
 function generateHttpEffects(config, name, simpleName, actionClassNameBase, formSubDirName, paramGroups) {
@@ -10,13 +11,13 @@ function generateHttpEffects(config, name, simpleName, actionClassNameBase, form
     content += getConstructorDefinition(name);
     content += `}\n`;
     const effectsFileName = path.join(formSubDirName, `states`, `effects.ts`);
-    utils_1.writeFile(effectsFileName, content, config.header);
+    (0, utils_1.writeFile)(effectsFileName, content, config.header);
 }
 exports.generateHttpEffects = generateHttpEffects;
 function getEffectsImports(name) {
     let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
     res += `import {Injectable} from '@angular/core';\n`;
-    res += `import {Actions, Effect, ofType} from '@ngrx/effects';\n`;
+    res += `import {Actions, createEffect, ofType} from '@ngrx/effects';\n`;
     res += '\n';
     res += `import {of} from 'rxjs';\n`;
     res += '\n';
@@ -33,25 +34,24 @@ function getEffectsStartDefinition(actionClassNameBase) {
 }
 function getConstructorDefinition(name) {
     let res = `constructor(\n`;
-    res += utils_1.indent(`private storeActions: Actions,\n`);
-    res += utils_1.indent(`private ${name.toLowerCase()}Service: ${name}Service,\n`);
+    res += (0, utils_1.indent)(`private storeActions: Actions,\n`);
+    res += (0, utils_1.indent)(`private ${name.toLowerCase()}Service: ${name}Service,\n`);
     res += `) {}\n\n`;
-    return utils_1.indent(res);
+    return (0, utils_1.indent)(res);
 }
 function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
     const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
-    let res = utils_1.indent(`@Effect()\n`);
-    res += utils_1.indent(`${actionClassNameBase} = this.storeActions.pipe(\n`);
-    res += utils_1.indent(`ofType<actions.Start>(actions.Actions.START),\n`, 2);
+    let res = (0, utils_1.indent)(`${actionClassNameBase} = createEffect(() => this.storeActions.pipe(\n`);
+    res += (0, utils_1.indent)(`ofType<actions.Start>(actions.Actions.START),\n`, 2);
     const actionParam = hasParams ? 'action: actions.Start' : '';
-    res += utils_1.indent(`switchMap((${actionParam}) => ` +
+    res += (0, utils_1.indent)(`switchMap((${actionParam}) => ` +
         `this.${name.toLowerCase()}Service.${simpleName}(${startActionPayloadDefinition})\n`, 2);
-    res += utils_1.indent(`.pipe(\n`, 3);
-    res += utils_1.indent(`map(result => new actions.Success(result)),\n`, 4);
-    res += utils_1.indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error))),\n`, 4);
-    res += utils_1.indent(`),\n`, 3);
-    res += utils_1.indent(`),\n`, 2);
-    res += utils_1.indent(`);\n`);
+    res += (0, utils_1.indent)(`.pipe(\n`, 3);
+    res += (0, utils_1.indent)(`map(result => new actions.Success(result)),\n`, 4);
+    res += (0, utils_1.indent)(`catchError((error: HttpErrorResponse) => of(new actions.Error(error))),\n`, 4);
+    res += (0, utils_1.indent)(`),\n`, 3);
+    res += (0, utils_1.indent)(`),\n`, 2);
+    res += (0, utils_1.indent)(`));\n`);
     res += '\n';
     return res;
 }
