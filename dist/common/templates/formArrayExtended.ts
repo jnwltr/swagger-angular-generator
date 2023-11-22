@@ -1,8 +1,8 @@
-import {AbstractControl, FormArray} from '@angular/forms';
+import {AbstractControl, UntypedFormArray} from '@angular/forms';
 import {ControlFactory} from './utils';
 
 /** Extends FormArray so it contains definition of items for further creation */
-export class FormArrayExtended extends FormArray {
+export class FormArrayExtended extends UntypedFormArray {
   constructor(public createControl: ControlFactory, controls: AbstractControl[], ...rest: any[]) {
     super(controls, ...rest);
   }

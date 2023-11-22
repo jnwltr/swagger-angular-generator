@@ -6,22 +6,22 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {RestAuthService} from '../../../controllers/RestAuth';
 
 @Injectable()
 export class RestAuthUserPartialUpdateFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private restAuthService: RestAuthService,
   ) {
-    this.form = new FormGroup({
-      data: new FormGroup({
-        pk: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
-        username: new FormControl(undefined, [Validators.maxLength(150), Validators.pattern(/^[\w.@+-]+$/), Validators.required]),
-        email: new FormControl(undefined, [Validators.email]),
-        first_name: new FormControl(undefined, [Validators.maxLength(30)]),
-        last_name: new FormControl(undefined, [Validators.maxLength(150)]),
+    this.form = new UntypedFormGroup({
+      data: new UntypedFormGroup({
+        pk: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
+        username: new UntypedFormControl(undefined, [Validators.maxLength(150), Validators.pattern(/^[\w.@+-]+$/), Validators.required]),
+        email: new UntypedFormControl(undefined, [Validators.email]),
+        first_name: new UntypedFormControl(undefined, [Validators.maxLength(30)]),
+        last_name: new UntypedFormControl(undefined, [Validators.maxLength(150)]),
       }, [Validators.required]),
     });
   }

@@ -6,21 +6,21 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {OrderService} from '../../../controllers/Order';
 
 @Injectable()
 export class OrderFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private orderService: OrderService,
   ) {
-    this.form = new FormGroup({
-      orderDto: new FormGroup({
-        id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
-        name: new FormControl(undefined, []),
+    this.form = new UntypedFormGroup({
+      orderDto: new UntypedFormGroup({
+        id: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+        name: new UntypedFormControl(undefined, []),
       }, []),
-      producer: new FormControl(undefined, []),
+      producer: new UntypedFormControl(undefined, []),
     });
   }
 

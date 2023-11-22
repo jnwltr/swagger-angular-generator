@@ -1,4 +1,4 @@
-import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 
 import {FormArrayExtended} from './formArrayExtended';
 import {FormMap} from './formMap';
@@ -12,7 +12,7 @@ export type ControlFactory = () => AbstractControl;
  * @param value source data
  */
 export function safeSetValue(control: AbstractControl, value: any) {
-  if (control instanceof FormControl) {
+  if (control instanceof UntypedFormControl) {
     control.setValue(value, {emitEvent: false});
     return;
   }
@@ -31,10 +31,10 @@ export function safeSetValue(control: AbstractControl, value: any) {
 
     control.setShape(Object.keys(value));
     Object.entries(control.controls).forEach(([name, c]) => safeSetValue(c, value[name]));
-  } else if (control instanceof FormArray) {
+  } else if (control instanceof UntypedFormArray) {
     control.controls.forEach((child, idx) =>
       safeSetValue(child, getValue(value, idx)));
-  } else if (control instanceof FormGroup) {
+  } else if (control instanceof UntypedFormGroup) {
     Object.keys(control.controls).forEach(name => {
       safeSetValue(control.controls[name], getValue(value, name));
     });

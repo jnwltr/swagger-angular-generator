@@ -14,7 +14,7 @@ function generateFormService(config, name, params, definitions, simpleName, form
     content += getImports(name, constructor);
     content += `@Injectable()\n`;
     content += `export class ${className}FormService {\n`;
-    content += (0, utils_1.indent)(`${formName}: FormGroup;\n`);
+    content += (0, utils_1.indent)(`${formName}: UntypedFormGroup;\n`);
     content += constructor;
     content += getFormSubmitFunction(name, formName, simpleName, params);
     content += '}\n';
@@ -24,10 +24,10 @@ function generateFormService(config, name, params, definitions, simpleName, form
 exports.generateFormService = generateFormService;
 function getImports(name, constructor) {
     const imports = [];
-    if (constructor.match(/new FormControl\(/))
-        imports.push('FormControl');
-    if (constructor.match(/new FormGroup\(/))
-        imports.push('FormGroup');
+    if (constructor.match(/new UntypedFormControl\(/))
+        imports.push('UntypedFormControl');
+    if (constructor.match(/new UntypedFormGroup\(/))
+        imports.push('UntypedFormGroup');
     if (constructor.match(/\[Validators\./))
         imports.push('Validators');
     let res = 'import {Injectable} from \'@angular/core\';\n';
@@ -49,7 +49,7 @@ function getConstructor(name, formName, definitions, params) {
     res += (0, utils_1.indent)(') {\n');
     const definitionsMap = _.groupBy(definitions, 'name');
     const formDefinition = walkParamOrProp(params, definitionsMap);
-    res += (0, utils_1.indent)(`this.${formName} = new FormGroup({\n${formDefinition}\n});\n`, 2);
+    res += (0, utils_1.indent)(`this.${formName} = new UntypedFormGroup({\n${formDefinition}\n});\n`, 2);
     res += (0, utils_1.indent)('}\n');
     res += '\n';
     return res;
@@ -122,12 +122,12 @@ function makeField(param, name, required, definitions, parentTypes) {
         }
         else {
             const fields = walkParamOrProp(def, definitions, newParentTypes);
-            control = 'FormGroup';
+            control = 'UntypedFormGroup';
             initializer = `{\n${fields}\n}`;
         }
     }
     else {
-        control = 'FormControl';
+        control = 'UntypedFormControl';
         initializer = typeof param.default === 'string' ? `'${param.default}'` : param.default;
     }
     const validators = getValidators(param);

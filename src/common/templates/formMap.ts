@@ -1,8 +1,8 @@
-import {AbstractControl, FormGroup} from '@angular/forms';
+import {AbstractControl, UntypedFormGroup} from '@angular/forms';
 import {ControlFactory} from './utils';
 
 /** Extends FormGroup so it contains definition of map items for further creation */
-export class FormMap extends FormGroup {
+export class FormMap extends UntypedFormGroup {
   constructor(public createControl: ControlFactory, controls: Record<string, AbstractControl>, ...rest: any[]) {
     super(controls, ...rest);
   }
