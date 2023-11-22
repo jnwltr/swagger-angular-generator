@@ -6,26 +6,26 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ProductsService} from '../../../controllers/Products';
 
 @Injectable()
 export class ProductsFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private productsService: ProductsService,
   ) {
-    this.form = new FormGroup({
-      stringField: new FormControl(undefined, []),
-      BooleanField: new FormControl(undefined, []),
-      int32Field: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
-      longField: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
-      floatField: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
-      doubleField: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
-      byteField: new FormControl(undefined, []),
-      binaryField: new FormControl(undefined, []),
-      dateField: new FormControl(undefined, []),
-      dateTimeField: new FormControl(undefined, []),
+    this.form = new UntypedFormGroup({
+      stringField: new UntypedFormControl(undefined, []),
+      BooleanField: new UntypedFormControl(undefined, []),
+      int32Field: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
+      longField: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
+      floatField: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
+      doubleField: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/)]),
+      byteField: new UntypedFormControl(undefined, []),
+      binaryField: new UntypedFormControl(undefined, []),
+      dateField: new UntypedFormControl(undefined, []),
+      dateTimeField: new UntypedFormControl(undefined, []),
     });
   }
 

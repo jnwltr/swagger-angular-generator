@@ -6,18 +6,18 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {CareerService} from '../../../controllers/Career';
 
 @Injectable()
 export class PositionsFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private careerService: CareerService,
   ) {
-    this.form = new FormGroup({
-      positionId: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
-      version: new FormControl(undefined, [Validators.required]),
+    this.form = new UntypedFormGroup({
+      positionId: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+      version: new UntypedFormControl(undefined, [Validators.required]),
     });
   }
 

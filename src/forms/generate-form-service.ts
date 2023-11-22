@@ -25,7 +25,7 @@ export function generateFormService(config: Config, name: string, params: Parame
   content += `@Injectable()\n`;
   content += `export class ${className}FormService {\n`;
 
-  content += indent(`${formName}: FormGroup;\n`);
+  content += indent(`${formName}: UntypedFormGroup;\n`);
   content += constructor;
   content += getFormSubmitFunction(name, formName, simpleName, params);
   content += '}\n';
@@ -37,8 +37,8 @@ export function generateFormService(config: Config, name: string, params: Parame
 function getImports(name: string, constructor: string) {
   const imports: string[] = [];
 
-  if (constructor.match(/new FormControl\(/)) imports.push('FormControl');
-  if (constructor.match(/new FormGroup\(/)) imports.push('FormGroup');
+  if (constructor.match(/new UntypedFormControl\(/)) imports.push('UntypedFormControl');
+  if (constructor.match(/new UntypedFormGroup\(/)) imports.push('UntypedFormGroup');
   if (constructor.match(/\[Validators\./)) imports.push('Validators');
 
   let res = 'import {Injectable} from \'@angular/core\';\n';
@@ -64,7 +64,7 @@ function getConstructor(name: string, formName: string, definitions: ProcessedDe
 
   const definitionsMap = _.groupBy(definitions, 'name');
   const formDefinition = walkParamOrProp(params, definitionsMap);
-  res += indent(`this.${formName} = new FormGroup({\n${formDefinition}\n});\n`, 2);
+  res += indent(`this.${formName} = new UntypedFormGroup({\n${formDefinition}\n});\n`, 2);
   res += indent('}\n');
   res += '\n';
 
@@ -142,11 +142,11 @@ function makeField(param: Schema, name: string, required: boolean,
       initializer += `(\n${indent(controlInstance)}), {}`;
     } else {
       const fields = walkParamOrProp(def, definitions, newParentTypes);
-      control = 'FormGroup';
+      control = 'UntypedFormGroup';
       initializer = `{\n${fields}\n}`;
     }
   } else {
-    control = 'FormControl';
+    control = 'UntypedFormControl';
     initializer = typeof param.default === 'string' ? `'${param.default}'` : param.default;
   }
 

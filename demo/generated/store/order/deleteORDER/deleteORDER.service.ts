@@ -6,17 +6,17 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {OrderService} from '../../../controllers/Order';
 
 @Injectable()
 export class DeleteORDERFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private orderService: OrderService,
   ) {
-    this.form = new FormGroup({
-      orderId: new FormControl(undefined, [Validators.required]),
+    this.form = new UntypedFormGroup({
+      orderId: new UntypedFormControl(undefined, [Validators.required]),
     });
   }
 

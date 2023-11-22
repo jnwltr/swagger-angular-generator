@@ -6,17 +6,17 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ProductDetailService} from '../../../controllers/ProductDetail';
 
 @Injectable()
 export class ProductDetailFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private productDetailService: ProductDetailService,
   ) {
-    this.form = new FormGroup({
-      productId: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+    this.form = new UntypedFormGroup({
+      productId: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
     });
   }
 

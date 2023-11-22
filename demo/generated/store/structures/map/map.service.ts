@@ -6,42 +6,42 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {FormArrayExtended} from '../../../common/formArrayExtended';
 import {FormMap} from '../../../common/formMap';
 import {StructuresService} from '../../../controllers/Structures';
 
 @Injectable()
 export class MapFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private structuresService: StructuresService,
   ) {
-    this.form = new FormGroup({
+    this.form = new UntypedFormGroup({
       mapSection: new FormMap(() => (
-        new FormGroup({
-          control: new FormControl(undefined, []),
-          group: new FormGroup({
-            id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
-            name: new FormControl(undefined, []),
+        new UntypedFormGroup({
+          control: new UntypedFormControl(undefined, []),
+          group: new UntypedFormGroup({
+            id: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+            name: new UntypedFormControl(undefined, []),
           }, []),
           arrayOfObjects: new FormArrayExtended(() => (
-            new FormGroup({
-              id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
-              name: new FormControl(undefined, []),
+            new UntypedFormGroup({
+              id: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+              name: new UntypedFormControl(undefined, []),
             }, [])), [], []),
           mapRef: new FormMap(() => (
-            new FormControl(undefined, [])), {}, []),
+            new UntypedFormControl(undefined, [])), {}, []),
           mapInlinePrimitive: new FormMap(() => (
-            new FormControl(undefined, [])), {}, []),
+            new UntypedFormControl(undefined, [])), {}, []),
           mapInlineRef: new FormMap(() => (
-            new FormGroup({
-              id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
-              name: new FormControl(undefined, []),
+            new UntypedFormGroup({
+              id: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+              name: new UntypedFormControl(undefined, []),
             }, [])), {}, []),
           arrayOfMaps: new FormArrayExtended(() => (
             new FormMap(() => (
-              new FormControl(undefined, [])), {}, [])), [], []),
+              new UntypedFormControl(undefined, [])), {}, [])), [], []),
         }, [Validators.required])), {}, [Validators.required]),
     });
   }

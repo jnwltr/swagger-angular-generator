@@ -6,19 +6,19 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {TicketingService} from '../../../controllers/Ticketing';
 
 @Injectable()
 export class ShowTicketDetailFormService {
-  form: FormGroup;
+  form: UntypedFormGroup;
   constructor(
     private ticketingService: TicketingService,
   ) {
-    this.form = new FormGroup({
-      date_from: new FormControl(undefined, []),
-      date_to: new FormControl(undefined, []),
-      id: new FormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
+    this.form = new UntypedFormGroup({
+      date_from: new UntypedFormControl(undefined, []),
+      date_to: new UntypedFormControl(undefined, []),
+      id: new UntypedFormControl(undefined, [Validators.pattern(/^([+-]?[1-9]\d*|0)$/), Validators.required]),
     });
   }
 
